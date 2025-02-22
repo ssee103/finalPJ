@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.calendar.mapper.ICalendarMapper">
+
+	<select id="findAll" resultType="kr.or.ddit.calendar.vo.CalendarVO">
+		SELECT 
+			sch_no 
+			,empl_no
+			,sch_title
+			,sch_sdate
+			,sch_edate
+			,sch_allday
+			,sch_color
+			,sch_textcolor
+		FROM schedule
+		WHERE empl_no = #{emplNo}
+	</select>
+
+
+	<insert id="insert" parameterType="kr.or.ddit.calendar.vo.CalendarVO">
+		INSERT INTO schedule (
+				 sch_no
+				,empl_no
+				,sch_title
+				,sch_sdate
+				,sch_edate
+				,sch_allday
+				,sch_color
+				,sch_textcolor
+		)VALUES(
+				cal_seq.nextval
+				,#{emplNo}
+				,#{schTitle}
+				,NVL(#{schSDate}, SYSDATE)
+				,#{schEDate}
+				,#{schAllDay}
+				,#{schColor}
+				,#{schTextColor}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		DELETE 
+		FROM schedule
+		WHERE sch_no = #{schNo}
+	</delete>
+	
+	<update id="update" parameterType="kr.or.ddit.calendar.vo.CalendarVO">
+		UPDATE schedule
+		SET
+			 sch_title = #{schTitle}
+			,sch_sdate = COALESCE(#{schSDate},sch_sdate)
+			,sch_edate = COALESCE(#{schEDate}, sch_edate)
+			,sch_color= #{schColor}
+			,sch_textcolor= #{schTextColor}
+			,sch_allday= #{schAllDay}
+		WHERE sch_no = #{schNo}
+	</update>
+
+	<select id="selectSchNo" parameterType="int" resultType="kr.or.ddit.calendar.vo.CalendarVO">
+		SELECT 
+			sch_no
+		    ,empl_no
+		    ,sch_title
+		    ,sch_sdate
+		    ,sch_edate
+		    ,sch_allday
+		    ,sch_color
+		    ,sch_textcolor
+		FROM schedule
+		WHERE sch_no = #{schNo}
+	</select>
+	
+	<select id="selectAll" resultType="kr.or.ddit.calendar.vo.CalendarVO">
+		SELECT 
+			sch_no
+		    ,empl_no
+		    ,sch_title
+		    ,sch_sdate
+		    ,sch_edate
+		    ,sch_allday
+		    ,sch_color
+		    ,sch_textcolor	
+		FROM schedule
+		WHERE empl_no = #{emplNo}
+	</select>
+	
+	
+</mapper>

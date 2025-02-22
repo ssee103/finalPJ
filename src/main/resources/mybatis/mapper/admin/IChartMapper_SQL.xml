@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.ddit.admin.mapper.IChartMapper">
+	<!-- 지난1년간 전체사원의 지각횟수 -->
+	<sql id="getBeforeHeader">
+	    NVL((SELECT COUNT(*) FROM DILIGENCE_AND_LAZINESS 
+	         WHERE TO_CHAR(DCLZ_DATE, 'YYYYMM') = TO_CHAR(ADD_MONTHS(SYSDATE, 
+	</sql>
+	<sql id="getBeforeFooter">
+		), 'YYYYMM')
+		AND DCLZ_STATUS = '02'), 0) AS 
+	</sql>
+	<select id="getLateData" parameterType="java.util.Map">
+		SELECT 
+		    <include refid="getBeforeHeader"/> -11 <include refid="getBeforeFooter"/> late11,
+		    <include refid="getBeforeHeader"/> -10 <include refid="getBeforeFooter"/> late10,
+		    <include refid="getBeforeHeader"/> -9 <include refid="getBeforeFooter"/> late9,
+		    <include refid="getBeforeHeader"/> -8 <include refid="getBeforeFooter"/> late8,
+		    <include refid="getBeforeHeader"/> -7 <include refid="getBeforeFooter"/> late7,
+		    <include refid="getBeforeHeader"/> -6 <include refid="getBeforeFooter"/> late6,
+		    <include refid="getBeforeHeader"/> -5 <include refid="getBeforeFooter"/> late5,
+		    <include refid="getBeforeHeader"/> -4 <include refid="getBeforeFooter"/> late4,
+		    <include refid="getBeforeHeader"/> -3 <include refid="getBeforeFooter"/> late3,
+		    <include refid="getBeforeHeader"/> -2 <include refid="getBeforeFooter"/> late2,
+		    <include refid="getBeforeHeader"/> -1 <include refid="getBeforeFooter"/> late1,
+		    <include refid="getBeforeHeader"/> 0 <include refid="getBeforeFooter"/> late0
+		FROM DUAL
+	</select>
+	
+</mapper>
