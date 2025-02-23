@@ -59,8 +59,9 @@ public class CmmRestController {
 		String emplNo = paramMap.get("emplNo");
 
 		Map<String, BigDecimal> countMap = cmmService.getDocumentCount(emplNo);
-		
+		// 원결재자사번이 나 && 결재상태가 결재대기 or 결재중 => SANCTN_STATUS 가 01 또는 02 인것
 		resultMap.put("doc", countMap.get("DOC").toString());
+		resultMap.put("sanc", countMap.get("SANC").toString());
 		return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 	}
 	

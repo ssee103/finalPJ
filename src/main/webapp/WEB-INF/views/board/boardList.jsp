@@ -125,7 +125,7 @@
 						                                        <td>${board.boardWriter}</td>
 				                                        	</c:otherwise>
 				                                        </c:choose>
-														<td>${board.boardDate }</td>										
+														<td>${fn:substring(board.boardDate,0,16) }</td>										
 														<td>${board.boardHit }</td>		
 														<td></td>								
 													</tr>

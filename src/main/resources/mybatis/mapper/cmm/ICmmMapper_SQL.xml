@@ -80,6 +80,13 @@
 		        where writer_no = #{emplNo}
 		        and doc_apv = '01'
 		    ) as doc
+		    ,(
+		    	SELECT
+		    		COUNT(sanctner_no)
+		    	FROM sanctioner
+		    	where sanctner_no = #{empl_no}
+		    	and sanctn_status in('01', '02')
+		    ) as sanc
 		FROM dual
   	</select>
   	

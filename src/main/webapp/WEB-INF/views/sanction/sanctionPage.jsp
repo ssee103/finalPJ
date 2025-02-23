@@ -235,7 +235,7 @@ h1{
 							</div>
 						</div>
 						<button id="prevModal" class="btn btn-primary" data-bs-toggle="modal" 
-									data-bs-target="#previewModal" style="float: right; margin-bottom: 20px;">미리보기 & 결재요청</button>
+									data-bs-target="#previewModal" style="float: right; margin-bottom: 20px;">미리보기</button>
 					</div>
 					
 				</div>
@@ -465,6 +465,12 @@ $(function(){
 					-&nbsp;<input type="time" id="eTime"/> <br/><br/>`);
 					
 					CKEDITOR.instances.ckEditor.setData(res[3].dsForm);
+					
+				}
+				
+				if(option == "99") {
+					
+					CKEDITOR.instances.ckEditor.setData(res[4].dsForm);
 					
 				}
 			

@@ -1,31 +1,67 @@
 $(function() {
   const payTableBody = $("#myPayTableBody");
 
-  // ✅ 로그인한 사용자의 급여 내역 조회
-  function loadMyPayStubs() {
-      $.ajax({
-          url: "/hrms/payStub/mylist", // 🔥 서버 측 엔드포인트
-          type: "GET",
-          success: function(res) {
-            console.log("res : " , res);
-              let html = "";
-              res.forEach((pay) => {
-                  html += `
-                      <tr>
-                          <td>${pay.payDate}</td>
-                          <td>${formatPayDate(pay.payDate)}</td>
-                          <td>${pay.totalPayment.toLocaleString()} 원</td>
-                          <td>${pay.actualSalary.toLocaleString()} 원</td>
-                          <td><button class="btn btn-primary btn-view-my-stub" data-empl-no="${pay.emplNo}" data-paydate="${pay.payDate}">급여 명세서</button></td>
-                      </tr>`;
-              });
-              payTableBody.html(html);
-          },
-          error: function() {
-              showToastMessage("❌ 급여 내역을 불러오는 데 실패했습니다.", "danger");
-          }
-      });
+  // ✅ 연도 및 월 데이터 초기화
+  function initializeDateFilters() {
+    const yearSelect = $("#yearSelect");
+    const monthSelect = $("#monthSelect");
+    const daySelect = $("#daySelect");
+
+    const currentYear = new Date().getFullYear();
+    for (let yearr = currentYear; yearr >= currentYear - 10; yearr--) {
+        yearSelect.append(`<option value="${yearr}">${yearr}년</option>`);
+    }
+    for (let monthh = 1; monthh <= 12; monthh++) {
+        monthSelect.append(`<option value="${monthh.toString().padStart(2, '0')}">${monthh}월</option>`);
+    }
+    for (let dayy = 1; dayy <= 31; dayy++) {
+        daySelect.append(`<option value="${dayy.toString().padStart(2, '0')}">${dayy}일</option>`);
+    }
   }
+
+  // ✅ 로그인한 사용자의 급여 내역 조회
+  function loadMyPayStubs(yearr = "", monthh = "", dayy = "") {
+    $.ajax({
+        url: "/hrms/payStub/mylist",
+        type: "GET",
+        data: { yearr: yearr, monthh: monthh, dayy: dayy },
+        success: function(res) {
+            let html = "";
+            if (res.length === 0) {
+                html = `<tr><td colspan="5">🔍 검색 결과가 없습니다.</td></tr>`;
+            } else {
+                res.forEach((pay) => {
+                    html += `
+                        <tr>
+                            <td>${pay.payDate}</td>
+                            <td>${formatPayDate(pay.payDate)}</td>
+                            <td>${pay.totalPayment.toLocaleString()} 원</td>
+                            <td>${pay.actualSalary.toLocaleString()} 원</td>
+                            <td><button class="btn btn-primary btn-view-my-stub" data-empl-no="${pay.emplNo}" data-paydate="${pay.payDate}">급여 명세서</button></td>
+                        </tr>`;
+                });
+            }
+            payTableBody.html(html);
+        },
+        error: function() {
+            showToastMessage("❌ 급여 내역을 불러오는 데 실패했습니다.", "danger");
+        }
+    });
+  }
+
+  // ✅ 검색 버튼 클릭 이벤트
+  $("#searchBtn").on("click", function() {
+    const yearr = $("#yearSelect").val();
+    const monthh = $("#monthSelect").val();
+    const dayy = $("#daySelect").val();
+    loadMyPayStubs(yearr, monthh, dayy);
+  });
+
+  // ✅ 초기화 버튼 클릭 이벤트
+  $("#resetBtn").on("click", function() {
+    $("#yearSelect, #monthSelect, #daySelect").val("");
+    loadMyPayStubs();
+  });
 
   // ✅ 급여 명세서 (모달 재사용)
   $(document).on("click", ".btn-view-my-stub", function() {
@@ -38,21 +74,21 @@ $(function() {
             console.log("data : " , data);
                 const safeValue = (value) => value !== null && value !== undefined ? value.toLocaleString() : "0";
 
-                $("#modalEmpName").text(data.EMPLNM || "-");            
-                $("#modalDeptName").text(data.DEPTNAME || "-");          
-                $("#modalPosition").text(data.EMPLPOSITION || "-");   
-                $("#modalBasicSalary").text(safeValue(data.BASICSALARY) + " 원");
-                $("#modalOvertimePay").text(safeValue(data.OVERTIMEPAY) + " 원");
-                $("#modalMealPay").text(safeValue(data.MEALPAY) + " 원");
-                $("#modalBonus").text(safeValue(data.PSBONUS) + " 원");
-                $("#modalIncomeTax").text(safeValue(data.INCOMETAX) + " 원");
-                $("#modalLocalTax").text(safeValue(data.LOCALTAX) + " 원");
-                $("#modalEmploymentInsurance").text(safeValue(data.EMPLOYMENTINSURANCE) + " 원");
-                $("#modalHealthInsurance").text(safeValue(data.HEALTHINSURANCE) + " 원");
-                $("#modalNursingInsurance").text(safeValue(data.NURSINGINSURANCE) + " 원");
-                $("#modalNationalPension").text(safeValue(data.NATIONALPENSION) + " 원");
-                $("#modalTotalPayment").text(safeValue(data.TOTALPAYMENT) + " 원");
-                $("#modalActualSalary").text(safeValue(data.ACTUALSALARY) + " 원");
+                $("#modalEmpName").text(data.EMPL_NM || "-");            
+                $("#modalDeptName").text(data.DEPT_NAME || "-");          
+                $("#modalPosition").text(data.POSITIONNAME || "-");   
+                $("#modalBasicSalary").text(safeValue(data.BASIC_SALARY) + " 원");
+                $("#modalOvertimePay").text(safeValue(data.OVERTIME_PAY) + " 원");
+                $("#modalMealPay").text(safeValue(data.MEAL_PAY) + " 원");
+                $("#modalBonus").text(safeValue(data.PS_BONUS) + " 원");
+                $("#modalIncomeTax").text(safeValue(data.INCOME_TAX) + " 원");
+                $("#modalLocalTax").text(safeValue(data.LOCAL_TAX) + " 원");
+                $("#modalEmploymentInsurance").text(safeValue(data.EMPLOYMENT_INSURANCE) + " 원");
+                $("#modalHealthInsurance").text(safeValue(data.HEALTH_INSURANCE) + " 원");
+                $("#modalNursingInsurance").text(safeValue(data.NURSING_INSURANCE) + " 원");
+                $("#modalNationalPension").text(safeValue(data.NATIONAL_PENSION) + " 원");
+                $("#modalTotalPayment").text(safeValue(data.TOTAL_PAYMENT) + " 원");
+                $("#modalActualSalary").text(safeValue(data.ACTUAL_SALARY) + " 원");
                 $("#modalPayDate").text(data.PAYDATE || "-");
 
               new bootstrap.Modal(document.getElementById('payStubModal')).show();
@@ -63,6 +99,7 @@ $(function() {
       });
   });
 
+  initializeDateFilters();
   loadMyPayStubs();
 });
 

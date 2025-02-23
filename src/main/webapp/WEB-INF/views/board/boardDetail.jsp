@@ -75,7 +75,7 @@
                                         <div class="col-md-6">
                                             <div class=" text-end mb-3">
                                                 <h5 class="text-gray mb-1">게시글 번호 <span class="text-primary">${board.boardNo }</span></h5>
-                                                <h5 class="text-gray mb-1">작성일 : <span class="text-dark">${board.boardDate}</span> </h5>
+                                                <h5 class="text-gray mb-1">작성일 : <span class="text-dark">${fn:substring(board.boardDate,0,16) }</span> </h5>
                                                 <c:choose>
                                                 	<c:when test="${board.boardAnon eq 'Y' }">
                                                 		<c:choose>

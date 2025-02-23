@@ -15,9 +15,22 @@
             <div class="content">
                 <h2 class="mb-3">나의 급여 내역</h2>
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5>급여 목록</h5>
-                    </div>
+									<div class="card-header d-flex justify-content-between">
+										<h5>급여 목록</h5>
+										<div>
+												<select id="yearSelect" class="form-select d-inline" style="width: 100px;">
+														<option value="">년</option>
+												</select>
+												<select id="monthSelect" class="form-select d-inline" style="width: 80px;">
+														<option value="">월</option>
+												</select>
+												<select id="daySelect" class="form-select d-inline" style="width: 80px;">
+														<option value="">일</option>
+												</select>
+												<button class="btn btn-primary" id="searchBtn">검색</button>
+												<button class="btn btn-secondary" id="resetBtn">초기화</button>
+										</div>
+									</div>								
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table">

@@ -7,12 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class PayStubController {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private IPayStubService service;
@@ -73,8 +71,12 @@ public class PayStubController {
 
     @GetMapping("/payStub/mylist")
     @ResponseBody
-    public List<PayStubVO> getMyPayStubs(HttpSession session) {
+    public List<PayStubVO> getMyPayStubs(
+        @RequestParam(value = "yearr", required = false) String yearr,
+        @RequestParam(value = "monthh", required = false) String monthh,
+        @RequestParam(value = "dayy", required = false) String dayy,
+        HttpSession session) {
         String emplNo = (String) session.getAttribute("userId");
-        return service.getMyPayStubs(emplNo);
+        return service.getMyPayStubs(emplNo, yearr, monthh, dayy);
     }
 }

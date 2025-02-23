@@ -89,17 +89,6 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-end notification-dropdown p-4">
 							<div class="noti-content" id="noti-content">
-								<div class="d-flex flex-column">
-									<div class="border-bottom mb-3 pb-3">
-										<div class="d-flex">
-											<div class="flex-grow-1">
-												<p class="mb-1"><span class="text-dark fw-semibold">Shawn</span>
-													performance in Math is below the threshold.</p>
-												<span>Just Now</span>
-											</div>
-										</div>
-									</div>
-								</div>
 							</div>
 							<div class="d-flex p-0">
 								<a href="#" class="btn btn-light w-100 me-2">닫기</a>
@@ -212,21 +201,34 @@ function notify(message){ // 메시지 태그 만들기
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
 			let result = "";
-			for(let i=0; i<res.notificationList.length; i++){
-				result += `
-					<div class="d-flex flex-column">
-						<div class="border-bottom mb-3 pb-3">
-							<div class="d-flex">
-								<div class="flex-grow-1">
-									<p class="mb-1">
-										\${res.notificationList[i].ntcnContent}</p>
-									<span>\${res.notificationList[i].ntcnDate}</span>
+			if(res.length > 0){
+				for(let i=0; i<res.notificationList.length; i++){
+					result += `
+						<div class="d-flex flex-column">
+							<div class="border-bottom mb-3 pb-3">
+								<div class="d-flex">
+									<div class="flex-grow-1">
+										<p class="mb-1">\${res.notificationList[i].ntcnContent}</p>
+										<span>\${res.notificationList[i].ntcnDate}</span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				`;
+					`;
+				}
 			}
+			result += `
+				<div class="d-flex flex-column">
+					<div class="border-bottom mb-3 pb-3">
+						<div class="d-flex">
+							<div class="flex-grow-1">
+								<p class="mb-1">알림이 없습니다.</p>
+								<span></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			`;
 			noti_content.html(result);
 		},
 		error : function(error){

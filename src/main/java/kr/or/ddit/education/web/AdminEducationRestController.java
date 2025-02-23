@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import kr.or.ddit.attendance.vo.DiligenceAndLazinessVO;
@@ -67,7 +69,7 @@ public class AdminEducationRestController {
         pageVO.setTotalRecord(totalRecord);
         List<EducationVO> eduAllList = eduService.selectEducationList(pageVO, educationVO);
 
-        // ✅ 날짜 변환 적용
+        // 날짜 변환 적용
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         for (EducationVO edu : eduAllList) {
             if (edu.getRecruitSdate() != null) {
@@ -83,59 +85,67 @@ public class AdminEducationRestController {
                 edu.setEdcEdateFormatted(sdf.format(edu.getEdcEdate())); 
             }
         }
-
         if (!eduAllList.isEmpty()) {
             resultMap.put("eduAllList", eduAllList);
         }
         resultMap.put("pageVO", pageVO);
+        entity = new ResponseEntity<>(resultMap, HttpStatus.OK);
+        return entity;
+    }
+    
+    
+    @PostMapping("/getEduApplicationAllList")
+    public ResponseEntity<Map<String, Object>> getEduApplicationAllList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Map<String, String> paramMap) {
+        ResponseEntity<Map<String, Object>> entity;
+        Map<String, Object> resultMap = new HashMap<>();
 
+        // 뷰에서 전달받은 데이터 가져오기
+        String edcTarget = paramMap.get("edcTarget");
+        String educator = paramMap.get("educator");
+        String edcTitle = paramMap.get("edcTitle");
+        String edcSort = paramMap.get("edcSort");
+        int currentPage = Integer.parseInt(paramMap.get("page"));
+        log.info("edcTarget, educator, edcTitle, edcSort, currentPage " + currentPage + edcTarget + educator + edcTitle + edcSort);
+
+        EducationVO educationVO = new EducationVO();
+        educationVO.setEdcTarget(edcTarget);
+        educationVO.setEducator(educator);
+        educationVO.setEdcTitle(edcTitle);
+        educationVO.setEdcSort(edcSort);
+        String emplNo = userDetails.getUsername();
+        log.info("로그인된 사용자의 사원번호: {}------------------------------", emplNo);
+
+
+        // 페이지와 검색어를 위한 데이터 세팅
+        PaginationInfoVO<EducationVO> pageVO = new PaginationInfoVO<>();
+        pageVO.setCurrentPage(currentPage);
+        int totalRecord = eduService.selectEduApplicationListCount(educationVO);
+        pageVO.setTotalRecord(totalRecord);
+        
+        List<EducationVO> eduAllList = eduService.selectEduApplicationList(emplNo, pageVO, educationVO);
+        
+        // 날짜 변환 적용
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        for (EducationVO edu : eduAllList) {
+            if (edu.getRecruitSdate() != null) {
+                edu.setRecruitSdateFormatted(sdf.format(edu.getRecruitSdate())); 
+            }
+            if (edu.getRecruitEdate() != null) {
+                edu.setRecruitEdateFormatted(sdf.format(edu.getRecruitEdate())); 
+            }
+            if (edu.getEdcSdate() != null) {
+                edu.setEdcSdateFormatted(sdf.format(edu.getEdcSdate())); 
+            }
+            if (edu.getEdcEdate() != null) {
+                edu.setEdcEdateFormatted(sdf.format(edu.getEdcEdate())); 
+            }
+        }
+        if (!eduAllList.isEmpty()) {
+            resultMap.put("eduAllList", eduAllList);
+        }
+        resultMap.put("pageVO", pageVO);
         entity = new ResponseEntity<>(resultMap, HttpStatus.OK);
         return entity;
     }
 
-	
-	/**
-	  
-	 // 20250213202427
-	 // http://localhost:8060/hrms/education/admin/rest/getEducationAllList
-     // get으로 호출하면 받는 정보임.
-		{
-		  "eduAllList": [
-		    {
-		      "edcNo": "11",
-		      "edcSort": "기술",
-		      "edcWay": "온라인",
-		      "educator": "강감찬",
-		      "edcTarget": "경력",
-		      "edcGrade": "과장",
-		      "edcPsncpa": 40,
-		      "edcTitle": "교육 프로그램 11",
-		      "edcContent": "이것은 교육 프로그램 11의 내용입니다.",
-		      "recruitSdate": "2025-03-06T15:00:00.000+00:00",
-		      "recruitEdate": "2025-03-14T15:00:00.000+00:00",
-		      "edcSdate": "2025-03-21T15:00:00.000+00:00",
-		      "edcEdate": "2025-04-05T15:00:00.000+00:00",
-		      "edcActive": "Y"
-		    }
-		  ],
-		  "pageVO": {
-		    "emplNo": null,
-		    "totalRecord": 1,
-		    "totalPage": 1,
-		    "currentPage": 1,
-		    "screenSize": 10,
-		    "blockSize": 3,
-		    "startRow": 1,
-		    "endRow": 10,
-		    "startPage": 1,
-		    "endPage": 3,
-		    "dataList": null,
-		    "searchType": null,
-		    "searchWord": null,
-		    "dateStart": null,
-		    "dateEnd": null,
-		    "pagingHTML": "<ul class='pagination pagination-sm m-0 float-right'><li class='page-item active'><span class='page-link'>1</span></li></ul>"
-		  }
-		}
-	 */
 }

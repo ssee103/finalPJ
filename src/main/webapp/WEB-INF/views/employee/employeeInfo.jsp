@@ -190,12 +190,12 @@
 										</div>
 									</div>
 									<div class="col-md-6">
-										<div class="row align-items-center mb-3" style="width: 500px;">
+										<div class="row align-items-center mb-3" id="signDiv">
 											<div class="col-md-4">
 												<label class="form-label mb-md-0">서명</label>
 											</div>
 											<div class="col-md-8">
-												<p id="emplSignature" style="border: 1px solid black;"></p>
+												<p id="emplSignature" ></p>
 											</div>
 										</div>
 									</div>
@@ -350,7 +350,7 @@
 							
 								<div class="d-flex align-items-center justify-content-end">
 									<button type="button" class="btn btn-outline-light border me-3" id="changePwdBtn">비밀번호 변경</button>
-									<button type="submit" class="btn btn-primary">추가 기입 & 수정</button>
+									<button type="submit" class="btn btn-primary">수정</button>
 								</div>
 						</form>
 					</div>
@@ -526,6 +526,8 @@ $(function(){
 						$("#emplSignature").html("등록한 서명이 없습니다.");
 					} else {
 						$("#emplSignature").append(imgHtml);	// 서명
+						$("#signDiv").css('width', '500px');
+						$("#emplSignature").css("border", "1px solid black");
 					}
 					
 					// 여기부터 추가 정보

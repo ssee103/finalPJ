@@ -74,10 +74,6 @@
                                         <span>교육 기간</span>
                                         <p class="text-gray-9">${education.edcSdateFormatted} ~ ${education.edcEdateFormatted}</p>
                                     </div>
-                                    <div class="list-group-item">
-                                        <span>교육 활성화 여부</span>
-                                        <p class="text-gray-9">${education.edcActive}</p>
-                                    </div>
                                 </div>
                                 <h5 class="mb-3">교육 교재</h5>
                                 <table class="table table-bordered">

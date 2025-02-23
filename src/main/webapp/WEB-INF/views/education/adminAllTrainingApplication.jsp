@@ -58,7 +58,7 @@
 				<!-- Leads List -->
 				<div class="card">
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-						<h5>신청 미승인 내역조회</h5>
+						<h5>수강신청자 목록</h5>
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
@@ -83,8 +83,9 @@
 							<table class="table datatable">
 								<thead class="thead-light">
 									<tr>
-										<th>신청자(사번)</th>
+										<th>신청자명</th>
 										<th>강의제목</th>
+										<th>교육담당</th>
 										<th>수강기간</th>
 										<th>교육해당부서</th>
 										<th>교육대상</th>
@@ -143,7 +144,7 @@
 						    console.log("전송 데이터:", data);
 
 						    $.ajax({
-						        url: "/hrms/education/user/rest/getMyEducationList",
+						        url: "/hrms/education/admin/rest/getEduApplicationAllList",
 						        type: "POST",
 						        data: JSON.stringify(data),
 						        contentType: "application/json;charset=utf-8",
@@ -154,32 +155,26 @@
 
 						            if (res.eduAllList && res.eduAllList.length > 0) {
 						            	res.eduAllList.forEach(function(edu) {
-						            	    let recruitPeriod = `${edu.recruitSdateFormatted} ~ ${edu.recruitEdateFormatted}`;
 						            	    let edcPeriod = `${edu.edcSdateFormatted} ~ ${edu.edcEdateFormatted}`;
-
+											
 						            	    tr += `
 												<tr>
-						            	    		<td>신청자사번</td>
-						            	    		<td>
-								            	        <p class="fs-14 text-dark fw-medium">
-								            	            <a href="/hrms/education/user/userTrainingDetail/\${edu.edcNo}">
-								            	                \${edu.edcTitle}
-								            	            </a>
-								            	        </p>
-								            	    </td>
+						            	    		<td>\${edu.emplNm}(\${edu.edcAplc})</td>
+							            	    	<td>\${edu.edcTitle}</td>
+						                            <td>\${edu.educator}</td>
 						                            <td>
 						                                <span class="text-nowrap">\${edu.edcSdateFormatted}</span> <br> 
 						                                <span class="text-nowrap"> ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcSort}</td>
 						                            <td>\${edu.edcTarget}</td>
-						                            <td>수강신청일</td>
+						                            <td>\${edu.erDate}</td>
 						                            <td>
-													    <div class="btn-group">
-													        <button class="btn btn-sm accept-btn" data-id="${prop.propNo}">승인</button>
-													        <button class="btn btn-sm fail-btn" data-id="${prop.propNo}">반려</button>
-													    </div>
-												</td>
+							                            <div class="mb-2">
+															<button class="btn btn-primary">승인</a>
+															<button class="btn btn-primary">반려</a>
+														</div>
+						                            </td>
 						            	        </tr>	
 						            	    `;
 						            	});
@@ -207,7 +202,6 @@
 		<!-- /Page Wrapper -->
 		
 		<script>
-		// 날짜 형식을 "yyyy-MM-dd HH:mm"으로 변환하는 함수
 		function formatDateTime(dateString) {
 		    if (!dateString) return "";
 		    

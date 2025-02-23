@@ -67,4 +67,17 @@ public class EducationServiceImpl implements IEducationService {
 	    return eduMapper.selectEducationMyList(pageVO, educationVO, educationVO.getEmplNo());
 	}
 
+	@Override
+	public int selectEduApplicationListCount(EducationVO educationVO) {
+		return eduMapper.selectEduApplicationListCount(educationVO);
+	}
+
+	@Override
+	public List<EducationVO> selectEduApplicationList(String emplNo, PaginationInfoVO<EducationVO> pageVO, EducationVO educationVO) {
+	    log.info("Service - selectEduApplicationList: emplNo = {}", emplNo);
+	    educationVO.setEmplNo(emplNo); // ✅ emplNo를 EducationVO에 직접 세팅!
+	    return eduMapper.selectEduApplicationList(emplNo, pageVO, educationVO);
+	}
+
+
 }

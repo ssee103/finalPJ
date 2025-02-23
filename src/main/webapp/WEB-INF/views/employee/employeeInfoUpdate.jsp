@@ -213,7 +213,7 @@
 												<label class="form-label mb-md-0">서명</label>
 											</div>
 											<div class="col-md-8">
-												<button type="button" class="btn btn-primary" id="showSignBtn">서명 등록&수정</button>
+												<button type="button" class="btn btn-primary" id="showSignBtn">등록</button>
 											</div>
 										</div>
 									</div>

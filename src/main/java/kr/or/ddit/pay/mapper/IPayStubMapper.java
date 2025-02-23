@@ -10,7 +10,7 @@ import kr.or.ddit.pay.vo.PayStubVO;
 @Mapper
 public interface IPayStubMapper {
 
-  public List<PayStubVO> selectMyPayStubs(String emplNo);
+  public List<PayStubVO> selectMyPayStubs(String emplNo, String yearr, String monthh, String dayy);
 
   public Map<String, Object> getPaidPayStub(String emplNo);
 

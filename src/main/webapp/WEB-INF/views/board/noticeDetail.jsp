@@ -70,12 +70,12 @@
                                 <div class="card-body">
                                     <div class="row justify-content-between align-items-center border-bottom mb-3">
                                         <div class="col-md-6">
-                                            <h4 class="fw-bold">제목:<span>${notice.noticeTitle}</span></h4>
+                                            <h4 class="fw-bold">${notice.noticeTitle}</h4>
                                         </div>
                                         <div class="col-md-6">
                                             <div class=" text-end mb-3">
                                                 <h5 class="text-gray mb-1">게시글 번호 <span class="text-primary">${notice.noticeNo }</span></h5>
-                                                <h5 class="text-gray mb-1">작성일 : <span class="text-dark">${notice.noticeDate }</span> </h5>
+                                                <h5 class="text-gray mb-1"><span class="text-dark">${fn:substring(notice.noticeDate,0,16) }</span> </h5>
                                             </div>
                                         </div>
                                     </div>
@@ -147,8 +147,10 @@
 				<!-- /Invoices -->
 
                 <div class="d-flex justify-content-center align-items-center mb-4">
-                   <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center me-2" id="updateBtn">수정</button>
-                   <button type="button" class="btn btn-white d-flex justify-content-center align-items-center border" id="deleteBtn">삭제</button>
+               		<c:if test="${sessionScope.userAuth eq 'ROLE_ADMIN' }">
+	               		<button type="button" class="btn btn-primary d-flex justify-content-center align-items-center me-2" id="updateBtn">수정</button>
+	        			<button type="button" class="btn btn-white d-flex justify-content-center align-items-center border" id="deleteBtn">삭제</button>
+               		</c:if>			
                    	<!-- Delete Modal -->
 						<!-- <div class="modal fade" id="delete_modal">
 							<div class="modal-dialog modal-dialog-centered">
@@ -182,8 +184,6 @@
 			<!-- /Footer -->
         </div>
 		<!-- /Page Wrapper -->
-
-
     </div>
 	<!-- /Main Wrapper -->
 

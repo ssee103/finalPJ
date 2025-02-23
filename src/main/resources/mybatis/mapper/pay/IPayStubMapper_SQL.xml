@@ -7,7 +7,7 @@
 <mapper namespace="kr.or.ddit.pay.mapper.IPayStubMapper">
 
     <!-- ✅ 확정된 급여 명세서만 조회하는 쿼리 -->
-    <select id="selectMyPayStubs" parameterType="string" resultType="kr.or.ddit.pay.vo.PayStubVO">
+    <select id="selectMyPayStubs" parameterType="map" resultType="kr.or.ddit.pay.vo.PayStubVO">
         SELECT 
               ps_no
             , empl_no
@@ -28,11 +28,20 @@
             , pay_at
         FROM pay_stub
         WHERE empl_no = #{emplNo}
-          AND pay_at = 'Y'  
+        AND pay_at = 'Y'
+        <if test="yearr != null and yearr != ''">
+            AND TO_CHAR(pay_date, 'YYYY') = #{yearr}
+        </if>
+        <if test="monthh != null and monthh != ''">
+            AND TO_CHAR(pay_date, 'MM') = #{monthh}
+        </if>
+        <if test="dayy != null and dayy != ''">
+            AND TO_CHAR(pay_date, 'DD') = #{dayy}
+        </if>
         ORDER BY pay_date DESC
     </select>
 
-     <!-- ✅ 지급된 급여 명세서 조회 -->
+    <!-- ✅ 지급된 급여 명세서 조회 + 포지션 코드별 직급명 매핑 -->
     <select id="getPaidPayStub" parameterType="string" resultType="map">
         SELECT 
               ps.basic_salary
@@ -50,20 +59,29 @@
             , TO_CHAR(ps.pay_date, 'YYYY-MM-DD') AS payDate
             , ps.pay_at
             , e.empl_position
+            , CASE e.empl_position
+                WHEN '01' THEN '사원'
+                WHEN '02' THEN '대리'
+                WHEN '03' THEN '과장'
+                WHEN '04' THEN '차장'
+                WHEN '05' THEN '부장'
+                ELSE '직급 미정'
+            END AS positionName
             , d.dept_name
             , e.empl_nm
             , CASE WHEN SYSDATE - ps.pay_date &gt;= 30 
-              THEN 'Y' 
-              ELSE 'N' 
-              END AS pay_eligible
+                THEN 'Y' 
+                ELSE 'N' 
+            END AS pay_eligible
         FROM pay_stub ps
         JOIN employee e ON ps.empl_no = e.empl_no
-        JOIN department d ON E.dept_code = d.dept_code
+        JOIN department d ON e.dept_code = d.dept_code
         WHERE ps.empl_no = #{emplNo}
         AND ps.pay_at = 'Y'
         ORDER BY ps.pay_date DESC
         FETCH FIRST 1 ROWS ONLY
     </select>
+
 
     <!-- ✅ 미리보기 급여 명세서 생성 (프로시저 호출) -->
     <update id="generatePayStubPreview" parameterType="string">

@@ -189,7 +189,7 @@
         WHERE e.edc_no = #{edcNo}
     </select>
     
-    	<select id="selectEducationMyListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
+    <select id="selectEducationMyListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
 		SELECT COUNT(ee_number)
 		FROM emp_edc
 		WHERE empl_no = '202501002'
@@ -216,6 +216,44 @@
 		        LEFT JOIN emp_edc ee 
 		            ON e.EDC_NO = ee.EDC_NO  
 		        WHERE ee.EMPL_NO = '202501002'
+		    <include refid="edcTitleSearchList"/>
+			<include refid="educatorSearchList"/>
+			<include refid="edcTargetSearchList"/>
+			<include refid="edcSortSearchList"/>
+		        ) a
+		<![CDATA[
+			WHERE a.rnum >= #{page.startRow} AND a.rnum <= #{page.endRow}
+		]]>
+	</select>
+	
+	 <select id="selectEduApplicationListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
+		SELECT COUNT(ee_number)
+		FROM emp_edc
+		WHERE empl_no = '202501002'
+	</select>
+	
+	<select id="selectEduApplicationList" parameterType="map" resultType="kr.or.ddit.education.vo.EducationVO">
+		SELECT * 
+			FROM (
+			    SELECT 
+			        er.EDC_APLC,
+			        em.EMPL_NM,
+			        er.ER_DATE,
+			        e.EDC_NO,
+			        e.EDC_SORT,
+			        e.EDUCATOR,
+			        e.EDC_TARGET,
+			        e.EDC_GRADE,
+			        e.EDC_TITLE,
+			        e.EDC_CONTENT,
+			        e.EDC_SDATE,
+			        e.EDC_EDATE,
+			        ROW_NUMBER() OVER (ORDER BY e.EDC_NO DESC) rnum
+			    FROM education e
+			    JOIN EDC_REQUEST er
+			        ON e.EDC_NO = er.EDC_NO  
+			    JOIN EMPLOYEE em 
+			    	ON em.empl_no = er.edc_aplc
 		    <include refid="edcTitleSearchList"/>
 			<include refid="educatorSearchList"/>
 			<include refid="edcTargetSearchList"/>

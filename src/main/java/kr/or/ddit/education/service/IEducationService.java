@@ -24,4 +24,8 @@ public interface IEducationService {
 	public int selectEducationMyListCount(EducationVO educationVO);
 	public List<EducationVO> selectEducationMyList(PaginationInfoVO<EducationVO> pageVO, EducationVO educationVO);
 
+	/* ADMIN - 교육신청자 관리*/
+	public int selectEduApplicationListCount(EducationVO educationVO);
+	public List<EducationVO> selectEduApplicationList(String emplNo, PaginationInfoVO<EducationVO> pageVO, EducationVO educationVO);
+
 }

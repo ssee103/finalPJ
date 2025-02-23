@@ -30,7 +30,7 @@
 			    <li id="sanLi" style="font-size: 15px; width: 160px; display: flex; align-items: center; justify-content: space-between; cursor:pointer;">
 			        <span style="display: flex; align-items: center; gap: 5px;">
 			            <i class="ti ti-calendar-star"></i>결재
-			            <span>?</span>
+			            <span id="mySancCount"></span>
 			        </span>
 			    </li>
 			    <li id="docLi" style="font-size: 15px; width: 160px; display: flex; align-items: center; justify-content: space-between; cursor:pointer;">
@@ -209,13 +209,14 @@
 </div>
 <script>
 let myDocCount = $("#myDocCount");
+let mySancCount = $("#mySancCount");
 let docLi = $("#docLi");
 let sanLi = $("#sanLi");
 
 
 $(function(){
 	getDocumentCount();
-	//setInterval(getDocumentCount, 10000);
+	//setInterval(getDocumentCount, 10000); // 이거 주석풀어야 실시간으로 문서개수 가져옴
 	
 	docLi.on("click", function(){
 		location.href="/hrms/sanction/personalDocuments";
@@ -235,6 +236,7 @@ function getDocumentCount(){
 		success : function(res){
 			console.log("문서 가져오기 실행됨");
 			myDocCount.text(res.doc);
+			mySancCount.text(res.sanc);
 		},
 		error : function(error){}
 	});

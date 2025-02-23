@@ -20,8 +20,8 @@ public class PayStubServiceImpl implements IPayStubService {
     private IPayStubMapper mapper;
 
     @Override
-    public List<PayStubVO> getMyPayStubs(String emplNo) {
-        return mapper.selectMyPayStubs(emplNo);
+    public List<PayStubVO> getMyPayStubs(String emplNo, String yearr, String monthh, String dayy) {
+        return mapper.selectMyPayStubs(emplNo, yearr, monthh, dayy);
     }
 
     @Override

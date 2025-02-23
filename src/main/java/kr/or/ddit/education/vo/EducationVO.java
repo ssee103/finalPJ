@@ -39,8 +39,18 @@ public class EducationVO {
 	private String curName  ;  // 커리큘럼명
 	private int curSort     ;  // 분류코드
     
+    // EdcRequest
+	private String edcAplc  ;  // 교육신청자
+	private Date erDate     ;  // 교육신청일자
+	private String erStatus ;  
     
-    
+	
+	// EMPLOYEE
+	private String emplNm;			// 사원 명
+	private String emplPosition;	// 사원 직위
+	private String deptCode;		// 부서 코드
+	private String teamCode;		// 팀 코드
+	
     // 날짜 포맷
     private String recruitSdateFormatted;
     private String recruitEdateFormatted;

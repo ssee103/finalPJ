@@ -49,6 +49,8 @@ public class NoticeController {
 	public String noticeList(
 			@RequestParam(name="page", required = false, defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String searchWord,
+			HttpSession session,
+			EmpAuthVO auth,
 			Model model) {
 		//paginationInfoVO를 활용한 페이징 및 검색
 		PaginationInfoVO<NoticeVO> pagingVO = new PaginationInfoVO<>();
@@ -70,6 +72,7 @@ public class NoticeController {
 		List<NoticeVO> noticeList = noticeService.noticeList(pagingVO);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("paging", pagingVO);
+		session.setAttribute("userAuth", auth.getAuthCode());
 		return "board/noticeList";
 	}
 	
@@ -111,13 +114,14 @@ public class NoticeController {
 	//게시판 상세보기
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@GetMapping("/noticeDetail")
-	public String noticeDetail(String noticeNo ,Model model) {
+	public String noticeDetail(String noticeNo ,EmpAuthVO auth,HttpSession session, Model model) {
 		NoticeVO noticeVO = noticeService.selectNotice(noticeNo);
 		if(noticeVO.getFileIdentify() != null && noticeVO.getFileIdentify() != "") {
 			List<DocFileVO> fileList = fileService.selectFileList(noticeVO.getFileIdentify());
 			model.addAttribute("fileList", fileList);
 		}
 		model.addAttribute("notice", noticeVO);
+		session.setAttribute("userAuth", auth.getAuthCode());
 		return "board/noticeDetail";
 	}
 	

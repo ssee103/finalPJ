@@ -32,18 +32,6 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -53,11 +41,13 @@
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">공지사항</h2>
 					</div>
-					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
-						<div class="mb-2">
-							<a href="/hrms/notice/noticeForm" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>글쓰기</a>
+					<c:if test="${sessionScope.userAuth eq 'ROLE_ADMIN'}">
+						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
+							<div class="mb-2">
+								<a href="/hrms/notice/noticeForm" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>글쓰기</a>
+							</div>
 						</div>
-					</div>
+					</c:if>
 				</div>
 				<!-- /Breadcrumb -->
 
@@ -103,8 +93,8 @@
 			                                        <td>
 			                                        	<a href="/hrms/notice/noticeDetail?noticeNo=${notice.noticeNo }">${notice.noticeTitle }</a>
 			                                        </td>
-			                                        <td>${notice.noticeWriter}</td>
-													<td>${notice.noticeDate }</td>										
+			                                        <td>관리자</td>
+													<td>${fn:substring(notice.noticeDate,0,16) }</td>										
 													<td>${notice.noticeHit }</td>		
 													<td></td>								
 												</tr>

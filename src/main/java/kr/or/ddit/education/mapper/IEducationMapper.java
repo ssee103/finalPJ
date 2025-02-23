@@ -24,7 +24,11 @@ public interface IEducationMapper {
 	public List<BookVO> getBooksByEdcNo(@Param("edcNo") String edcNo);
 
 	public int selectEducationMyListCount(EducationVO educationVO);
-	public List<EducationVO> selectEducationMyList(@Param("page")PaginationInfoVO<EducationVO> pageVO, @Param("education") EducationVO educationVO, String string);
+	public List<EducationVO> selectEducationMyList(@Param("page")PaginationInfoVO<EducationVO> pageVO, @Param("education") EducationVO educationVO, String empl);
+
+	/* ADMIN - 교육신청자 조회 */
+	public int selectEduApplicationListCount(EducationVO educationVO);
+	public List<EducationVO> selectEduApplicationList(@Param("emplNo")String emplNo, @Param("page")PaginationInfoVO<EducationVO> pageVO, @Param("education") EducationVO educationVO);
 
 
 
