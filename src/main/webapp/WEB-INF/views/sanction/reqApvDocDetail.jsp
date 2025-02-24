@@ -397,6 +397,24 @@ $(function(){
                                                             // 연장근무, 야간근무 결재시 히스토리 테이블 인서트
                                                             insertHistory(docNoData);
                                                             
+                                                            // 사원 평가일 때
+                                                            if(dsCode == '99') {
+                                                            	let emplNoValue = $("#emplNoValue").text();
+                                                            	let evalScore = $("#totalScore").text();
+                                                            	let evalScoreStr = evalScore.split("점")[0];
+                                                            	let evalSbj = $("#emplNo").text();
+                                                            	
+                                                        		let evalData = {
+                                                        				evalSbj: evalSbj,
+                                                        				emplObj: emplNoValue,
+                                                        				evalScore: evalScoreStr,
+                                                        		};
+                                                        		console.log("evalData: ", evalData);
+                                                        		insertEvaluation(evalData);
+                                                        		
+                                                        		
+                                                        	}
+                                                            
                                                         } else {
                                                             alert("최종 승인 처리 중 오류가 발생했습니다.");
                                                         }
@@ -473,6 +491,24 @@ $(function(){
                                         
                                         // 연장근무 신청서 등 dsCode에 따른 히스토리 테이블 삽입
                                         insertHistory(docNoData);
+                                        
+                                     	// 사원 평가일 때
+                                        if(dsCode == '99') {
+                                        	let emplNoValue = $("#emplNoValue").text();
+                                        	let evalScore = $("#totalScore").text();
+                                        	let evalScoreStr = evalScore.split("점")[0];
+                                        	let evalSbj = $("#emplNo").text();
+                                        	
+                                    		let evalData = {
+                                    				evalSbj: evalSbj,
+                                    				emplObj: emplNoValue,
+                                    				evalScore: evalScoreStr,
+                                    		};
+                                    		console.log("evalData: ", evalData);
+                                    		insertEvaluation(evalData);
+                                    		
+                                    		
+                                    	}
                                         
                                         // 문서 상태 업데이트
                                         $.ajax({
@@ -577,6 +613,25 @@ function insertHistory(docNoData) {
         });
     }
 	
+} // insertHistory 종료 영역
+
+// 사원 평가 시 데이터 인서트
+function insertEvaluation(evalData) {
+	$.ajax({
+		url: "/sanction/insertEvaluation",
+		method: "post",
+		data: JSON.stringify(evalData),
+		dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function(evalRes) {
+        	console.log("evalRes: ", evalRes);
+        	if(evalRes == 1) {
+        		alert("사원 평가 데이터 삽입 성공");
+        	} else {
+        		alert("사원 평가 데이터 삽입 실패");
+        	}
+        }
+	});
 }
 </script>
 </html>

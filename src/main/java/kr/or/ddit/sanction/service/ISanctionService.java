@@ -5,6 +5,7 @@ import java.util.List;
 import kr.or.ddit.employee.vo.EmployeeVO;
 import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
+import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
 
@@ -47,5 +48,7 @@ public interface ISanctionService {
 	public DocumentVO getWriterNo(String docNo);
 
 	public int allowFinalStatus(String docNo);
+
+	public int insertEvaluation(EvaluationVO evo);
 
 }

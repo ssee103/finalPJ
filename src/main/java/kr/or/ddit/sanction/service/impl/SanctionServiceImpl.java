@@ -14,6 +14,7 @@ import kr.or.ddit.sanction.mapper.ISanctionMapper;
 import kr.or.ddit.sanction.service.ISanctionService;
 import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
+import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
 import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
@@ -225,6 +226,14 @@ public class SanctionServiceImpl implements ISanctionService {
 	public int allowFinalStatus(String docNo) {
 		
 		int cnt = mapper.allowFinalStatus(docNo);
+		
+		return cnt;
+	}
+
+	@Override
+	public int insertEvaluation(EvaluationVO evo) {
+		
+		int cnt = mapper.insertEvaluation(evo);
 		
 		return cnt;
 	}

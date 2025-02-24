@@ -560,6 +560,26 @@ $(function(){
 							timeElem.setHtml(sTime + " - " + eTime);
 						}
 						
+						// 실적 보고서 평가 일 때
+						if(option == 99) {
+							var totalScore = 0;
+						    let cells = editor.document.find('.evalScore');
+						    for (var i = 0; i < cells.count(); i++) {
+						        var cell = cells.getItem(i);
+						        var text = cell.getText().trim();  // CKEditor의 경우 getText() 사용
+						        if (text === '우수') {
+						            totalScore += 20;
+						        } else if (text === '보통') {
+						            totalScore += 10;
+						        } else if (text === '미흡') {
+						            totalScore += 0;
+						        }
+						    }
+						    console.log("총점: " + totalScore);
+						    let totalScoreStr = editor.document.getById("totalScore");
+						    totalScoreStr.setHtml(totalScore + "점");
+						}
+						
 						
 
 						

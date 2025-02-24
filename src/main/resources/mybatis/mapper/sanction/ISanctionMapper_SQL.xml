@@ -209,4 +209,9 @@
 	where doc_no = #{docNo}
 </update>
 
+<insert id="insertEvaluation" parameterType="kr.or.ddit.sanction.vo.EvaluationVO">
+	insert into evaluation (eval_no, eval_sbj, empl_obj, eval_score, eval_date)
+	values(evaluation_seq.nextval, #{evalSbj}, #{emplObj}, TO_NUMBER(#{evalScore}), sysdate)
+</insert>
+
 </mapper>

@@ -13,6 +13,7 @@ import kr.or.ddit.employee.vo.EmployeeVO;
 import kr.or.ddit.sanction.service.ISanctionService;
 import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
+import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
 import lombok.extern.slf4j.Slf4j;
@@ -197,6 +198,16 @@ public class SanctionRestController {
 		log.info("docNo: " + docNo);
 		
 		int cnt = service.allowFinalStatus(docNo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/insertEvaluation")
+	public int insertEvaluation(@RequestBody EvaluationVO evo) {
+		log.info("사원 평가 인서트 컨트롤러 실행");
+		log.info("사원평가 evo: " + evo);
+		
+		int cnt = service.insertEvaluation(evo);
 		
 		return cnt;
 	}

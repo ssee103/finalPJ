@@ -32,18 +32,6 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -52,17 +40,6 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">사원 정보 </h2>
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="index.html"><i class="ti ti-smart-home"></i></a>
-								</li>
-								<li class="breadcrumb-item">
-									Pages
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">Profile </li>
-							</ol>
-						</nav>
 					</div>
 					<div class="head-icons ms-2">
 						<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
@@ -322,8 +299,8 @@
 									</div>
 								</div>
 							</div>
-							<div class="border-bottom mb-3">
-								<h6 class="mb-3">퇴사 관련 정보</h6> <!-- 퇴사 관련 정보 -->
+							<!-- <div class="border-bottom mb-3">
+								<h6 class="mb-3">퇴사 관련 정보</h6>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="row align-items-center mb-3">
@@ -346,7 +323,7 @@
 										</div>
 									</div>
 								</div>
-							</div> <!-- 정보 끝 (버튼 바로 위) -->
+							</div> --> <!-- 정보 끝 (버튼 바로 위) -->
 							
 								<div class="d-flex align-items-center justify-content-end">
 									<button type="button" class="btn btn-outline-light border me-3" id="changePwdBtn">비밀번호 변경</button>
@@ -405,10 +382,6 @@
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<!-- Datatable JS -->
-<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
-
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -416,10 +389,6 @@
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
