@@ -36,7 +36,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>지급 예정일</th>
+                                        <th>지급 일자</th>
                                         <th>지급 내용</th>
                                         <th>총 지급액</th>
                                         <th>실 지급액</th>
@@ -76,7 +76,7 @@
 											<tr>
 													<td>부서</td>
 													<td id="modalDeptName">-</td>
-													<td>지급 예정일</td>
+													<td>지급 일자</td>
 													<td id="modalPayDate">-</td>
 											</tr>
 											<tr>

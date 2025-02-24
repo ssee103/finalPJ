@@ -27,21 +27,22 @@
 
 	<select id="getJobById" resultType="kr.or.ddit.recruit.vo.RecruitVO">
 	    SELECT 
-	        rec_no AS recNo,
-	        dept_code AS deptCode,
-	        rec_title AS recTitle,
-	        rec_position AS recPosition,
-	        rec_content AS recContent,
-	        rec_req AS recReq,
-	        rec_ideal AS recIdeal,
-	        TO_CHAR(rec_sdate, 'YYYY-MM-DD HH24:MI:SS') AS recSdate,
-	        TO_CHAR(rec_edate, 'YYYY-MM-DD HH24:MI:SS') AS recEdate,
-	        rec_exp AS recExp,
-	        rec_treatment AS recTreatment,
-	        rec_essential AS recEssential,
-	        rec_usage AS recUsage,
-	        rec_target AS recTarget
-	    FROM RECRUITMENT
+	        r.rec_no AS recNo,
+	        d.dept_name AS deptName,
+	        r.rec_title AS recTitle,
+	        r.rec_position AS recPosition,
+	        r.rec_content AS recContent,
+	        r.rec_req AS recReq,
+	        r.rec_ideal AS recIdeal,
+	        TO_CHAR(r.rec_sdate, 'YYYY-MM-DD HH24:MI:SS') AS recSdate,
+	        TO_CHAR(r.rec_edate, 'YYYY-MM-DD HH24:MI:SS') AS recEdate,
+	        r.rec_exp AS recExp,
+	        r.rec_treatment AS recTreatment,
+	        r.rec_essential AS recEssential,
+	        r.rec_usage AS recUsage,
+	        r.rec_target AS recTarget
+	    FROM RECRUITMENT r
+	    JOIN department d ON d.dept_code = r.dept_code
 	    WHERE rec_no = #{recNo}
 	</select>
 	

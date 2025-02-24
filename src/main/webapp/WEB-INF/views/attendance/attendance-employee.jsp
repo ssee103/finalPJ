@@ -78,7 +78,7 @@
 										</div>
 										<div>
 											<h2>
-												<span class="fs-20 text-gray-5"> ?</span>
+												<span class="fs-20 text-gray-5" id="OVERTIMEHOUR"> ?</span>
 											</h2>
 										</div>
 									</div>
@@ -244,6 +244,7 @@ let todayDclzEtime = $("#todayDclzEtime");	// 오늘 나의 퇴근시간을 표�
 let pagingArea = $("#pagingArea");			// 페이지 표시하는 div
 let searchBtn = $("#searchBtn");			// 날짜검색버튼
 let LATE = $("#LATE")
+let OVERTIMEHOUR = $("#OVERTIMEHOUR")
 
 time(); // 시계함수 실행
 setInterval(time, 1000); // 시계함수 1초마다 계속실행
@@ -417,6 +418,7 @@ function selectThisMonthData(){
 		success : function(res){
 			console.log(res);
 			LATE.text(" " + res.LATE + " 회")
+			OVERTIMEHOUR.text(" " + res.OVERTIMEHOUR + " 시간")
 		},
 		error : function(){
 			showToastMessage("❌ 목록을 불러오는데 실패했습니다.", "danger");

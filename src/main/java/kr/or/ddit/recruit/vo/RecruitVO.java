@@ -25,7 +25,7 @@ public class RecruitVO {
     private String deptName;      // 부서명
     private String positionName;  // 직위명
     private String usageStatus;   // 공고활성여부(진행중/완료)
-
+    
     // 연관된 기술항목 목록 (1:N 관계)
     private List<RecSortVO> sortList;
     

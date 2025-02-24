@@ -228,6 +228,14 @@
 		        <include refid="selectThisMonth"/>
 		        and DCLZ_STATUS = '01'    
 		    ) as normal
+		    ,(
+				SELECT TRUNC(SUM((HIS_ETIME - HIS_STIME) * 24)) AS total_hours
+				FROM HISTORY
+				WHERE HIS_SDATE >= TRUNC(SYSDATE, 'MM')
+				<![CDATA[AND HIS_SDATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)]]>
+				AND empl_no = #{emplNo}
+				AND HIS_TYPE = '01'
+		    ) as overtimeHour
 		from dual
   	</select>
 </mapper>

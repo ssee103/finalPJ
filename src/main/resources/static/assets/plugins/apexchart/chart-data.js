@@ -1,35 +1,37 @@
 'use strict';
+const now = new Date();
+let month = [];
+for(let i=0; i<12; i++){
+	month[i] = ((now.getMonth() - i + 12) % 12) + 1 + "월";
+}
 
 $(document).ready(function () {
-
+	
 $.ajax({
 	url : "/hrms/admin/getChartsData",
 	type : "post",
 	success : function(res)	{
 		console.log(res);
-	},
-	error : function(error){
-		console.log(error);
-	}
-});
-
-  function generateData(baseval, count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;;
-      var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-      var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
-
-      series.push([x, y, z]);
-      baseval += 86400000;
-      i++;
-    }
-    return series;
-  }
+		let late = res.lateMap;
+		let emplCount = res.emplCount;
+		
+		function generateData(baseval, count, yrange) {
+		  var i = 0;
+		  var series = [];
+		  while (i < count) {
+		    var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;;
+		    var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+		    var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
+		
+		    series.push([x, y, z]);
+		    baseval += 86400000;
+		    i++;
+		  }
+		  return series;
+		}
 
 
-  // Simple Line 1번
+  // 지난1년동안의 월별지각횟수
   if ($('#s-line').length > 0) {
     var sline = {
       chart: {
@@ -51,7 +53,7 @@ $.ajax({
       },
       series: [{
         name: "지각횟수",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148, null, null, null]
+        data: [late['LATE11'], late['LATE10'], late['LATE9'], late['LATE8'], late['LATE7'], late['LATE6'], late['LATE5'], late['LATE4'], late['LATE3'], late['LATE2'], late['LATE1'], late['LATE0']]
       }],
       title: {
         text: 'Product Trends by Month',
@@ -64,7 +66,7 @@ $.ajax({
         },
       },
       xaxis: {
-        categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '10월', '11월', '12월'],
+        categories: [month[11], month[10], month[9], month[8], month[7], month[6], month[5], month[4], month[3], month[2], month[1], month[0]],
       }
     }
 
@@ -75,7 +77,41 @@ $.ajax({
 
     chart.render();
   }
+  
+  // 부서별 인원수
+  if ($('#donut-chart').length > 0) {
+    var donutChart = {
+      chart: {
+        height: 350,
+        type: 'donut',
+        toolbar: {
+          show: false,
+        }
+      },
+      // colors: ['#4361ee', '#888ea8', '#e3e4eb', '#d3d3d3'],
+      series: [emplCount['01'],emplCount['02'],emplCount['03'],emplCount['04'],emplCount['05']],
+	  labels: ['경영 인사', '마케팅', '연구 개발', '운영', '재무 회계'],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+    }
 
+    var donut = new ApexCharts(
+      document.querySelector("#donut-chart"),
+      donutChart
+    );
+
+    donut.render();
+  }
+  
   // Simple Line Area 2번
   if ($('#s-line-area').length > 0) {
     var sLineArea = {
@@ -331,40 +367,6 @@ $.ajax({
     chart.render();
   }
 
-  // Donut Chart 7번
-
-  if ($('#donut-chart').length > 0) {
-    var donutChart = {
-      chart: {
-        height: 350,
-        type: 'donut',
-        toolbar: {
-          show: false,
-        }
-      },
-      // colors: ['#4361ee', '#888ea8', '#e3e4eb', '#d3d3d3'],
-      series: [44, 55, 41, 17],
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
-    }
-
-    var donut = new ApexCharts(
-      document.querySelector("#donut-chart"),
-      donutChart
-    );
-
-    donut.render();
-  }
-
   // Radial Chart 8번
   if ($('#radial-chart').length > 0) {
     var radialChart = {
@@ -406,4 +408,10 @@ $.ajax({
 
     chart.render();
   }
+
+		},
+		error : function(error){
+			console.log(error);
+		}
+	});
 });

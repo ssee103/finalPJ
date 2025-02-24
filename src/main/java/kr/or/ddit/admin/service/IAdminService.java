@@ -19,6 +19,6 @@ public interface IAdminService {
 
 	public int insertAttendance(DiligenceAndLazinessVO dalVO); // 출퇴근 기록 추가하기
 
-	public Map<String, Object> getLateData(); // 차트데이터 일괄 가져오기
+	public Map<String, Map<String, Object>> getChartData(); // 차트데이터 일괄 가져오기
 
 }

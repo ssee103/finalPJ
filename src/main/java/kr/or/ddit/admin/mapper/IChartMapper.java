@@ -9,4 +9,6 @@ public interface IChartMapper {
 
 	public Map<String, Object> getLateData();
 
+	public Map<String, Object> getEmplCountData();
+
 }

@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,9 @@ import kr.or.ddit.admin.service.IAdminService;
 import kr.or.ddit.attendance.vo.DiligenceAndLazinessVO;
 import kr.or.ddit.cmm.vo.PaginationInfoVO;
 import kr.or.ddit.employee.vo.EmployeeVO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class AdminServiceImpl implements IAdminService{
 	
@@ -48,8 +51,14 @@ public class AdminServiceImpl implements IAdminService{
 	}
 
 	@Override
-	public Map<String, Object> getLateData() {
-		return chartMapper.getLateData();
+	public Map<String, Map<String, Object>> getChartData() {
+		Map<String, Map<String, Object>> resultMap = new HashMap<>();
+		Map<String, Object> lateMap = chartMapper.getLateData(); // 월별 지각한사람 수
+		Map<String, Object> emplCount = chartMapper.getEmplCountData(); // 부서별 인원 통계
+		log.info("결과결과결과결과결과결과결과결과" + lateMap.toString() + " , " + emplCount.toString());
+		resultMap.put("lateMap", lateMap);
+		resultMap.put("emplCount", emplCount);
+		return resultMap;
 	}
 
 }

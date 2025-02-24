@@ -59,7 +59,7 @@
 							</a>
 							<ul>
 								<li><a href="/hrms/attendance/page">출퇴근</a></li>
-								<li><a href="#">연장근무</a></li>
+								<li><a href="/hrms/dclz/overtime/employee">연장근무</a></li>
 								<li><a href="#">야간근무</a></li>
 								<li><a href="#">출장</a></li>
 								<li><a href="#">조퇴</a></li>
@@ -178,6 +178,7 @@
 								</a>
 								<ul>
 									<li><a href="/hrms/attendance/authorityPage">출퇴근 기록</a></li>
+									<li><a href="/hrms/dclz/overtime-authority">연장근무 기록</a></li>
 									<li><a href="#">출장기록</a></li>
 									<li><a href="#">더추가하기</a></li>
 								</ul>

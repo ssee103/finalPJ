@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.admin.service.IAdminService;
@@ -135,9 +136,9 @@ public class AdminRestController {
 
 	// 통계 데이터 가져오기
 	@PostMapping("/getChartsData")
-	public ResponseEntity<Map<String, Object>> getChartsData(){
-		Map<String, Object> lateMap = adminService.getLateData();
+	public ResponseEntity<Map<String, Map<String, Object>>> getChartsData(){
+		Map<String, Map<String, Object>> resultMap = adminService.getChartData();
 		
-		return null;
+		return new ResponseEntity<Map<String,Map<String,Object>>>(resultMap, HttpStatus.OK);
 	}
 }

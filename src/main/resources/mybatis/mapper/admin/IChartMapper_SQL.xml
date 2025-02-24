@@ -28,4 +28,18 @@
 		FROM DUAL
 	</select>
 	
+	<sql id="getEmplCountHeader">
+		SELECT COUNT(empl_no)
+		FROM EMPLOYEE
+		WHERE dept_code = 
+	</sql>
+	<select id="getEmplCountData" resultType="java.util.Map">
+		select
+			 (<include refid="getEmplCountHeader"/> '01') as "01"
+			,(<include refid="getEmplCountHeader"/> '02') as "02"
+			,(<include refid="getEmplCountHeader"/> '03') as "03"
+			,(<include refid="getEmplCountHeader"/> '04') as "04"
+			,(<include refid="getEmplCountHeader"/> '05') as "05"
+		from dual
+	</select>
 </mapper>

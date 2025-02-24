@@ -146,8 +146,7 @@ public class AttendanceRestController {
 		Map<String, BigDecimal> resultMap = service.selectThisMonthData(emplNo); // 이렇게하면 된다고했는데 안되네 null나옴
 		BigDecimal result1 = resultMap.get("LATE");
 		BigDecimal result2 = resultMap.get("NORMAL");
-		log.info("LATE : " + result1.toString());
-		log.info("NORMAL : " + result2.toString());
+		BigDecimal result3 = resultMap.get("OVERTIMEHOUR");
 		return new ResponseEntity<Map<String,BigDecimal>>(resultMap, HttpStatus.OK);
 	}
 }

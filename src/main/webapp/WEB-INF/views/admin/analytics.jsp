@@ -51,7 +51,7 @@
 					<div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title">Apex Simple</h5>
+								<h5 class="card-title">월별 지각횟수</h5>
 							</div>
 							<div class="card-body">
 								<div id="s-line" class="chart-set"></div>
@@ -59,7 +59,20 @@
 						</div>
 					</div>
 					<!-- /Chart -->
-
+					
+					<!-- Chart -->
+					<div class="col-md-6 d-flex">
+						<div class="card w-100">
+							<div class="card-header">
+								<h5 class="card-title">부서별 인원수</h5>
+							</div>
+							<div class="card-body">
+								<div id="donut-chart" class="chart-set"></div>
+							</div>
+						</div>
+					</div>
+					<!-- /Chart -->
+					
 					<!-- Chart -->
 					<div class="col-md-6">
 						<div class="card">
@@ -121,19 +134,6 @@
 							</div>
 							<div class="card-body">
 								<div id="mixed-chart" class="chart-set"></div>
-							</div>
-						</div>
-					</div>
-					<!-- /Chart -->
-
-					<!-- Chart -->
-					<div class="col-md-6 d-flex">
-						<div class="card w-100">
-							<div class="card-header">
-								<h5 class="card-title">Donut Chart</h5>
-							</div>
-							<div class="card-body">
-								<div id="donut-chart" class="chart-set"></div>
 							</div>
 						</div>
 					</div>
