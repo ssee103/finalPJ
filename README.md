@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/92be6308-e9ac-40ac-912a-003b2b5ae048)# DDIT FinalProject HERMES
+# DDIT FinalProject HERMES
 대덕인재 개발원 ddit 최종 프로젝트입니다.<br/>
 작성자 : 403호 1조 TA 백승권
 
