@@ -18,6 +18,7 @@ import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
 import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
+import kr.or.ddit.sanction.vo.VacationVO;
 
 @Service
 public class SanctionServiceImpl implements ISanctionService {
@@ -234,6 +235,46 @@ public class SanctionServiceImpl implements ISanctionService {
 	public int insertEvaluation(EvaluationVO evo) {
 		
 		int cnt = mapper.insertEvaluation(evo);
+		
+		return cnt;
+	}
+
+	@Override
+	public int insertVacationHistory(HistoryVO hvo) {
+		
+		int cnt = mapper.insertVacationHistory(hvo);
+		
+		return cnt;
+	}
+
+	@Override
+	public int calVacCount(VacationVO vvo) {
+
+		int cnt = mapper.calVacCount(vvo);
+		
+		return cnt;
+	}
+
+	@Override
+	public List<ReferenceVO> getRefList(String docNo) {
+		
+		List<ReferenceVO> rvo = mapper.getRefList(docNo);
+		
+		return rvo;
+	}
+
+	@Override
+	public List<DocumentVO> getRefDocuments(String userId) {
+		
+		List<DocumentVO> dvo = mapper.getRefDocuments(userId);
+		
+		return dvo;
+	}
+
+	@Override
+	public int refReadUpdate(String userId, String docNo) {
+		
+		int cnt = mapper.refReadUpdate(userId, docNo);
 		
 		return cnt;
 	}

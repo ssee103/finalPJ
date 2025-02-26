@@ -2131,7 +2131,7 @@ $(function(){
 								</a>
 							</p>
 						<td>
-							<span class=" badge badge-pink-transparent"><i class="ti ti-device-computer-camera me-1"></i>\${apvText}</span>
+							<span class=" badge badge-info-transparent"><i class="ti ti-device-computer-camera me-1"></i>\${apvText}</span>
 						</td>
 						<td>\${doc.sanctnRqstdt}</td>
 						<td>\${doc.writerNo}</td>
@@ -2144,6 +2144,29 @@ $(function(){
 						</td>
 					</tr>`		
 				);
+				
+				if(apvText == '승인') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-info-transparent")
+		            .addClass("badge-success-transparent");
+				} else if(apvText == '반려') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-info-transparent")
+		            .addClass("badge-purple-transparent");
+				} else if(apvText == '전결') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-info-transparent")
+		            .addClass("badge-purple-transparent");
+				} else if(apvText == '위임 전결') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-info-transparent")
+		            .addClass("badge-secondary-transparent");
+				} else if(apvText == '결재 대기') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-info-transparent")
+		            .addClass("badge-dark-transparent");
+				}
+				
 				
 			});
 			

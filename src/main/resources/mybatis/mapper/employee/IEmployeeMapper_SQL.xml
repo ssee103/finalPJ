@@ -132,4 +132,20 @@
              end
 	</select>
 	
+	<insert id="giveVacation" parameterType="kr.or.ddit.employee.vo.EmployeeVO">
+		INSERT INTO yearly_vacation (
+		    yryc_no,
+		    empl_no,
+		    yryc_total,
+		    yryc_remndr,
+		    yryc_year
+		) VALUES (
+		    yearly_vacation_seq.nextval
+		    ,#{emplNo}
+		    ,20
+		    ,20
+		    ,sysdate
+		)
+	</insert>
+	
 </mapper>

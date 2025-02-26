@@ -142,22 +142,31 @@
 const userId = sessionStorage.getItem("userId");
 let searchBtn = $("#searchBtn");
 let dataTableTbody = $("#dataTable-tbody");
+let pagingArea = $("#pagingArea");
 
 $(function(){
 	getList(1);
+	
+	searchBtn.on("click", function(){
+		let dateStart = $("#dateStart");
+		let dateEnd = $("#dateEnd");
+		console.log("검색어들 : ", dateStart.val(), dateEnd.val())
+		getList(1, dateStart.val(), dateEnd.val());
+	});
+	
+	pagingArea.on("click", "a", function(){
+		event.preventDefault();
+		let page = $(this).data("page");
+		let dateStart = $("#dateStart");
+		let dateEnd = $("#dateEnd");
+		getList(page, dateStart.val(), dateEnd.val());
+	})
 });
 
 function getList(page, dateStart, dateEnd){
-	data = {
-		currentPage : page,
-		emplNo : userId,
-	};
-	if(dateStart != null && dateStart != ''){
-		data.dateStart = dateStart;
-	}
-	if(dateEnd != null && dateEnd != ''){
-		data.dateEnd = dateEnd;
-	}
+	data = {currentPage : page, emplNo : userId,};
+	if(dateStart != null && dateStart != '') data.dateStart = dateStart;
+	if(dateEnd != null && dateEnd != '') data.dateEnd = dateEnd;
 	$.ajax({
 		url : "/dclz/getOvertimeList",
 		type : "post",
@@ -166,10 +175,10 @@ function getList(page, dateStart, dateEnd){
 		success : function(res){
 			console.log(res);
 			let tr = "";
-			for(let i=0; i<res.length; i++){
-				let hisSdate = res[i].hisSdate.substring(0,11);
-				let hisStime = res[i].hisStime.substring(10,20);
-				let hisEtime = res[i].hisEtime.substring(10,20);
+			for(let i=0; i<res.historyList.length; i++){
+				let hisSdate = res.historyList[i].hisSdate.substring(0,11);
+				let hisStime = res.historyList[i].hisStime.substring(10,20);
+				let hisEtime = res.historyList[i].hisEtime.substring(10,20);
 				
 				let diffSeconds = timeStringToSeconds(hisEtime) - timeStringToSeconds(hisStime);
 				let diffHours = Math.floor(diffSeconds / 3600);
@@ -185,6 +194,7 @@ function getList(page, dateStart, dateEnd){
 					`;
 			}
 			dataTableTbody.html(tr);
+			pagingArea.html(res.pageVO.pagingHTML);
 		},
 		error : function(){},
 	});

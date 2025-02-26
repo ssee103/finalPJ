@@ -85,13 +85,18 @@ public class BoardServiceImpl implements IBoardService{
 	}
 
 	@Override
-	public int commentDelete(String commentNo) {
-		return cmtMapper.commentDelete(commentNo);
+	public int commentDelete(String commentNo, String commentNos) {
+		return cmtMapper.commentDelete(commentNo,commentNos);
 	}
 
 	@Override
-	public CommentVO commentSelect(String commentNo) {
-		return cmtMapper.commentSelect(commentNo);
+	public CommentVO commentSelect(String commentNo,String commentNos) {
+		return cmtMapper.commentSelect(commentNo,commentNos);
+	}
+
+	@Override
+	public int commentUpdate(CommentVO cmtVO) {
+		return cmtMapper.commentUpdate(cmtVO);
 	}
 
 }

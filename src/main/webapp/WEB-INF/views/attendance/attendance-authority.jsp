@@ -136,10 +136,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<!-- Datatable JS -->
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>	
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -214,9 +210,9 @@ function getList(page, dateStart, dateEnd, emplNm, emplNo){
 			console.log("성공", res);
 			let tr = "";
 			for(let i=0; i<res.dalList.length; i++){
-				let dclzDate = res.dalList[i].dclzDate.substr(0,10);
-				let dclzStime = res.dalList[i].dclzStime.substr(11);
-				let dclzEtime = res.dalList[i].dclzEtime.substr(11);
+				let dclzDate = res.dalList[i].dclzDate != null ? res.dalList[i].dclzDate.substr(0,10) : "00:00:00";
+				let dclzStime = res.dalList[i].dclzStime != null ? res.dalList[i].dclzStime.substr(11) : "00:00:00";
+				let dclzEtime = res.dalList[i].dclzEtime != null ? res.dalList[i].dclzEtime.substr(11) : "00:00:00";
 				tr += `
 					<tr>
 						<td>\${res.dalList[i].emplNo}</td>

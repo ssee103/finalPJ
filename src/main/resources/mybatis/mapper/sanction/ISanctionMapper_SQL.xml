@@ -67,6 +67,7 @@
 	    d.doc_title,
 	    d.doc_content,
 	    d.doc_period,
+	    d.file_identify,
 	    TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt,
 	    a.sanctner_no,
 	    a.sanctn_status,
@@ -90,6 +91,7 @@
     <result property="emplSignature" column="EMPL_SIGNATURE"/>
     <result property="docApv" column="DOC_APV"/>
     <result property="dcrbAllow" column="dcrb_allow"/>
+    <result property="fileIdentify" column="file_identify"/>
     <!-- 기타 Document 컬럼 매핑 -->
 
     <!-- 결재자 정보를 collection으로 매핑 -->
@@ -111,6 +113,7 @@
 	    TO_CHAR(d.doc_period, 'YYYY-MM-DD') as doc_period,
 	    d.doc_apv,
 	    d.dcrb_allow,
+	    d.file_identify,
 	    TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt,
 	    (select empl_nm from employee where empl_no = a.sanctner_no) as sanctner_no,
 	    (select cc_name from common_code where cc_code = a.sanctn_status and cg_group = 'SANCTN_STATUS') as sanctn_status,
@@ -214,4 +217,41 @@
 	values(evaluation_seq.nextval, #{evalSbj}, #{emplObj}, TO_NUMBER(#{evalScore}), sysdate)
 </insert>
 
+<insert id="insertVacationHistory" parameterType="kr.or.ddit.sanction.vo.HistoryVO">
+	insert into history(his_no, empl_no, his_type, his_sdate, his_edate, his_creatdt)
+	values (history_seq.nextval, #{emplNo}, #{hisType}, TO_DATE(#{hisSdate}, 'YYYY-MM-DD'), TO_DATE(#{hisEdate}, 'YYYY-MM-DD'), sysdate)
+</insert>
+
+<update id="calVacCount" parameterType="kr.or.ddit.sanction.vo.VacationVO">
+	update yearly_vacation
+	set
+		yryc_usage = yryc_usage + #{count},
+		yryc_remndr = yryc_remndr - #{count}
+	where empl_no = #{emplNo}
+</update>
+
+<select id="getRefList" parameterType="string" resultType="kr.or.ddit.sanction.vo.ReferenceVO">
+	select doc_no, 
+		   (select empl_nm from employee where empl_no = ref_no) as ref_no, 
+		   ref_read
+	from reference
+	where doc_no = #{docNo}
+</select>
+
+<select id="getRefDocuments" parameterType="string" resultType="kr.or.ddit.sanction.vo.DocumentVO">
+	select d.doc_no, d.ds_code, d.writer_no, d.doc_title, TO_CHAR(d.doc_date, 'YYYY-MM-DD') as doc_date, d.doc_content, d.doc_remark, 
+	d.doc_period, d.doc_temp, TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt, d.dcrb_allow, d.doc_apv, d.final_date, d.file_identify, r.ref_read
+	from document d
+	join reference r on d.doc_no = r.doc_no
+	where r.ref_no = #{userId}
+	order by TO_NUMBER(doc_no) desc
+</select>
+
+<update id="refReadUpdate" parameterType="string">
+	update reference
+	set
+		ref_read = 'Y'
+	where doc_no = #{docNo}
+	and ref_no = #{userId}
+</update>
 </mapper>

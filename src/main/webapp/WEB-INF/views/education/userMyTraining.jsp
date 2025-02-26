@@ -146,8 +146,7 @@
 							            	    	<td>\${edu.edcTitle}</td>
 						                            <td>\${edu.educator}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.edcEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcSort}</td>
 						                            <td>\${edu.edcTarget}</td>
@@ -155,7 +154,7 @@
 						                            <td>\${edu.eeCdate}</td>
 						                            <td>
 							                            <div class="mb-2">
-															<a href=/hrms/education/user/userTrainingDetail/\${edu.edcNo}  class="btn btn-primary">자세히보기</a>
+															<a href=/hrms/education/user/userMyTrainingLecture/\${edu.edcNo}  class="btn btn-primary">자세히보기</a>
 														</div>
 						                            </td>
 						            	        </tr>	

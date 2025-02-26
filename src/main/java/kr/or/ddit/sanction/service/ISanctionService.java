@@ -7,7 +7,9 @@ import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
 import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
+import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
+import kr.or.ddit.sanction.vo.VacationVO;
 
 public interface ISanctionService {
 
@@ -50,5 +52,15 @@ public interface ISanctionService {
 	public int allowFinalStatus(String docNo);
 
 	public int insertEvaluation(EvaluationVO evo);
+
+	public int insertVacationHistory(HistoryVO hvo);
+
+	public int calVacCount(VacationVO vvo);
+
+	public List<ReferenceVO> getRefList(String docNo);
+
+	public List<DocumentVO> getRefDocuments(String userId);
+
+	public int refReadUpdate(String userId, String docNo);
 
 }

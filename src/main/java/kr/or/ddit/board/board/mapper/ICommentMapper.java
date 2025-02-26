@@ -3,6 +3,7 @@ package kr.or.ddit.board.board.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.board.board.vo.CommentVO;
 
@@ -17,9 +18,11 @@ public interface ICommentMapper {
 	//대댓글 등록
 	public int replyCommentInsert(CommentVO cmtVO);
 
-	public int commentDelete(String commentNo);
+	public int commentDelete(@Param("commentNo") String commentNo,@Param("commentNos") String commentNos);
 
-	public CommentVO commentSelect(String commentNo);
+	public CommentVO commentSelect(String commentNo,String commentNos);
+
+	public int commentUpdate(CommentVO cmtVO);
 
 	
 }

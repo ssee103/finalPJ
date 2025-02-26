@@ -163,16 +163,15 @@
 							            	    	<td>\${edu.edcTitle}</td>
 						                            <td>\${edu.educator}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.edcEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcSort}</td>
 						                            <td>\${edu.edcTarget}</td>
 						                            <td>\${edu.erDate}</td>
 						                            <td>
 							                            <div class="mb-2">
-															<button class="btn btn-primary">승인</a>
-															<button class="btn btn-primary">반려</a>
+															<button class="btn btn-primary accept-btn">승인</a>
+															<button class="btn btn-primary cancel-btn">반려</a>
 														</div>
 						                            </td>
 						            	        </tr>	
@@ -189,7 +188,6 @@
 						        },
 						    });
 						}
-
 					</script>
 				</div>
 				<!-- /Leads List -->
@@ -209,11 +207,47 @@
 		    let year = date.getFullYear();
 		    let month = String(date.getMonth() + 1).padStart(2, "0");
 		    let day = String(date.getDate()).padStart(2, "0");
-		    let hours = String(date.getHours()).padStart(2, "0");
-		    let minutes = String(date.getMinutes()).padStart(2, "0");
-		    
-		    return `${year}-${month}-${day} ${hours}:${minutes}`;
+		    return `\${year}/\${month}/\${day}`;
 		}
+		
+		$(document).ready(function () {
+		    // 승인 버튼 클릭 이벤트
+		    $(document).on("click", ".accept-btn", function () {
+		        let edcAplc = $(this).closest("tr").find("td:first").text().match(/\((.*?)\)/)[1]; // edcAplc 값 추출
+		        updateRequestStatus(edcAplc, "Y"); // 'Y' = 승인
+		    });
+
+		    // 반려 버튼 클릭 이벤트
+		    $(document).on("click", ".cancel-btn", function () {
+		        let edcAplc = $(this).closest("tr").find("td:first").text().match(/\((.*?)\)/)[1]; // edcAplc 값 추출
+		        updateRequestStatus(edcAplc, "N"); // 'N' = 반려
+		    });
+
+		    // 교육 신청 상태 업데이트 (승인 또는 반려)
+		    function updateRequestStatus(edcAplc, status) {
+		        let requestData = {
+		            edcAplc: edcAplc,
+		            erStatus: status
+		        };
+
+		        console.log("보낼 데이터:", requestData);
+
+		        $.ajax({
+		            url: "/hrms/education/admin/rest/updateEdcRequestStatus",
+		            type: "POST",
+		            contentType: "application/json",
+		            data: JSON.stringify(requestData),
+		            success: function (response) {
+		                alert(status === "Y" ? "승인 완료!" : "반려 완료!");
+		                location.reload();
+		            },
+		            error: function (xhr, status, error) {
+		                console.error("처리 실패:", xhr.responseText);
+		                alert("처리 중 오류가 발생했습니다.");
+		            }
+		        });
+		    }
+		});
 		</script>
 	</div>
 	<!-- /Main Wrapper -->

@@ -73,6 +73,7 @@
 							<ul>
 								<li><a href="/hrms/sanction/personalDocuments">기안문서</a></li>
 								<li><a href="/hrms/sanction/requestedApvDocuments">결재문서</a></li>
+								<li><a href="/hrms/sanction/referenceDocuments">참조문서</a></li>
 							</ul>
 						</li>
 						<li>
@@ -178,8 +179,8 @@
 								</a>
 								<ul>
 									<li><a href="/hrms/attendance/authorityPage">출퇴근 기록</a></li>
-									<li><a href="/hrms/dclz/overtime-authority">연장근무 기록</a></li>
-									<li><a href="#">출장기록</a></li>
+									<li><a href="/hrms/dclz/overtime/authorityPage">연장근무 기록</a></li>
+									<li><a href="/hrms/vacation/authorityPage">휴가 기록</a></li>
 									<li><a href="#">더추가하기</a></li>
 								</ul>
 							</li>
@@ -196,6 +197,7 @@
 									<li><a href="/hrms/admin/employeeList">사원관리</a></li>
 									<li><a href="/hrms/payStub">급여관리</a></li>
 									<li><a href="/hrms/job">채용관리</a></li>
+									<li><a href="/hrms/prom/promotion">승진관리</a></li>
 									<li><a href="/hrms/admin/analytics">애널리틱스</a></li>
 								</ul>
 							</li>

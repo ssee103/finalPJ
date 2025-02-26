@@ -46,4 +46,10 @@ public class SanctionController {
 		return "sanction/reqApvDocDetail";
 	}
 	
+	@GetMapping("/referenceDocuments")
+	public String referenceDocuments() {
+		log.info("참조 문서함이 호출 되었습니다.");
+		return "sanction/referenceDoc";
+	}
+	
 }

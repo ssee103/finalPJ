@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.ddit.cmm.service.IFileService;
+import kr.or.ddit.cmm.vo.DocFileVO;
 import kr.or.ddit.employee.vo.EmployeeVO;
 import kr.or.ddit.sanction.service.ISanctionService;
 import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
 import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
+import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
+import kr.or.ddit.sanction.vo.VacationVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +33,9 @@ public class SanctionRestController {
 	
 	@Autowired
 	private ISanctionService service;
+	
+	@Autowired
+	private IFileService fileService;
 	
 	@GetMapping("/getDocSort")
 	public List<DocSortVO> getDocSort() {
@@ -87,6 +94,11 @@ public class SanctionRestController {
 		log.info("결재문서 상세 정보 호출에 성공했습니다.");
 		
 		DocumentVO dvo = service.getApvDocDetail(docNo);
+		
+		if(dvo.getFileIdentify() != null) {
+			List<DocFileVO> dfvo = fileService.selectFileList(dvo.getFileIdentify());
+			dvo.setFileList(dfvo);
+		}
 		
 		return dvo;
 	}
@@ -208,6 +220,53 @@ public class SanctionRestController {
 		log.info("사원평가 evo: " + evo);
 		
 		int cnt = service.insertEvaluation(evo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/insertVacationHistory")
+	public int insertVacationHistory(@RequestBody HistoryVO hvo) {
+		log.info("휴가 히스토리 생성 컨트롤러 실행");
+		log.info("휴가 히스토리 hvo: " + hvo);
+		
+		int cnt = service.insertVacationHistory(hvo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/calVacCount")
+	public int calVacCount(@RequestBody VacationVO vvo) {
+		log.info("휴가 일 수 차감 컨트롤러 실행");
+		log.info("휴가 일 수 차감 vvo: " + vvo);
+		
+		int cnt = service.calVacCount(vvo);
+		
+		return cnt;
+	}
+	
+	@GetMapping("/getRefList")
+	public List<ReferenceVO> getRefList(String docNo) {
+		log.info("참조자 목록 받아오기 컨트롤러 실행");
+		
+		List<ReferenceVO> rvo = service.getRefList(docNo);
+		
+		return rvo;
+	}
+	
+	@GetMapping("/getRefDocuments")
+	public List<DocumentVO> getRefDocuments(String userId) {
+		log.info("참조문서 목록 출력 컨트롤러 실행");
+		
+		List<DocumentVO> dvo = service.getRefDocuments(userId);
+		
+		return dvo;
+	}
+	
+	@PostMapping("/refReadUpdate")
+	public int refReadUpdate(String userId, String docNo) {
+		log.info("참조자 읽음 여부 업데이트 컨트롤러 실행");
+		
+		int cnt = service.refReadUpdate(userId, docNo);
 		
 		return cnt;
 	}

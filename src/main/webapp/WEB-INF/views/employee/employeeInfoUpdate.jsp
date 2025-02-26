@@ -180,7 +180,7 @@
 									<div class="col-md-6">
 										<div class="row align-items-center mb-3">
 											<div class="col-md-4">
-												<label class="form-label mb-md-0">보유 권한</label>
+												<label class="form-label mb-md-0">권한</label>
 											</div>
 											<div class="col-md-8">
 												<input type="text" id="emplAuth" class="form-control" placeholder="인사 관리자에게 문의하세요." readonly>
@@ -245,15 +245,35 @@
 									</div>
 									<div class="col-md-6">
 										<div class="row align-items-center mb-3">
+											
 											<div class="col-md-4">
-												<button type="button" id="findAddr" class="btn btn-primary">주소 검색</button>
+												우편번호
 											</div>
 											<div class="col-md-8">
-												<input type="text" id="zipCode" class="form-control" placeholder="우편 번호">
-												<input type="text" id="addrMain" class="form-control" placeholder="기본 주소">
-												<input type="text" id="addrDetail" class="form-control" placeholder="상세 주소">
-												
+												<div class="input-group mb-2 sort-item">
+													<input type="text" id="zipCode" class="form-control tech-item" placeholder="우편 번호" readonly>
+													<button type="button" id="findAddr" class="btn btn-primary">주소 검색</button>
+												</div>
 											</div>
+											
+											<div class="col-md-4">
+												기본주소
+											</div>
+											<div class="col-md-8">
+												<div class="input-group mb-2">
+													<input type="text" id="addrMain" class="form-control tech-item" placeholder="기본 주소" readonly>
+												</div>
+											</div>
+											
+											<div class="col-md-4">
+												상세주소
+											</div>
+											<div class="col-md-8">
+												<div class="input-group mb-2">
+												<input type="text" id="addrDetail" class="form-control" placeholder="상세 주소">
+												</div>
+											</div>
+											
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -454,7 +474,7 @@ console.log("userId: ", userId);
 $(function(){
 	
 	// 사원 권한 가져오기
-	$.ajax({
+/* 	$.ajax({
 		url: "/employee/getEmpAuth",
 		method: 'get',
 		data: {userId: userId},
@@ -480,7 +500,7 @@ $(function(){
 			$("#emplAuth").html(authHtml);
 			
 		}
-	});
+	}); */
 	
 	// 프로필 이미지 업로드
 	let imgSaveBtn = $("#imgSaveBtn");

@@ -48,7 +48,7 @@
 			,comment_anon
 		FROM comments
 		WHERE board_no = #{boardNo}
-		ORDER BY comment_no asc, comment_nos asc
+		ORDER BY comment_no asc, comment_nos asc, comment_date desc
 	</select>
 	
 	<!--대댓글 등록  -->
@@ -94,16 +94,26 @@
 			,comment_anon
 		FROM	comments
 		WHERE comment_no = #{commentNo}
-			AND	comment_nos = #{commentNos}
-			AND	depth = #{depth}
+		AND comment_nos = #{commentNos}
 	</select>
 	
 	<!--댓글삭제  -->
 	<delete id="commentDelete" parameterType="String">
-		DELETE FROM comments
-		WHERE comment_no = #{commentNo}
-		<if test="depth eq 0">
-			or comment_nos = #{commentNos}
-		</if>
+	    DELETE FROM comments
+	    WHERE comment_no = #{commentNo}
+	    <if test="commentNos != null and commentNos != '1'">
+	        AND comment_nos = #{commentNos}
+	    </if>
 	</delete>
+
+	
+	<!--댓글수정  -->
+	<update id="commentUpdate" parameterType="int">
+		UPEATE	comments
+		SET	
+			comment_title = #{commentTitle}
+			,comment_udate = sysdate
+		WHERE comment_no = #{commentNo}
+		AND	comment_nos = #{commentNos} 		
+	</update>
 </mapper>

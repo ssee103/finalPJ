@@ -1,6 +1,8 @@
 package kr.or.ddit.dclz.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +26,15 @@ public class DclzRestController {
 	IDclzService dclzService;
 	
 	@PostMapping("/getOvertimeList")
-	public ResponseEntity<List<HistoryVO>> getOvertimeList(@RequestBody PaginationInfoVO<HistoryVO> pageVO){
+	public ResponseEntity<Map<String, Object>> getOvertimeList(@RequestBody PaginationInfoVO<HistoryVO> pageVO){
+		Map<String, Object> resultMap = new HashMap<>();
 		int totalRecord = dclzService.getOverTimeTotalRecord(pageVO);
 		pageVO.setTotalRecord(totalRecord);
 		List<HistoryVO> historyList = dclzService.getOvertimeList(pageVO);
-		return new ResponseEntity<List<HistoryVO>>(historyList, HttpStatus.OK);
+		
+		resultMap.put("historyList", historyList);
+		resultMap.put("pageVO", pageVO);
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
 }

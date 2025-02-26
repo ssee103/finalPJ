@@ -24,6 +24,7 @@
 	<div class="main-wrapper">
 		<%@ include file="/WEB-INF/views/theme/header.jsp" %>
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
 		
 		
 		<div class="page-wrapper">
@@ -118,12 +119,6 @@
 						let pagingArea = $("#pagingArea");
 						getList(1);
 					$(function(){
-						/* 	
- 							if(!sessionStorage.getItem("currentPage")){
-								getList(1);
-							}else{
-								getList(sessionStorage.getItem("currentPage"));
-							} */
 							searchBtn.on("click", function(){
 								let edcTitle = $("#edcTitle");
 								let educator = $("#educator");
@@ -183,37 +178,38 @@
 
 						            	    tr += `
 												<tr>
-							            	    	<td><p class="fs-14 text-dark fw-medium"><a href="/hrms/education/admin/adminTrainingDetail">\${edu.edcTitle}</a></p></td>
+								            	    <td>
+								            	        <p class="fs-14 text-dark fw-medium">
+								            	            <a href="/hrms/education/admin/adminTrainingDetail/\${edu.edcNo}">
+								            	                \${edu.edcTitle}
+								            	            </a>
+								            	        </p>
+								            	    </td>
 						                            <td>\${edu.educator}</td>
 						                            <td>\${edu.edcPsncpa}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.edcEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcTarget}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.recruitSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.recruitEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcSort}</td>
 						                            <td>
 						                                <div class="action-icon d-inline-flex">
 						                                    <a href="#" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_activity"><i class="ti ti-edit"></i></a>
-						                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
+						                                    <a href="javascript:void(0);" class="deleteLecture-btn" data-edc-no="\${edu.edcNo}">
+							                                    <i class="ti ti-trash"></i>
+							                                </a>
 						                                </div>
 						                            </td>
 						            	        </tr>	
 						            	    `;
 						            	});
-
-
-
-						                // 데이터 삽입
 						                dataTable_tbody.html(tr);
 						            } else {
 						                dataTable_tbody.html(`<tr><td colspan="8" class="text-center">데이터가 없습니다.</td></tr>`);
 						            }
-
 						            pagingArea.html(res.pageVO.pagingHTML);
 						        },
 						        error: function (error) {
@@ -222,6 +218,36 @@
 						    });
 						}
 
+						/* 교육 삭제 시 상태 변경 */
+						$(document).ready(function () {
+						    // 삭제(비활성화) 버튼 클릭 이벤트
+						    $(document).on("click", ".deleteLecture-btn", function () {
+						        let edcNo = $(this).data("edc-no"); // 강의 번호 가져오기
+						
+						        if (!confirm("정말로 해당 강의를 비활성화하시겠습니까?")) {
+						            return;
+						        }
+						
+						        let requestData = { edcNo: edcNo };
+						
+						        console.log("보낼 데이터:", requestData);
+						
+						        $.ajax({
+						            url: "/hrms/education/admin/rest/updateEdcActive",
+						            type: "POST",
+						            contentType: "application/json",
+						            data: JSON.stringify(requestData),
+						            success: function (response) {
+						            	showToastMessage("✅ 강의가 비활성화되었습니다. ", "success");
+						            	setTimeout(() => location.reload(), 1000);
+						            },
+						            error: function (xhr, status, error) {
+						                console.error("삭제 실패:", xhr.responseText);
+						                alert("삭제 중 오류가 발생했습니다.");
+						            }
+						        });
+						    });
+						});
 					</script>
 				</div>
 				<!-- /Leads List -->
@@ -232,14 +258,14 @@
 			</div>
 		</div>
 		<!-- /Page Wrapper -->
+		
 		<!-- Add Project -->
 		<div class="modal fade" id="add_project" role="dialog">
 			<div class="modal-dialog modal-dialog-centered modal-lg">
 				<div class="modal-content">
 					<div class="modal-header header-border align-items-center justify-content-between">
 						<div class="d-flex align-items-center">
-							<h5 class="modal-title me-2">Add Project </h5>
-							<p class="text-dark">Project ID : PRO-0004</p>
+							<h5 class="modal-title me-2">새로운 강의 등록</h5>
 						</div>
 						<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
 							<i class="ti ti-x"></i>
@@ -249,10 +275,10 @@
 						<div class="contact-grids-tab p-3 pb-0">
 							<ul class="nav nav-underline" id="myTab" role="tablist">
 								<li class="nav-item" role="presentation">
-									<button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">Basic Information</button>
+									<button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">강의등록</button>
 								  </li>
 								  <li class="nav-item" role="presentation">
-									<button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab" aria-selected="false">Members</button>
+									<button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab" aria-selected="false">교재등록(구현 미정)</button>
 								  </li>
 							</ul>
 						</div>
@@ -262,101 +288,203 @@
 								<div class="modal-body">
 									<div class="row">
 										<div class="col-md-12">
-											<div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
-												<div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
-													<i class="ti ti-photo text-gray-2 fs-16"></i>
-												</div>                                              
-												<div class="profile-upload">
-													<div class="mb-2">
-														<h6 class="mb-1">Upload Project Logo</h6>
-														<p class="fs-12">Image should be below 4 mb</p>
-													</div>
-													<div class="profile-uploader d-flex align-items-center">
-														<div class="drag-upload-btn btn btn-sm btn-primary me-2">
-															Upload
-															<input type="file" class="form-control image-sign" multiple="">
-														</div>
-														<a href="javascript:void(0);" class="btn btn-light btn-sm">Cancel</a>
-													</div>
-													
-												</div>
+											<div class="mb-3">
+												<label class="form-label">교육명</label>
+												<input type="text" class="form-control" id="edcTitle2"  required placeholder="교육명을 입력하세요.">
 											</div>
 										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Project Name</label>
-												<input type="text" class="form-control">
-											</div>
+										<div class="col-md-6">
+										    <div class="mb-3">
+										        <label class="form-label">교육교재</label>
+										        <select class="select" id="edcBookNo">
+										            <option>선택</option>
+										        </select>
+										    </div>
 										</div>
+										
+										<script>
+										    $(document).ready(function() {
+										        $.ajax({
+										            url: "/hrms/education/admin/rest/getBookList",
+										            type: "GET",
+										            dataType: "json",
+										            success: function(books) {
+										                let edcBookNo = $("#edcBookNo");
+										                books.forEach(function(book) {
+										                    let option = `<option value=\${book.bookNo}>\${book.bookName}</option>`;
+										                    edcBookNo.append(option);
+										                });
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("책 데이터를 불러오는 중 오류 발생:", error);
+										            }
+										        });
+										    });
+										</script>
+
+										<!-- 
 										<div class="col-md-12">
+										    <div class="mb-3">
+										        <label class="form-label">교육 커리큘럼</label>
+										        <div id="curriculumContainer">
+										        </div>
+										        <button type="button" class="btn btn-secondary mt-2" id="addCurriculum">+ 커리큘럼 추가</button>
+										    </div>
+										</div>
+										-->
+
+										
+										<div class="col-md-4">
 											<div class="mb-3">
-												<label class="form-label">Client</label>
-												<select class="select">
-													<option>Select</option>
-													<option>Anthony Lewis</option>
-													<option>Brian Villalobos</option>
+												<label class="form-label">교육분류</label>
+												<select class="select"  id="edcSort2">
+													<option>선택</option>
 												</select>
 											</div>
 										</div>
+										<script>
+										    $(document).ready(function() {
+										        $.ajax({
+										            url: "/hrms/education/admin/rest/getSortList",
+										            type: "GET",
+										            dataType: "json",
+										            success: function(sorts) {
+										                let edcSort2 = $("#edcSort2");
+										                sorts.forEach(function(sort) {
+										                    let option = `<option value=\${sort.edcSort}>\${sort.edcSort}</option>`;
+										                    edcSort2.append(option);
+										                });
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("분류 데이터를 불러오는 중 오류 발생:", error);
+										            }
+										        });
+										    });
+										</script>
+										
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="form-label">교육대상부서</label>
+												<select class="select" id="edcTarget2">
+													<option>선택</option>
+												</select>
+											</div>
+										</div>
+										<script>
+										    $(document).ready(function() {
+										        $.ajax({
+										            url: "/hrms/education/admin/rest/getTargetList",
+										            type: "GET",
+										            dataType: "json",
+										            success: function(targets) {
+										                let edcTarget2 = $("#edcTarget2");
+										                targets.forEach(function(target) {
+										                    let option = `<option value=\${target.edcTarget}>\${target.edcTarget}</option>`;
+										                    edcTarget2.append(option);
+										                });
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("교육대상부서 데이터를 불러오는 중 오류 발생:", error);
+										            }
+										        });
+										    });
+										</script>
+										
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="form-label">교육대상직급</label>
+												<select class="select" id="edcGrade2">
+													<option>전체</option>
+												</select>
+											</div>
+										</div>
+										<script>
+										    $(document).ready(function() {
+										        $.ajax({
+										            url: "/hrms/education/admin/rest/getGradeList",
+										            type: "GET",
+										            dataType: "json",
+										            success: function(grades) {
+										            	//console.log(grades);
+										                let edcGrade2 = $("#edcGrade2");
+										                grades.forEach(function(grade) {
+										                    let option = `<option value=\${grade.edcGrade}>\${grade.edcGrade}</option>`;
+										                    edcGrade2.append(option);
+										                });
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("교육대상직급 데이터를 불러오는 중 오류 발생:", error);
+										            }
+										        });
+										    });
+										</script>
+										
 										<div class="col-md-12">
 											<div class="row">
-												<div class="col-md-6">
+												<div class="col-md-3">
 													<div class="mb-3">
-														<label class="form-label">Start Date</label>
-														<div class="input-icon-end position-relative">
-															<input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="02-05-2024">
-															<span class="input-icon-addon">
-																<i class="ti ti-calendar text-gray-7"></i>
-															</span>
-														</div>
+														<label class="form-label">모집시작일자</label>
+														<input type="date" class="form-control" id="recruitSdate" placeholder="yyyy/mm/dd">
+														<span class="input-icon-addon">
+															<i class="ti ti-calendar text-gray-7"></i>
+														</span>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-3">
 													<div class="mb-3">
-														<label class="form-label">End Date</label>
-														<div class="input-icon-end position-relative">
-															<input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="02-05-2024">
-															<span class="input-icon-addon">
-																<i class="ti ti-calendar text-gray-7"></i>
-															</span>
-														</div>
+														<label class="form-label">모집종료일자</label>
+														<input type="date" class="form-control" id="recruitEdate" placeholder="yyyy/mm/dd">
+														<span class="input-icon-addon">
+															<i class="ti ti-calendar text-gray-7"></i>
+														</span>
 													</div>
 												</div>
+												<div class="col-md-3">
+													<div class="mb-3">
+														<label class="form-label">교육시작일자</label>
+														<input type="date" class="form-control" id="edcSdate" placeholder="yyyy/mm/dd">
+														<span class="input-icon-addon">
+															<i class="ti ti-calendar text-gray-7"></i>
+														</span>
+													</div>
+												</div>
+												<div class="col-md-3">
+													<div class="mb-3">
+														<label class="form-label">교육종료일자</label>
+														<input type="date" class="form-control" id="edcEdate" placeholder="yyyy/mm/dd">
+														<span class="input-icon-addon">
+															<i class="ti ti-calendar text-gray-7"></i>
+														</span>
+													</div>
+												</div>
+												
 												<div class="col-md-4">
 													<div class="mb-3">
-														<label class="form-label">Priority</label>
-														<select class="select">
-															<option>Select</option>
-															<option>High</option>
-															<option>Medium</option>
-															<option>Low</option>
+														<label class="form-label">교육방식</label>
+														<select class="select" id="edcWay">
+															<option>온라인</option>
+															<option>오프라인</option>
 														</select>
 													</div>
 												</div>
 												<div class="col-md-4">
 													<div class="mb-3">
-														<label class="form-label">Project Value</label>
-														<input type="text" class="form-control" value="$">
+														<label class="form-label">강사명</label>
+														<input type="text" class="form-control" id="educator2" value="">
 													</div>
 												</div>
 												<div class="col-md-4">
 													<div class="mb-3">
-														<label class="form-label">Price Type</label>
-														<input type="text" class="form-control" value="">
+														<label class="form-label">수강인원제한</label>
+														<input type="text" class="form-control" id="edcPsncpa" value="">
 													</div>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-12">
 											<div class="mb-3">
-												<label class="form-label">Description</label>
-												<div class="summernote"></div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="input-block mb-0">
-												<label class="form-label">Upload Files</label>
-												<input class="form-control" type="file">
+												<label class="form-label">교육설명</label>
+												<input type="text" class="form-control" id="edcContent">
 											</div>
 										</div>
 									</div>								
@@ -364,63 +492,14 @@
 								<div class="modal-footer">
 									<div class="d-flex align-items-center justify-content-end">
 										<button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">Cancel</button>
-										<button class="btn btn-primary" type="submit">Save</button>
+										<button class="btn btn-primary" type="button" id="saveProjectBtn">Save</button>
 									</div>
 								</div>
 							</form>
 							</div>
-							<div class="tab-pane fade" id="member" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
-							<form>
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Team Members</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Jerald,Andrew,Philip,Davis">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Team Leader</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Hendry,James">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Project Manager</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Dwight">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div>
-												<label class="form-label">Tags</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Collab,Promotion,Rated">
-											</div>
-										</div>
-										
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Status</label>
-												<select class="select">
-													<option>Select</option>
-													<option>Active</option>
-													<option>Inactive</option>
-												</select>
-											</div>
-										</div>
-									</div>								
-								</div>
-								<div class="modal-footer">
-									<div class="d-flex align-items-center justify-content-end">
-										<button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">Cancel</button>
-										<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#success_modal">Save</button>
-									</div>
-								</div>
-							</form>
 						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 		<!-- /Add Project -->
@@ -510,7 +589,6 @@
 		<!-- /Add Book -->
 		
 		<script>
-		// 날짜 형식을 "yyyy-MM-dd HH:mm"으로 변환하는 함수
 		function formatDateTime(dateString) {
 		    if (!dateString) return "";
 		    
@@ -564,13 +642,13 @@
 	        console.log("saveBookBtn 클릭"); 
 
 	        let bookData = {
-	            bookNo: $('#bookIsbn').val(),           				// ISBN → BOOK_NO
-	            bookName: $('#bookTitle').val(),       					// 제목 → BOOK_NAME
-	            bookPrice: $('#bookPrice').val(),      					// 가격 → BOOK_PRICE
-	            bookCompany: $('#bookPublisher').val() 					// 출판사 → BOOK_COMPANY
+	            bookNo: $('#bookIsbn').val(),           				
+	            bookName: $('#bookTitle').val(),       					
+	            bookPrice: $('#bookPrice').val(),      					
+	            bookCompany: $('#bookPublisher').val() 					
 	        };
 
-	        console.log("보낼 데이터:", bookData); 						// 데이터 확인
+	        console.log("보낼 데이터:", bookData); 						
 
 	        $.ajax({
 	            url: '/hrms/education/admin/rest/insertBook',
@@ -578,257 +656,89 @@
 	            contentType: 'application/json',
 	            data: JSON.stringify(bookData),
 	            success: function (response) {
-	                console.log("성공 응답:", response); 				// 서버 응답 확인
+	                console.log("성공 응답:", response); 			
 	                alert('도서가 성공적으로 등록되었습니다!');
 	                location.reload();
 	            },
 	            error: function (xhr, status, error) {
-	                console.error("도서 등록 실패:", xhr.responseText);  // 에러 로그
+	                console.error("도서 등록 실패:", xhr.responseText); 
 	                alert('도서 등록 중 오류가 발생했습니다.');
 	            }
 	        });
 		}
+		
+		$(document).ready(function () {
+		    $("#addCurriculum").click(function () {
+		        let curriculumHtml = `
+		            <div class="input-group mb-2 curriculum-item">
+		                <input type="text" class="form-control" placeholder="커리큘럼명 입력">
+		                <input type="text" class="form-control" placeholder="커리큘럼URL 입력">
+		                <button type="button" class="btn btn-danger removeCurriculum">X</button>
+		            </div>
+		        `;
+		        $("#curriculumContainer").append(curriculumHtml);
+		    });
+
+		    $("#curriculumContainer").on("click", ".removeCurriculum", function () {
+		        $(this).closest(".curriculum-item").remove();
+		    });
+		});
+
+	</script>
+		<script>
+		$("#saveProjectBtn").click(function () {
+		    let edcTitle2Value = $("#edcTitle2").val();
+		    if (edcTitle2Value == null || edcTitle2Value == "") {
+		        alert("교육명을 입력해주세요."); 
+		        return;  
+		    }
+		    
+		    // console.log("edcGrade2 보낼 데이터:", $("#edcGrade2"));
+		    // console.log("edcGrade2 보낼 데이터:", $("#edcGrade2")[0]);
+		    
+		    let educationData = {
+		        edcSort: $("#edcSort2").val(),
+		        edcWay: $("#edcWay").val(),
+		        educator: $("#educator2").val(),
+		        edcTarget: $("#edcTarget2").val(),
+		        edcGrade: $("#edcGrade2").val(),
+		        edcPsncpa: $("#edcPsncpa").val(),
+		        edcTitle: edcTitle2Value, 
+		        edcContent: $("#edcContent").val(),
+		        recruitSdate: $("#recruitSdate").val(),
+		        recruitEdate: $("#recruitEdate").val(),
+		        edcSdate: $("#edcSdate").val(),
+		        edcEdate: $("#edcEdate").val(),
+		        edcActive: "Y",
+		        edcBookNo: $("#bookNo").val()
+		    };
+
+		    console.log("보낼 데이터:", educationData);
+
+		    $.ajax({
+		        url: "/hrms/education/admin/rest/insertEducationWithCurriculum",
+		        type: "POST",
+		        contentType: "application/json",
+		        data: JSON.stringify(educationData),
+		        success: function (response) {
+		            alert("강의 등록 완료!");
+		            location.reload();
+		        },
+		        error: function (xhr, status, error) {
+		            console.error("등록 실패:", error);
+		        }
+		    });
+		}); 
+		
+		function showToastMessage(message, type = "primary") {
+			let toast = $("#toastMessage");
+			toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+			toast.addClass(`bg-\${type}`);
+			$("#toastBody").text(message);
+			let toastInstance = new bootstrap.Toast(toast[0]);
+			toastInstance.show();
+		}
 		</script>
-		
-		<!-- Edit Project -->
-		<div class="modal fade" id="edit_project" role="dialog">
-			<div class="modal-dialog modal-dialog-centered modal-lg">
-				<div class="modal-content">
-					<div class="modal-header header-border align-items-center justify-content-between">
-						<div class="d-flex align-items-center">
-							<h5 class="modal-title me-2">Edit Project </h5>
-							<p class="text-dark">Project ID : PRO-0004</p>
-						</div>
-						<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-							<i class="ti ti-x"></i>
-						</button>
-					</div>
-					<div class="add-info-fieldset ">
-						<div class="contact-grids-tab p-3 pb-0">
-							<ul class="nav nav-underline" id="myTab1" role="tablist">
-								<li class="nav-item" role="presentation">
-									<button class="nav-link active" id="basic-tab1" data-bs-toggle="tab" data-bs-target="#basic-info1" type="button" role="tab" aria-selected="true">Basic Information</button>
-								  </li>
-								  <li class="nav-item" role="presentation">
-									<button class="nav-link" id="member-tab1" data-bs-toggle="tab" data-bs-target="#member1" type="button" role="tab" aria-selected="false">Members</button>
-								  </li>
-							</ul>
-						</div>
-							<div class="tab-content" id="myTabContent1">
-								<div class="tab-pane fade show active" id="basic-info1" role="tabpanel" aria-labelledby="basic-tab1" tabindex="0">
-							<form>
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
-												<div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
-													<i class="ti ti-photo text-gray-2 fs-16"></i>
-												</div>                                              
-												<div class="profile-upload">
-													<div class="mb-2">
-														<h6 class="mb-1">Upload Project Logo</h6>
-														<p class="fs-12">Image should be below 4 mb</p>
-													</div>
-													<div class="profile-uploader d-flex align-items-center">
-														<div class="drag-upload-btn btn btn-sm btn-primary me-2">
-															Upload
-															<input type="file" class="form-control image-sign" multiple="">
-														</div>
-														<a href="javascript:void(0);" class="btn btn-light btn-sm">Cancel</a>
-													</div>
-													
-												</div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Project Name</label>
-												<input type="text" class="form-control" value="Office Management">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Client</label>
-												<select class="select">
-													<option>Select</option>
-													<option selected>Anthony Lewis</option>
-													<option>Brian Villalobos</option>
-												</select>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="row">
-												<div class="col-md-6">
-													<div class="mb-3">
-														<label class="form-label">Start Date</label>
-														<div class="input-icon-end position-relative">
-															<input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="02-05-2024">
-															<span class="input-icon-addon">
-																<i class="ti ti-calendar text-gray-7"></i>
-															</span>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="mb-3">
-														<label class="form-label">End Date</label>
-														<div class="input-icon-end position-relative">
-															<input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="02-05-2024">
-															<span class="input-icon-addon">
-																<i class="ti ti-calendar text-gray-7"></i>
-															</span>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-4">
-													<div class="mb-3">
-														<label class="form-label">Priority</label>
-														<select class="select">
-															<option>Select</option>
-															<option>High</option>
-															<option>Medium</option>
-															<option>Low</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-md-4">
-													<div class="mb-3">
-														<label class="form-label">Project Value</label>
-														<input type="text" class="form-control" value="$">
-													</div>
-												</div>
-												<div class="col-md-4">
-													<div class="mb-3">
-														<label class="form-label">Price Type</label>
-														<input type="text" class="form-control" value="">
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Description</label>
-												<div class="summernote"></div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="input-block mb-0">
-												<label class="form-label">Upload Files</label>
-												<input class="form-control" type="file">
-											</div>
-										</div>
-									</div>								
-								</div>
-								<div class="modal-footer">
-									<div class="d-flex align-items-center justify-content-end">
-										<button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">Cancel</button>
-										<button class="btn btn-primary" type="submit">Save</button>
-									</div>
-								</div>
-							</form>
-							</div>
-							<div class="tab-pane fade" id="member1" role="tabpanel" aria-labelledby="member-tab1" tabindex="0">
-							<form>
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Team Members</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Jerald,Andrew,Philip,Davis">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Team Leader</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Hendry,James">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label me-2">Project Manager</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Dwight">
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div>
-												<label class="form-label">Tags</label>
-												<input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Collab,Promotion,Rated">
-											</div>
-										</div>
-										
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label">Status</label>
-												<select class="select">
-													<option>Select</option>
-													<option selected>Active</option>
-													<option>Inactive</option>
-												</select>
-											</div>
-										</div>
-									</div>								
-								</div>
-								<div class="modal-footer">
-									<div class="d-flex align-items-center justify-content-end">
-										<button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">Cancel</button>
-										<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#success_modal">Save</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-			</div>
-		</div>
-		<!-- /Edit Project -->
-		
-		<!-- Add Project Success -->
-		<div class="modal fade" id="success_modal" role="dialog">
-			<div class="modal-dialog modal-dialog-centered modal-sm">
-				<div class="modal-content">
-					<div class="modal-body">
-						<div class="text-center p-3">
-							<span class="avatar avatar-lg avatar-rounded bg-success mb-3"><i class="ti ti-check fs-24"></i></span>
-							<h5 class="mb-2">Project  Added Successfully</h5>
-							<p class="mb-3">Stephan Peralt has been added with Client ID : <span class="text-primary">#pro - 0004</span>
-							</p>
-							<div>
-								<div class="row g-2">
-									<div class="col-6">
-										<a  class="btn btn-dark w-100">Back to List</a>
-									</div>
-									<div class="col-6">
-										<a href="project-details.html" class="btn btn-primary w-100">Detail Page</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Add Project Success -->
-		
-		<!-- Delete Modal -->
-		<div class="modal fade" id="delete_modal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-body text-center">
-						<span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
-							<i class="ti ti-trash-x fs-36"></i>
-						</span>
-						<h4 class="mb-1">Confirm Delete</h4>
-						<p class="mb-3">You want to delete all the marked items, this cant be undone once you delete.</p>
-						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-							<a href="projects-grid.html" class="btn btn-danger">Yes, Delete</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Delete Modal -->
 	</div>
 	<!-- /Main Wrapper -->
 

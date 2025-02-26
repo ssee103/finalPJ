@@ -12,55 +12,7 @@
 	<meta name="robots" content="noindex, nofollow">
 	<title>Smarthr Admin Template</title>
 
-	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
-	<!-- Apple Touch Icon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
-
-	<!-- Theme Script js -->
-	<script src="assets/js/theme-script.js"></script>
-
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
-	<!-- Feather CSS -->
-	<link rel="stylesheet" href="assets/plugins/icons/feather/feather.css">
-
-	<!-- Tabler Icon CSS -->
-	<link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.css">
-
-	<!-- Select2 CSS -->
-	<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
-
-	<!-- Fontawesome CSS -->
-	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-
-	 <!-- Color Picker Css -->
-	<link rel="stylesheet" href="assets/plugins/flatpickr/flatpickr.min.css">
-	<link rel="stylesheet" href="assets/plugins/@simonwep/pickr/themes/nano.min.css">
-
-	<!-- Daterangepikcer CSS -->
-	<link rel="stylesheet" href="assets/plugins/daterangepicker/daterangepicker.css">
-
-	<!-- Datatable CSS -->
-	<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
-
-	<!-- Summernote CSS -->
-	<link rel="stylesheet" href="assets/plugins/summernote/summernote-lite.min.css">
-
-	<!-- Datetimepicker CSS -->
-	<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
-
-	<!-- Bootstrap Tagsinput CSS -->
-	<link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
-
-	<!-- Select2 CSS -->
-	<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
-
-	<!-- Main CSS -->
-	<link rel="stylesheet" href="assets/css/style.css">
+	
 
 </head>
 
@@ -80,18 +32,6 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
 
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
@@ -2110,7 +2050,7 @@ $(function(){
 						</td>
 						<td><p class="fs-14 text-dark fw-medium"><a href="/hrms/sanction/personalDocumentsDetail?docNo=\${doc.docNo}">\${doc.docTitle}</a></p>
 						<td>
-							<span class=" badge badge-pink-transparent"><i class="ti ti-device-computer-camera me-1"></i>\${apvText}</span>
+							<span class=" badge badge-pink-transparent">\${apvText}</span>
 						</td>
 						<td>\${doc.sanctnRqstdt}</td>
 						<td>Hendry</td>
@@ -2123,6 +2063,16 @@ $(function(){
 						</td>
 					</tr>`		
 				);
+				
+				if(apvText == '승인') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-pink-transparent")
+		            .addClass("badge-success-transparent");
+				} else if(apvText == '반려') {
+					$("tbody tr:last-child .badge")
+		            .removeClass("badge-pink-transparent")
+		            .addClass("badge-purple-transparent");
+				}
 				
 			});
 			

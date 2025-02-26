@@ -11,4 +11,12 @@ public interface IChartMapper {
 
 	public Map<String, Object> getEmplCountData();
 
+	public Map<String, Object> getDeptSalary();
+
+	public Map<String, Object> getRecruitCount();
+	
+	public Map<String, Object> getAppCount();
+
+	public Map<String, Object> getVacationData();
+
 }

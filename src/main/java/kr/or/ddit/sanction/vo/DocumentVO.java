@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.cmm.vo.DocFileVO;
 import lombok.Data;
 
 @Data
@@ -36,4 +37,10 @@ public class DocumentVO {
     private byte[] emplSignature;
     
     private List<SanctionerVO> aprRefList;	// 상세 페이지용 List 필드
+    
+    // 참조자용 읽음 여부 필드
+    private String refRead;
+    
+    // 파일 목록 받아오기용 필드
+    private List<DocFileVO> fileList;
 }

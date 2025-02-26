@@ -136,6 +136,14 @@
 										<td class="sort">결재 선</td>
 										<td id="sanctionLine" colspan="3"></td>
 									</tr>
+									<tr>
+										<td class="sort">참조자</td>
+										<td id="refLine" colspan="3"></td>
+									</tr>
+									<tr>
+										<td class="sort">첨부 파일</td>
+										<td id="docFileView" colspan="3">aa</td>
+									</tr>
 								</table>
 							</div>
 						</div>
@@ -257,6 +265,7 @@ function getDocumentDetail(docNo, myEmplPosition) {
         success: function(res) {
             console.log("문서 상세 정보: ", res);
             renderDocumentDetail(res, myEmplPosition);
+            renderReference(docNo);
         },
         error: function() {
             alert("문서 상세정보 호출에 오류가 발생했습니다.");
@@ -286,16 +295,76 @@ function renderDocumentDetail(data, myEmplPosition) {
     if (data.aprRefList && data.aprRefList.length > 0) {
         renderApprovers(data.aprRefList);
     }
-
+    
+    // 첨부 파일 출력
+    let fileHtml = "";
+    if(data.fileList.length > 0) {
+    	for(let i = 0; i < data.fileList.length; i++){
+        	fileHtml += `
+        		<div><a href="/downloadFile?fileIdentify=\${data.fileList[i].fileIdentify}&fileNo=\${data.fileList[i].fileNo}">\${data.fileList[i].fileName}</a></div>
+       		`;
+        }
+    } else {
+    	fileHtml = "첨부된 파일이 없습니다.";
+    }
+    
+	$("#docFileView").html(fileHtml);
+	
     $("#docContent").html(data.docContent);
 }
 
 /** ✅ 결재자 리스트 렌더링 */
 function renderApprovers(approverList) {
-    let sanctionHtml = approverList.map(approver =>
-        `<div>\${approver.sanctnerNo} (\${approver.sanctnStatus})</div>`
-    ).join("");
+    let sanctionHtml = approverList.map(approver => {
+        if (approver.sanctnStatus == '승인') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-success-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if (approver.sanctnStatus == '결재 중') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-pink-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if(approver.sanctnStatus == '전결') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if(approver.sanctnStatus == '결재 대기') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-dark-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if(approver.sanctnStatus == '위임 전결') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-secondary-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if(approver.sanctnStatus == '반려') {
+            return `<div>\${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
+        }
+    }).join("");
     $("#sanctionLine").html(sanctionHtml);
+}
+
+/** ✅ 참조자 리스트 렌더링 */
+function renderReference(docNo) {
+	$.ajax({
+		url: "/sanction/getRefList",
+		method: "get",
+		data: { docNo: docNo },
+		dataType: 'json',
+		success: function(refRes) {
+			console.log("refRes: ", refRes);
+			
+			let readTxt = "";
+			
+			if(refRes.length > 0) {
+				$.each(refRes, function(index, item){
+					if(refRes[index].refRead == 'N') {
+						readTxt = "안읽음";
+					} else {
+						readTxt = "읽음";
+					}
+					
+					if(readTxt == "읽음") {
+						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-info-transparent'>\${readTxt}</span></div>`);
+					} else {
+						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-pink-transparent'>\${readTxt}</span></div>`);
+					}
+				});
+			} else {
+				$("#refLine").append("지정된 참조자가 없습니다.");
+			}
+			
+		}
+	});
 }
 
 </script>

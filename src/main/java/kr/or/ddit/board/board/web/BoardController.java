@@ -223,22 +223,36 @@ public class BoardController {
 	}
 	
 	//댓글 삭제
-	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@PostMapping("/commentDelete")
-	public String commentDelete(String commentNo, Model model) {
+	public String commentDelete(String commentNo,String commentNos, Model model) {
 		String goPage = "";
+		log.info("댓글댓글댓글댓글댓글 : " + commentNo);
+		log.info("댓글댓글댓글댓글댓글 : " + commentNos);
+		CommentVO cmtVO = boardService.commentSelect(commentNo,commentNos);
 		
-		CommentVO cmtVO = boardService.commentSelect(commentNo);
-		
-		int result = boardService.commentDelete(commentNo);
+		int result = boardService.commentDelete(commentNo,commentNos);
 		
 		if(result > 0 ) {
 			goPage = "redirect:/hrms/board/boardDetail?boardNo=" + cmtVO.getBoardNo();
 		}else {
 			goPage = "hrms/board/boardDetail?boardNo=" + cmtVO.getBoardNo();
-			
 		}
 		return goPage;
 	}
+	//댓글 수정
+	@PostMapping("/commentUpdate")
+	public String commentUpdate(@RequestBody CommentVO cmtVO ){
+		String goPage = "";
+		
+		int result = boardService.commentUpdate(cmtVO);
+		
+		if(result > 0) {
+			goPage = "redirect:/hrms/board/boardDetail?boardNo=" + cmtVO.getBoardNo();
+		}else {
+			goPage = "hrms/board/boardDetail?boardNo=" + cmtVO.getBoardNo();
+		}
+		return goPage;
+	}
+	
 	
 }

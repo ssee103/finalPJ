@@ -55,9 +55,18 @@ public class AdminServiceImpl implements IAdminService{
 		Map<String, Map<String, Object>> resultMap = new HashMap<>();
 		Map<String, Object> lateMap = chartMapper.getLateData(); // 월별 지각한사람 수
 		Map<String, Object> emplCount = chartMapper.getEmplCountData(); // 부서별 인원 통계
-		log.info("결과결과결과결과결과결과결과결과" + lateMap.toString() + " , " + emplCount.toString());
+		Map<String, Object> deptSal = chartMapper.getDeptSalary(); // 부서별 평균기본급여
+		Map<String, Object> recruitCount = chartMapper.getRecruitCount();
+		Map<String, Object> appCount = chartMapper.getAppCount();
+		Map<String, Object> vacationData = chartMapper.getVacationData();
+		
+		
 		resultMap.put("lateMap", lateMap);
 		resultMap.put("emplCount", emplCount);
+		resultMap.put("deptSal", deptSal);
+		resultMap.put("recruitCount", recruitCount);
+		resultMap.put("appCount", appCount);
+		resultMap.put("vacationData", vacationData);
 		return resultMap;
 	}
 

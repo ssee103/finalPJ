@@ -74,7 +74,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	public void registerEmployee(EmployeeVO evo) {
 		
 		mapper.registerEmployee(evo);
-		
+		mapper.giveVacation(evo);
 		String emplNo = evo.getEmplNo();
 		List<String> authList = evo.getAuthListStr();
 		
@@ -104,7 +104,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	            // 비밀번호 인코딩 (passwordEncoder는 주입받은 인스턴스)
 	            String pwd = passwordEncoder.encode(employee.getEmplPwd());
 	            employee.setEmplPwd(pwd);
-	            
+	            mapper.giveVacation(employee);
 	            // 사원 기본 정보 등록
 	            mapper.registerEmployee(employee);
 	            

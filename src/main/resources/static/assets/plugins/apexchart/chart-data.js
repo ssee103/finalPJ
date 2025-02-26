@@ -14,6 +14,9 @@ $.ajax({
 		console.log(res);
 		let late = res.lateMap;
 		let emplCount = res.emplCount;
+		let deptSal = res.deptSal;
+		let recruitCount = res.recruitCount;
+		let appCount = res.appCount;
 		
 		function generateData(baseval, count, yrange) {
 		  var i = 0;
@@ -55,10 +58,6 @@ $.ajax({
         name: "지각횟수",
         data: [late['LATE11'], late['LATE10'], late['LATE9'], late['LATE8'], late['LATE7'], late['LATE6'], late['LATE5'], late['LATE4'], late['LATE3'], late['LATE2'], late['LATE1'], late['LATE0']]
       }],
-      title: {
-        text: 'Product Trends by Month',
-        align: 'left'
-      },
       grid: {
         row: {
           colors: ['#f1f2f3', 'transparent'], // takes an array which will be repeated on columns
@@ -112,6 +111,130 @@ $.ajax({
     donut.render();
   }
   
+  // 부서별 기본급, 실수령 평균
+    if ($('#s-col').length > 0) {
+      var sCol = {
+        chart: {
+          height: 350,
+          type: 'bar',
+          toolbar: {
+            show: false,
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        colors: ['#F26522', '#4361ee'],
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        series: [{
+          name: '기본급 평균',
+          data: [deptSal['PERSONELL'], deptSal['MARKETING'], deptSal['DEVELOPE'], deptSal['OPERATION'], deptSal['ACCOUNT']]
+        }],
+        xaxis: {
+          categories: ['경영 인사', '마케팅', '연구 개발', '운영', '재무 회계'],
+        },
+        yaxis: {
+          title: {
+            text: '\ (만원)'
+          }
+        },
+        fill: {
+          opacity: 1
+
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "\ " + val + " 만원"
+            }
+          }
+        }
+      }
+
+      var chart = new ApexCharts(
+        document.querySelector("#s-col"),
+        sCol
+      );
+
+      chart.render();
+    }
+	
+	// 채용공고수와 지원자 수
+	if ($('#s-col2').length > 0) {
+	    var sCol = {
+	      chart: {
+	        height: 350,
+	        type: 'bar',
+	        toolbar: {
+	          show: false,
+	        }
+	      },
+	      plotOptions: {
+	        bar: {
+	          horizontal: false,
+	          columnWidth: '55%',
+	          endingShape: 'rounded'
+	        },
+	      },
+	      colors: ['#F26522', '#4361ee', '#28a745'],
+	      dataLabels: {
+	        enabled: false
+	      },
+	      stroke: {
+	        show: true,
+	        width: 2,
+	        colors: ['transparent']
+	      },
+	      series: [{
+	        name: '게시한 채용공고 수',
+	        data: [recruitCount['PERSONELL'], recruitCount['MARKETING'], recruitCount['DEVELOPE'], recruitCount['OPERATION'], recruitCount['ACCOUNT']]
+	      }, {
+	        name: '지원자 수',
+	        data: [appCount['PERSONELL'], appCount['MARKETING'], appCount['DEVELOPE'], appCount['OPERATION'], appCount['ACCOUNT']]
+	      }, {
+	        name: '채용공고 한개당 지원자 수',
+	        data: [(appCount['PERSONELL']/recruitCount['PERSONELL']).toFixed(1), (appCount['MARKETING']/recruitCount['MARKETING']).toFixed(1), (appCount['DEVELOPE']/recruitCount['DEVELOPE']).toFixed(1), (appCount['OPERATION']/recruitCount['OPERATION']).toFixed(1), (appCount['ACCOUNT']/recruitCount['ACCOUNT']).toFixed(1)]
+	      }],
+	      xaxis: {
+	        categories: ['경영 인사', '마케팅', '연구 개발', '운영', '재무 회계'],
+	      },
+	      yaxis: {
+	        title: {
+	          text: '$ (thousands)'
+	        }
+	      },
+	      fill: {
+	        opacity: 1
+
+	      },
+	      tooltip: {
+	        y: {
+	          formatter: function (val) {
+	            return val + " 건"
+	          }
+	        }
+	      }
+	    }
+
+	    var chart = new ApexCharts(
+	      document.querySelector("#s-col2"),
+	      sCol
+	    );
+
+	    chart.render();
+	  }
+	
   // Simple Line Area 2번
   if ($('#s-line-area').length > 0) {
     var sLineArea = {
@@ -156,67 +279,7 @@ $.ajax({
     chart.render();
   }
 
-  // Simple Column 3번
-  if ($('#s-col').length > 0) {
-    var sCol = {
-      chart: {
-        height: 350,
-        type: 'bar',
-        toolbar: {
-          show: false,
-        }
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '55%',
-          endingShape: 'rounded'
-        },
-      },
-      colors: ['#F26522', '#4361ee'],
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      series: [{
-        name: 'Net Profit',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-      }, {
-        name: 'Revenue',
-        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-      }],
-      xaxis: {
-        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-      },
-      yaxis: {
-        title: {
-          text: '$ (thousands)'
-        }
-      },
-      fill: {
-        opacity: 1
-
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return "$ " + val + " thousands"
-          }
-        }
-      }
-    }
-
-    var chart = new ApexCharts(
-      document.querySelector("#s-col"),
-      sCol
-    );
-
-    chart.render();
-  }
+  
 
 
   // Simple Column Stacked 4번

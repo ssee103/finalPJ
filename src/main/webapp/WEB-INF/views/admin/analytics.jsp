@@ -39,7 +39,7 @@
 				<div class="page-header">
 					<div class="row">
 						<div class="col-sm-12">
-							<h3 class="page-title">Charts</h3>
+							<h3 class="page-title">사내 애널리틱스</h3>
 						</div>
 					</div>
 				</div>
@@ -90,10 +90,23 @@
 					<div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title">Column Chart</h5>
+								<h5 class="card-title">부서별 기본급 평균</h5>
 							</div>
 							<div class="card-body">
 								<div id="s-col" class="chart-set"></div>
+							</div>
+						</div>
+					</div>
+					<!-- /Chart -->
+					
+					<!-- Chart -->
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-title">채용공고수와 지원자수</h5>
+							</div>
+							<div class="card-body">
+								<div id="s-col2" class="chart-set"></div>
 							</div>
 						</div>
 					</div>
@@ -179,10 +192,6 @@
 
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
-
-<!-- Datatable JS -->
-<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
 
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>

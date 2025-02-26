@@ -47,4 +47,6 @@ public interface IEmployeeMapper {
 	public int saveSignature(EmployeeVO evo);
 
 	public List<EmpAuthVO> getEmpAuth(String userId);
+
+	public void giveVacation(EmployeeVO employee);
 }

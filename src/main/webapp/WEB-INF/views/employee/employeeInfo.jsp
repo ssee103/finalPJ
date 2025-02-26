@@ -67,7 +67,17 @@
 												<div class="profile-upload" style="margin-left: 100px;">
 													<div class="mb-2">
 													</div>
-												</div>                                    
+												</div>
+												<div class="col-md-6">
+													<div class="row align-items-center mb-3" id="signDiv">
+														<div class="col-md-4">
+															<label class="form-label mb-md-0">서명</label>
+														</div>
+														<div class="col-md-8">
+															<p id="emplSignature" ></p>
+														</div>
+													</div>
+												</div>                                   
 											</div>
 										</div>
 									</div>
@@ -146,7 +156,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<!-- <div class="col-md-6">
 										<div class="row align-items-center mb-3">
 											<div class="col-md-4">
 												<label class="form-label mb-md-0">보유 권한</label>
@@ -155,7 +165,7 @@
 												<p id="emplAuth"></p>
 											</div>
 										</div>
-									</div>
+									</div> -->
 									<div class="col-md-6">
 										<div class="row align-items-center mb-3">
 											<div class="col-md-4">
@@ -166,16 +176,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<div class="row align-items-center mb-3" id="signDiv">
-											<div class="col-md-4">
-												<label class="form-label mb-md-0">서명</label>
-											</div>
-											<div class="col-md-8">
-												<p id="emplSignature" ></p>
-											</div>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 							<div class="border-bottom mb-3"> <!-- 이 부분 부터 추가 정보 -->
@@ -409,7 +410,7 @@ $(function(){
 	let userIdData = {userId : userId};
 	
 	// 사원 권한 가져오기
-	$.ajax({
+	/* $.ajax({
 		url: "/employee/getEmpAuth",
 		method: 'get',
 		data: {userId: userId},
@@ -435,7 +436,7 @@ $(function(){
 			$("#emplAuth").html(authHtml);
 			
 		}
-	});
+	}); */
 	
 	
 	$.ajax({
@@ -500,37 +501,78 @@ $(function(){
 					}
 					
 					// 여기부터 추가 정보
-					let gender = "";
-					if(res.emplGender == "M") {
-						gender = "남자";
+					if(res.emplGender == null) {
+						$("#emplGender").append("성별을 등록 해 주세요.");
+					} else {
+						let gender = "";
+						if(res.emplGender == "M") {
+							gender = "남자";
+						}
+						if(res.emplGender == "F") {
+							gender = "여자";
+						}
+						$("#emplGender").append(gender);
 					}
-					if(res.emplGender == "F") {
-						gender = "여자";
+					
+					if(res.emplTelno == null) {
+						$("#emplTelno").append("연락처를 등록 해 주세요.");
+					} else {
+						$("#emplTelno").append(res.emplTelno);
 					}
-					$("#emplGender").append(gender);
 					
-					$("#emplTelno").append(res.emplTelno);
-					
-					let hy = "";
-					if(res.householderAt == "Y") {
-						res.householderAt = "세대주";
+					if(res.householderAt == null) {
+						$("#householderAt").append("세대주 여부를 등록 해 주세요.");
+					} else {
+						if(res.householderAt == "Y") {
+							res.householderAt = "세대주";
+						}
+						if(res.householderAt == "N") {
+							res.householderAt = "세대원";
+						}
+						$("#householderAt").append(res.householderAt);
 					}
-					if(res.householderAt == "N") {
-						res.householderAt = "세대원";
+					
+					if(res.vehicleNumber == null) {
+						$("#vehicleNumber").append("등록 된 차량 번호가 없습니다.");
+					} else {
+						$("#vehicleNumber").append(res.vehicleNumber);
 					}
-					$("#householderAt").append(res.householderAt);
 					
-					$("#vehicleNumber").append(res.vehicleNumber);
+					if(res.emplEmail == null) {
+						$("#emplEmail").append("이메일을 등록 해 주세요.");
+					} else {
+						$("#emplEmail").append(res.emplEmail);
+					}
 					
-					$("#emplEmail").append(res.emplEmail);
 					if(res.zipCode == null || res.addrMain == null || res.addrDetail == null) {
-						res.zipCode = "";
-						res.addrMain = "";
-						res.addrDetail = "";
+						$("#addr").append("주소를 등록 해 주세요.");
+					} else {
+						$("#addr").append(`\${res.zipCode}, \${res.addrMain}, \${res.addrDetail}`);
 					}
-					$("#addr").append(`\${res.zipCode}, \${res.addrMain}, \${res.addrDetail}`);
-					$("#emplHobby").append(res.emplHobby);
-					$("#emplMrnry").append(res.emplMrnry);
+					
+					if(res.emplHobby == null) {
+						$("#emplHobby").append("등록 된 취미가 없습니다.");
+					} else {
+						$("#emplHobby").append(res.emplHobby);
+					}
+					
+					if(res.emplMrnry == null){
+						$("#emplMrnry").append("등록 된 결혼 기념일자가 없습니다.");
+					} else {
+						$("#emplMrnry").append(res.emplMrnry);
+					}
+					
+					if(res.retireDate == null) {
+						$("#retireDate").append("퇴사 일자가 없습니다.");
+					} else {
+						$("#retireDate").append(res.retireDate);
+					}
+					
+					if(res.retireResn == null) {
+						$("#retireResn").append("퇴사 사유가 없습니다.");
+					} else {
+						$("#retireResn").append(res.retireResn);
+					}
 					
 					// 급여 관련 정보
 					$("#bankCode").append(res.bankCode);

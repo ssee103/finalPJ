@@ -42,4 +42,80 @@
 			,(<include refid="getEmplCountHeader"/> '05') as "05"
 		from dual
 	</select>
+	
+	<sql id="getDeptSalaryHeader">
+		SELECT NVL(TRUNC(AVG(basic_salary) / 10000), 0)
+		FROM employee
+		WHERE dept_code = 
+	</sql>
+	<select id="getDeptSalary">
+		SELECT 
+			(<include refid="getDeptSalaryHeader"/>'01') AS personell
+			,(<include refid="getDeptSalaryHeader"/>'02') AS marketing
+			,(<include refid="getDeptSalaryHeader"/>'03') AS develope
+			,(<include refid="getDeptSalaryHeader"/>'04') AS operation
+			,(<include refid="getDeptSalaryHeader"/>'05') AS account
+		FROM DUAL
+	</select>
+	
+	<sql id="getRecruitCountHeader">
+		select count(rec_no)
+		from recruitment
+		where dept_code = 
+	</sql>
+	<select id="getRecruitCount">
+		select 
+			(<include refid="getRecruitCountHeader"/>'01') AS personell
+			,(<include refid="getRecruitCountHeader"/>'02') AS marketing
+			,(<include refid="getRecruitCountHeader"/>'03') AS develope
+			,(<include refid="getRecruitCountHeader"/>'04') AS operation
+			,(<include refid="getRecruitCountHeader"/>'05') AS account
+		from dual
+		</select>
+		
+		<sql id="getAppCountHeader">
+			select NVL(count(app_no), 0)
+		    from applier
+		    where rec_no in (
+		        select rec_no
+		        from recruitment
+		        where dept_code = 
+		</sql>
+		<select id="getAppCount">
+		select
+		(<include refid="getAppCountHeader"/>'01')) as personell
+		,(<include refid="getAppCountHeader"/>'02')) as marketing
+		,(<include refid="getAppCountHeader"/>'03')) as develope
+		,(<include refid="getAppCountHeader"/>'04')) as operation
+		,(<include refid="getAppCountHeader"/>'05')) as account
+		from dual	
+	</select>
+	
+	
+	<select id="getVacationData">
+		SELECT 
+		    SUM(CASE WHEN e.dept_code = '01' THEN yv.YRYC_USAGE END) AS "01U",
+		    SUM(CASE WHEN e.dept_code = '01' THEN yv.YRYC_REMNDR END) AS "01R",
+		    ROUND((SUM(CASE WHEN e.dept_code = '01' THEN yv.YRYC_REMNDR END) / SUM(CASE WHEN e.dept_code = '01' THEN yv.YRYC_TOTAL END)) * 100, 2) AS "01P",
+		
+		    SUM(CASE WHEN e.dept_code = '02' THEN yv.YRYC_USAGE END) AS "02U",
+		    SUM(CASE WHEN e.dept_code = '02' THEN yv.YRYC_REMNDR END) AS "02R",
+		    ROUND((SUM(CASE WHEN e.dept_code = '02' THEN yv.YRYC_REMNDR END) / SUM(CASE WHEN e.dept_code = '02' THEN yv.YRYC_TOTAL END)) * 100, 2) AS "02P",
+		
+		    SUM(CASE WHEN e.dept_code = '03' THEN yv.YRYC_USAGE END) AS "03U",
+		    SUM(CASE WHEN e.dept_code = '03' THEN yv.YRYC_REMNDR END) AS "03R",
+		    ROUND((SUM(CASE WHEN e.dept_code = '03' THEN yv.YRYC_REMNDR END) / SUM(CASE WHEN e.dept_code = '03' THEN yv.YRYC_TOTAL END)) * 100, 2) AS "03P",
+		
+		    SUM(CASE WHEN e.dept_code = '04' THEN yv.YRYC_USAGE END) AS "04U",
+		    SUM(CASE WHEN e.dept_code = '04' THEN yv.YRYC_REMNDR END) AS "04R",
+		    ROUND((SUM(CASE WHEN e.dept_code = '04' THEN yv.YRYC_REMNDR END) / SUM(CASE WHEN e.dept_code = '04' THEN yv.YRYC_TOTAL END)) * 100, 2) AS "04P",
+		
+		    SUM(CASE WHEN e.dept_code = '05' THEN yv.YRYC_USAGE END) AS "05U",
+		    SUM(CASE WHEN e.dept_code = '05' THEN yv.YRYC_REMNDR END) AS "05R",
+		    ROUND((SUM(CASE WHEN e.dept_code = '05' THEN yv.YRYC_REMNDR END) / SUM(CASE WHEN e.dept_code = '05' THEN yv.YRYC_TOTAL END)) * 100, 2) AS "05P"
+	
+		FROM yearly_vacation yv
+		JOIN employee e ON yv.empl_no = e.empl_no
+		WHERE e.dept_code IN ('01', '02', '03', '04', '05')
+	</select>
 </mapper>

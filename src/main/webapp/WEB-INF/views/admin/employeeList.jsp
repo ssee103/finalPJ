@@ -337,10 +337,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<!-- Datatable JS -->
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -348,10 +344,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

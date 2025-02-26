@@ -34,8 +34,10 @@ public interface IBoardService {
 	public int replyCommentInsert(CommentVO cmtVO);
 
 	//댓글삭제 
-	public int commentDelete(String commentNo);
+	public int commentDelete(String commentNo, String commentNos);
 
-	public CommentVO commentSelect(String commentNo);
+	public CommentVO commentSelect(String commentNo,String commentNos);
+
+	public int commentUpdate(CommentVO cmtVO);
 
 }

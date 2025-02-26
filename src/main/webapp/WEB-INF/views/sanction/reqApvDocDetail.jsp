@@ -136,6 +136,14 @@
 										<td class="sort">결재 선</td>
 										<td id="sanctionLine" colspan="3"></td>
 									</tr>
+									<tr>
+										<td class="sort">참조자</td>
+										<td id="refLine" colspan="3"></td>
+									</tr>
+									<tr>
+										<td class="sort">첨부 파일</td>
+										<td id="docFileView" colspan="3"></td>
+									</tr>
 								</table>
 							</div>
 						</div>
@@ -285,7 +293,7 @@ $(function(){
                             console.log("결제자 서명: ", res);
                             let emplSignature = res.emplSignature;
                             
-                            // 문서 상세 정보 조회 및 DOM 업데이트를 담당하는 함수
+                            // 문서 상세 정보 조회 함수
                             function loadDocDetail() {
                                 $.ajax({
                                     url: "/sanction/getApvDocDetail",
@@ -335,16 +343,50 @@ $(function(){
                                         
                                         $("#myAllow").html(dcrbRight);
                                         
-                                        // 결재 선 업데이트
+                                        // 결재 선 출력
                                         if (res.aprRefList && res.aprRefList.length > 0) {
                                             var sanctionHtml = "";
                                             $.each(res.aprRefList, function(index, approver) {
-                                                sanctionHtml += "<div>" + approver.sanctnerNo + " (" + approver.sanctnStatus + ")</div>";
+                                            	
+                                            	if(approver.sanctnStatus == '승인') {
+                                            		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-success-transparent'>" + approver.sanctnStatus + "</span></div>";
+                                            	} else if(approver.sanctnStatus == '전결') {
+                                            		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-purple-transparent'>" + approver.sanctnStatus + "</span></div>";
+                                            	} else if(approver.sanctnStatus == '결재 중') {
+                                            		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-pink-transparent'>" + approver.sanctnStatus + "</span></div>";
+                                            	} else if(approver.sanctnStatus == '위임 전결') {
+	                                        		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-secondary-transparent'>" + approver.sanctnStatus + "</span></div>";
+	                                        	} else if(approver.sanctnStatus == '결재 대기') {
+	                                        		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-dark-transparent'>" + approver.sanctnStatus + "</span></div>";
+	                                        	} else if(approver.sanctnStatus == '반려') {
+	                                        		sanctionHtml += "<div>" + approver.sanctnerNo + " <span class=' badge badge-purple-transparent'>" + approver.sanctnStatus + "</span></div>";
+	                                        	}
+                                            	
+                                            	
+                                                
                                             });
                                             $("#sanctionLine").html(sanctionHtml);
                                         }
                                         
-                                        // 문서 내용 업데이트
+                                        // 참조자 출력
+                                        renderReference(docNo);
+                                        
+                                        // 첨부 파일 출력
+                                        let fileHtml = "";
+                                        
+                                        if(res.fileList.length > 0) {
+                                        	for(let i = 0; i < res.fileList.length; i++){
+                                        		fileHtml += `
+                                            		<div><a href="/downloadFile?fileIdentify=\${res.fileList[i].fileIdentify}&fileNo=\${res.fileList[i].fileNo}">\${res.fileList[i].fileName}</a></div>
+                                           		`;
+                                       		}
+                                        } else {
+                                        	fileHtml = "첨부된 파일이 없습니다.";
+                                        }
+                                        
+                                    	$("#docFileView").html(fileHtml);
+                                        
+                                        // 문서 내용 출력
                                         $("#docContent").html(res.docContent);
                                     },
                                     error: function(error){
@@ -393,6 +435,11 @@ $(function(){
                                                     success: function(res){
                                                         if(res === 1) {
                                                             console.log("최종 승인 처리가 완료되었습니다.");
+                                                            
+                                                            // 연차일 때 히스토리 테이블 INSERT
+                                                            if(dsCode == '01') {
+                                                            	insertVacation();
+                                                            }
                                                             
                                                             // 연장근무, 야간근무 결재시 히스토리 테이블 인서트
                                                             insertHistory(docNoData);
@@ -489,8 +536,10 @@ $(function(){
                                             }
                                         });
                                         
-                                        // 연장근무 신청서 등 dsCode에 따른 히스토리 테이블 삽입
-                                        insertHistory(docNoData);
+                                        // 연차일 때 히스토리 테이블 INSERT 및 휴가 일 수 가감
+                                        if(dsCode == '01') {
+                             				insertVacation();
+                                        }
                                         
                                      	// 사원 평가일 때
                                         if(dsCode == '99') {
@@ -631,6 +680,119 @@ function insertEvaluation(evalData) {
         		alert("사원 평가 데이터 삽입 실패");
         	}
         }
+	});
+}
+
+function insertVacation() {
+	
+	let emplNoForVac = $("#emplNo").text();
+	let hisTypeForVac = '03';
+	// 일자값 추출 (해당 요소의 id가 dateValue)
+    let dateRange = $("#dateValue").text();
+    let [startDate, endDate] = dateRange.split(" - ");
+	
+	let vacationData = {
+			emplNo: emplNoForVac,
+			hisType: hisTypeForVac,
+			hisSdate: startDate,
+            hisEdate: endDate,
+	};
+	
+	console.log("vacationData: ", vacationData);
+	
+	$.ajax({
+		url: "/sanction/insertVacationHistory",
+		method: "post",
+		data: JSON.stringify(vacationData),
+		dataType: 'json',
+		contentType: "application/json; charset=UTF-8",
+		success: function(vacRes) {
+			console.log("vacRes: " ,vacRes);
+			
+			if(vacRes == 1) {
+				alert("휴가 신청 히스토리 인서트 완료");
+				// 일 수 가감 메소드 실행
+				minusVacation(startDate, endDate);
+			} else {
+				alert("휴가 신청 히스토리 인서트 에러");
+			}
+		}
+	});
+}
+
+/** ✅ 참조자 리스트 렌더링 */
+function renderReference(docNo) {
+	$.ajax({
+		url: "/sanction/getRefList",
+		method: "get",
+		data: { docNo: docNo },
+		dataType: 'json',
+		success: function(refRes) {
+			console.log("refRes: ", refRes);
+			
+			let readTxt = "";
+			
+			if(refRes.length > 0) {
+				$.each(refRes, function(index, item){
+					if(refRes[index].refRead == 'N') {
+						readTxt = "안읽음";
+					} else {
+						readTxt = "읽음";
+					}
+					
+					if(readTxt == "읽음") {
+						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-info-transparent'>\${readTxt}</span></div>`);
+					} else {
+						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-pink-transparent'>\${readTxt}</span></div>`);
+					}
+					
+				});
+			} else {
+				$("#refLine").append("지정된 참조자가 없습니다.");
+			}
+		}
+	});
+}
+
+// 휴가 결재 시 일 수 가감
+function minusVacation(startDate, endDate) {
+	// vacationData 객체에서 시작일과 종료일을 가져옴
+	let startDateObj = new Date(startDate);
+	let endDateObj = new Date(endDate);
+
+	// 두 날짜의 차이를 밀리초 단위로 계산
+	let diffTime = endDateObj - startDateObj;
+
+	// 밀리초를 일(day) 단위로 변환 (1일 = 1000 * 60 * 60 * 24 밀리초)
+	let diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+	console.log("diffDays: " + diffDays);  // 예시: 2가 출력됨
+	
+	let diffDaysInclusive = diffDays + 1;
+	console.log("diffDaysInclusive: ", diffDaysInclusive);  // 예시: 3일이 출력됨
+	
+	let emplNoForVac = $("#emplNo").text();
+	let dayCount = parseInt(diffDaysInclusive);
+	
+	let vacCountData = {
+			emplNo: emplNoForVac,
+			count: dayCount
+	};
+	
+	$.ajax({
+		url: "/sanction/calVacCount",
+		method: "post",
+		data: JSON.stringify(vacCountData),
+		dataType: 'json',
+		contentType: "application/json; charset=UTF-8",
+		success: function(countRes) {
+			console.log("countRes: ", countRes);
+			if(countRes == 1) {
+				alert("연차 수 차감이 반영되었습니다.");
+			} else {
+				alert("연차 수 차감에 오류가 발생했습니다.");
+			}
+		}
 	});
 }
 </script>

@@ -72,7 +72,7 @@
 										<th>교육대상</th>
 										<th>모집기간</th>
 										<th>교육해당부서</th>
-										<th></th>
+										<th>신청버튼</th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -142,8 +142,8 @@
 
 						            if (res.eduAllList && res.eduAllList.length > 0) {
 						            	res.eduAllList.forEach(function(edu) {
-						            	    let recruitPeriod = `${edu.recruitSdateFormatted} ~ ${edu.recruitEdateFormatted}`;
-						            	    let edcPeriod = `${edu.edcSdateFormatted} ~ ${edu.edcEdateFormatted}`;
+						            	    let recruitPeriod = `\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}`;
+						            	    let edcPeriod = `\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}`;
 
 						            	    tr += `
 												<tr>
@@ -157,19 +157,17 @@
 						                            <td>\${edu.educator}</td>
 						                            <td>\${edu.edcPsncpa}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.edcEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcTarget}</td>
 						                            <td>
-						                                <span class="text-nowrap">\${edu.recruitSdateFormatted}</span> <br> 
-						                                <span class="text-nowrap"> ~ \${edu.recruitEdateFormatted}</span>
+						                                <span class="text-nowrap">\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}</span>
 						                            </td>
 						                            <td>\${edu.edcSort}</td>
 						                            <td>
-							                            <div class="mb-2">
-															<a href="#" data-bs-toggle="modal" data-bs-target="#add_book" class="btn btn-primary">수강신청</a>
-														</div>
+								                            <div class="mb-1">
+								                                <button class="btn btn-primary enroll-btn" data-edc-no="\${edu.edcNo}">수강신청</button>
+								                            </div>
 						                            </td>
 						            	        </tr>	
 						            	    `;
@@ -199,6 +197,11 @@
 		</div>
 		<!-- /Page Wrapper -->
 		
+		<%
+		    // 로그인한 사용자의 empl_no 값을 가져오는 코드 (백엔드에서 model로 넘겨줘야 함)
+		    String edcAplc = (String) session.getAttribute("edcAplc");
+		%>
+
 		<script>
 		// 날짜 형식을 "yyyy-MM-dd HH:mm"으로 변환하는 함수
 		function formatDateTime(dateString) {
@@ -208,12 +211,63 @@
 		    let year = date.getFullYear();
 		    let month = String(date.getMonth() + 1).padStart(2, "0");
 		    let day = String(date.getDate()).padStart(2, "0");
-		    let hours = String(date.getHours()).padStart(2, "0");
-		    let minutes = String(date.getMinutes()).padStart(2, "0");
 		    
-		    return `${year}-${month}-${day} ${hours}:${minutes}`;
+		    return `\${year}-\${month}-\${day}`;
 		}
-		</script>
+		
+		
+	</script>
+	<%
+	    // 로그인한 사용자의 empl_no 값을 가져오는 코드 (백엔드에서 model로 넘겨줘야 함)
+	    String emplNo = (String) session.getAttribute("emplNo");
+	%>
+	<script>
+	    // JavaScript에서 emplNo 값을 변수로 저장
+	    let edcAplc = "<%= emplNo %>";
+
+	    $(document).ready(function () {
+	        $(".enroll-btn").on("click", function () {
+	            let edcNo = $(this).data("edcNo");
+
+	            let today = new Date();
+	            let erDate = today.getFullYear() + "-" +
+	                         String(today.getMonth() + 1).padStart(2, "0") + "-" + 
+	                         String(today.getDate()).padStart(2, "0");
+
+
+	            if (!edcAplc) {
+	                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
+	                return;
+	            }
+
+	            let requestData = {
+	                edcAplc: edcAplc,  // 로그인한 사용자 ID
+	                edcNo: edcNo,
+	                erDate: erDate,  // yyyy/MM/dd 형식
+	                erStatus: ''
+	            };
+
+	            console.log("보낼 데이터:", requestData);
+
+	            $.ajax({
+	                url: "/hrms/education/user/rest/insertEdcReqeust",
+	                type: "POST",
+	                contentType: "application/json",
+	                data: JSON.stringify(requestData),
+	                success: function (response) {
+	                    alert("수강 신청 완료!");
+	                    location.reload();
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error("수강 신청 실패:", xhr.responseText);
+	                    alert("수강 신청 중 오류가 발생했습니다.");
+	                }
+	            });
+	        });
+	    });
+	</script>
+
+		
 	</div>
 	<!-- /Main Wrapper -->
 

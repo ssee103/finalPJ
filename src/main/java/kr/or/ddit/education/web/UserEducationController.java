@@ -33,7 +33,7 @@ public class UserEducationController {
 	
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@GetMapping("/userTrainingDetail/{edcNo}")
-	public String userTrainingDetail(@PathVariable("edcNo") String edcNo, Model model) {
+	public String userTrainingDetail(@PathVariable("edcNo") int edcNo, Model model) {
 	    log.info("교육 상세 페이지 요청 - 교육번호: {}", edcNo);
 
 	    // 교육 상세 정보 가져오기
@@ -49,6 +49,26 @@ public class UserEducationController {
 	    model.addAttribute("bookList", bookList);
 
 	    return "education/userTrainingDetail";
+	}
+	
+	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
+	@GetMapping("/userMyTrainingLecture/{edcNo}")
+	public String userMyTrainingLecture(@PathVariable("edcNo") int edcNo, Model model) {
+	    log.info("교육 상세 페이지 요청 - 교육번호: {}", edcNo);
+
+	    // 교육 상세 정보 가져오기
+	    EducationVO education = eduService.getEducationMyLectureDetail(edcNo);
+	    // 교육 관련 커리큘럼 리스트 가져오기
+	    List<CurriculumVO> curriculumList = eduService.getCurriculumMyLectureByEdcNo(edcNo);
+	    // 교육 관련 도서 리스트 가져오기
+	    List<BookVO> bookList = eduService.getBooksMyLectureByEdcNo(edcNo);
+
+	    // JSP로 데이터 전달
+	    model.addAttribute("education", education);
+	    model.addAttribute("curriculumList", curriculumList);
+	    model.addAttribute("bookList", bookList);
+
+	    return "education/userMyTrainingLecture";
 	}
 
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")

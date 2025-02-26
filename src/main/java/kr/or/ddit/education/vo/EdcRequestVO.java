@@ -11,4 +11,10 @@ public class EdcRequestVO {
 	private int edcNo       ;  // 교육번호
 	private Date erDate     ;  // 교육신청일자
 	private String erStatus ;  
+	
+	// EMPLOYEE
+	private String emplNm;			// 사원 명
+	private String emplPosition;	// 사원 직위
+	private String deptCode;		// 부서 코드
+	private String teamCode;		// 팀 코드
 }

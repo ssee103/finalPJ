@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import kr.or.ddit.cmm.vo.PaginationInfoVO;
 import kr.or.ddit.education.service.IEducationService;
+import kr.or.ddit.education.vo.EdcRequestVO;
 import kr.or.ddit.education.vo.EducationVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +50,7 @@ public class UserEducationRestController {
         pageVO.setTotalRecord(totalRecord);
         List<EducationVO> eduAllList = eduService.selectEducationList(pageVO, educationVO);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (EducationVO edu : eduAllList) {
             if (edu.getRecruitSdate() != null) {
                 edu.setRecruitSdateFormatted(sdf.format(edu.getRecruitSdate())); 
@@ -99,7 +100,7 @@ public class UserEducationRestController {
         pageVO.setTotalRecord(totalRecord);
         List<EducationVO> eduAllList = eduService.selectEducationMyList(pageVO, educationVO);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (EducationVO edu : eduAllList) {
             if (edu.getRecruitSdate() != null) {
                 edu.setRecruitSdateFormatted(sdf.format(edu.getRecruitSdate())); 
@@ -120,7 +121,30 @@ public class UserEducationRestController {
         resultMap.put("pageVO", pageVO);
         entity = new ResponseEntity<>(resultMap, HttpStatus.OK);
         return entity;
-    }
+    } 
+    
+    
+    @PostMapping("/insertEdcReqeust")
+    @ResponseBody
+    public ResponseEntity<String> insertEdcReqeust(@AuthenticationPrincipal UserDetails userDetails, @RequestBody EdcRequestVO edcRequestVO) {
+        
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
 
+        // 현재 로그인한 사용자 ID 가져오기
+        String emplNo = userDetails.getUsername();  // UserDetails에서 ID 가져오기 (UserDetails를 상속한 User 클래스 확인 필요)
+        edcRequestVO.setEdcAplc(emplNo);  // 수강 신청자 ID 설정
+
+        log.info("교육 신청한 내용: {}", edcRequestVO);
+
+        int result = eduService.insertEdcReqeust(edcRequestVO);
+        
+        if (result > 0) {
+            return ResponseEntity.ok("교육 신청 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("교육 신청 실패");
+        }
+    }
 
 }

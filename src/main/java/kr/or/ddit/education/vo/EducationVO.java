@@ -1,13 +1,14 @@
 package kr.or.ddit.education.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class EducationVO {
     
-    private String edcNo;       // 교육번호
+    private int edcNo;       // 교육번호
     private String edcSort;     // 교육분류
     private String edcWay;      // 교육방식
     private String educator;    // 교육자
@@ -35,10 +36,12 @@ public class EducationVO {
     private String bookCompany;    // 출판사
     
     // CURRICULLUM
-    private int curNo       ;  // 커리큘럼번호
-	private String curName  ;  // 커리큘럼명
-	private int curSort     ;  // 분류코드
+    private int curNo;            // 커리큘럼 NO
+	private String curName;       // 커리큘럼명
+	private String curUrl;        // 해당 커리큘럼의 URL
+	private String curExplain;    // 해당 커리큘럼 설명
     
+	
     // EdcRequest
 	private String edcAplc  ;  // 교육신청자
 	private Date erDate     ;  // 교육신청일자

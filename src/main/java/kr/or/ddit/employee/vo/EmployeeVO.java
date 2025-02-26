@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.vacation.vo.YearlyVacationVO;
 import lombok.Data;
 
 @Data
@@ -45,5 +46,6 @@ public class EmployeeVO {
 	private String deptName;			// 부서 이름
 	private String ccName; 				// 직책 이름
 
+	private YearlyVacationVO yearlyVacationVO;
 	
 }

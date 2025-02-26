@@ -2,9 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c"  %>
-<%@page import="kr.or.ddit.education.vo.BookVO"%>
-<%@page import="kr.or.ddit.education.vo.CurriculumVO"%>
-<%@page import="kr.or.ddit.education.vo.EducationVO"%>
+<%@ page import="kr.or.ddit.education.vo.BookVO"%>
+<%@ page import="kr.or.ddit.education.vo.CurriculumVO"%>
+<%@ page import="kr.or.ddit.education.vo.EducationVO"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +14,7 @@
     <meta name="keywords" content="admin, estimates, bootstrap, business, html5, responsive, Projects">
     <meta name="author" content="Dreams technologies - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>전체교육관리자세히보기</title>
+    <title>전체교육유저자세히보기</title>
 </head>
 <body>
 
@@ -109,13 +109,12 @@
                                 <p>${education.edcContent}</p>
                             </div>
                         </div>
-                        <!-- 커리큘럼 -->
-						<div class="custom-accordion-items">
+                        <div class="custom-accordion-items">
 						    <div class="accordion accordions-items-seperate" id="accordionExample">
 						        <div class="accordion-item">
 						            <div class="accordion-header" id="headingTwo">
 						                <div class="accordion-button">
-						                    <h5>커리큘럼</h5>
+						                    <h5>커리큘럼 미리보기</h5>
 						                    <div class="ms-auto">
 						                        <a href="#" class="d-flex align-items-center collapsed collapse-arrow"
 						                            data-bs-toggle="collapse" data-bs-target="#primaryBorderTwo"
@@ -133,7 +132,8 @@
 						                            <c:when test="${not empty curriculumList}">
 						                                <c:forEach var="cur" items="${curriculumList}">
 						                                    <div class="list-group-item border rounded mb-2 p-2">
-						                                        <h4 class="fs-14">${cur.curName}</h4>
+						                                        <h4 class="fs-17">${cur.curName}</h4><br/>
+						                                        <h4 class="fs-15">: ${cur.curExplain}</h4>
 						                                    </div>
 						                                </c:forEach>
 						                            </c:when>
