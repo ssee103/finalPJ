@@ -29,7 +29,7 @@
         $("#modalBonus").text(safeValue(data.PS_BONUS) + " 원");
         $("#modalIncomeTax").text(safeValue(data.INCOME_TAX) + " 원");
         $("#modalLocalTax").text(safeValue(data.LOCAL_TAX) + " 원");
-        $("#modalEmploymentInsurance").text(safeValue(data.EMPLOY_MENTINSURANCE) + " 원");
+        $("#modalEmploymentInsurance").text(safeValue(data.EMPLOYMENT_INSURANCE) + " 원");
         $("#modalHealthInsurance").text(safeValue(data.HEALTH_INSURANCE) + " 원");
         $("#modalNursingInsurance").text(safeValue(data.NURSING_INSURANCE) + " 원");
         $("#modalNationalPension").text(safeValue(data.NATIONAL_PENSION) + " 원");
