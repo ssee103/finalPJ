@@ -27,7 +27,9 @@ public interface IPromMapper {
 			@Param("emplNo") String emplNo, 
 			@Param("emplNm") String emplNm, 
 			@Param("deptCode") String deptCode, 
-			@Param("position") String position);
+			@Param("position") String position,
+			@Param("sorting") String sorting
+			);
 
 	public int promoteTarget(String emplNo);
 

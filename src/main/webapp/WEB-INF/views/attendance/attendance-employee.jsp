@@ -11,7 +11,18 @@
 	<meta name="robots" content="noindex, nofollow">
 	<title>Smarthr Admin Template</title>
 </head>
-
+<style>
+    .progress {
+        position: relative;
+        height: 30px !important;
+        background-color: #e9ecef;
+    }
+    .progress-bar {
+        position: absolute;
+        height: 100%;
+        transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
+    }
+</style>
 <body>
 
 	<div id="global-loader" style="display: none;">
@@ -29,6 +40,9 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -43,9 +57,8 @@
 
 				<div class="row">
 					<div class="col-xl-3 col-lg-4 d-flex">
-						<div class="card flex-fill">
+						<div class="card flex-fill border-primary attendance-bg">
 							<div class="card-body">
-								 
 								<div class="attendance-circle-progress mx-auto mb-3" style="width:150px;padding-top: 50px;" data-value='65'>
 									<div class="mb-3 text-center">
 										<h6 class="fw-medium text-gray-5 mb-2">현재 시각</h6>
@@ -53,7 +66,6 @@
 									</div>
 								</div>
 								<div class="text-center" style="padding-top: 50px;">
-									<!-- <div class="badge badge-md badge-primary mb-3">Production :  3.45 hrs</div> -->
 									<div class="fw-medium d-flex align-items-center justify-content-center mb-3">
 										<i class="ti ti-fingerprint text-primary me-1"></i>
 										출근시간 :  <div id="todayDclzStime"></div>
@@ -62,72 +74,119 @@
 										<i class="ti ti-fingerprint text-primary me-1"></i>
 										퇴근시간 :  <div id="todayDclzEtime"></div>
 									</div>
-									<button class="btn btn-dark w-100" id="punchOutBtn">출근</button>
+									<button class="btn btn-primary w-100" id="punchOutBtn">출근</button>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-xl-9 col-lg-8 d-flex">
 						<div class="row flex-fill">
-							<div class="col-xl-3 col-md-6" style="width:550px;">
-								<div class="card">
-									<div class="card-body">
-										<div class="border-bottom mb-2 pb-2">
-											<span class="avatar avatar-sm bg-primary mb-2"><i class="ti ti-clock-stop"></i></span>
-											<h2 class="mb-2">연장근무 시간<span class="fs-20 text-gray-5"> </span></h2>
-										</div>
-										<div>
-											<h2>
-												<span class="fs-20 text-gray-5" id="OVERTIMEHOUR"> ?</span>
-											</h2>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6" style="width:550px;">
-								<div class="card">
-									<div class="card-body">
-										<div class="border-bottom mb-2 pb-2">
-											<span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
-											<h2 class="mb-2">야간근무 시간<span class="fs-20 text-gray-5"> </span></h2>
-										</div>
-										<div>
-											<h2>
-												<span class="fs-20 text-gray-5"> ?</span>
-											</h2>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6" style="width:550px;">
+							<div class="col-xl-3 col-md-6">
 								<div class="card">
 									<div class="card-body">
 										<div class="border-bottom mb-2 pb-2">
 											<span class="avatar avatar-sm bg-info mb-2"><i class="ti ti-calendar-up"></i></span>
-											<h2 class="mb-2">출장 횟수<span class="fs-20 text-gray-5"> </span></h2>
+											<h2 class="mb-2">출근<span class="fs-20 text-gray-5"> </span></h2>
 										</div>
 										<div>
 											<h2>
-												<span class="fs-20 text-gray-5"> ?</span>
+												<span class="fs-20 text-gray-5" id="NORMAL"> 0일</span>
 											</h2>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-xl-3 col-md-6" style="width:550px;">
+							<div class="col-xl-3 col-md-6">
 								<div class="card">
 									<div class="card-body">
 										<div class="border-bottom mb-2 pb-2">
-											<span class="avatar avatar-sm bg-pink mb-2"><i class="ti ti-calendar-star"></i></span>
-											<h2 class="mb-2">지각 횟수</h2>
+											<span class="avatar avatar-sm bg-primary mb-2"><i class="ti ti-clock-stop"></i></span>
+											<h2 class="mb-2">초과근무<span class="fs-20 text-gray-5"> </span></h2>
 										</div>
 										<div>
 											<h2>
-												<span class="fs-20 text-gray-5" id="LATE"> </span>
+												<span class="fs-20 text-gray-5" id="OVERTIMEHOUR"> 0시간</span>
 											</h2>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div class="col-xl-3 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<div class="border-bottom mb-2 pb-2">
+											<span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
+											<h2 class="mb-2">지각</h2>
+										</div>
+										<div>
+											<h2>
+												<span class="fs-20 text-gray-5" id="LATE"> 0일</span>
+											</h2>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-3 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<div class="border-bottom mb-2 pb-2">
+											<span class="avatar avatar-sm bg-pink mb-2"><i class="ti ti-calendar-star"></i></span>
+											<h2 class="mb-2">결근</h2>
+										</div>
+										<div>
+											<h2>
+												<span class="fs-20 text-gray-5" id="ABSENT"> 0일</span>
+											</h2>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="container">
+									        <div class="row">
+									            <div class="col-md-12">
+									            	<div class="mb-3">
+									            		<p class="d-flex align-items-center mb-1">
+									            			<i class="ti ti-point-filled text-success me-1"></i>금일 근무시간
+									            		</p>
+								            			<h3 id="workTime">0 시간</h3>
+									            	</div>
+									            </div>
+									
+									            <div class="col-md-12 mt-3">
+									                <div class="progress">
+									                    <div id="progressBar" class="progress-bar bg-primary"></div>
+									                </div>
+									            </div>
+									
+									            <div class="col-md-12">
+									                <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+									                    <span class="fs-10">06:00</span>
+									                    <span class="fs-10">07:00</span>
+									                    <span class="fs-10">08:00</span>
+									                    <span class="fs-10">09:00</span>
+									                    <span class="fs-10">10:00</span>
+									                    <span class="fs-10">11:00</span>
+									                    <span class="fs-10">12:00</span>
+									                    <span class="fs-10">13:00</span>
+									                    <span class="fs-10">14:00</span>
+									                    <span class="fs-10">15:00</span>
+									                    <span class="fs-10">16:00</span>
+									                    <span class="fs-10">17:00</span>
+									                    <span class="fs-10">18:00</span>
+									                    <span class="fs-10">19:00</span>
+									                    <span class="fs-10">20:00</span>
+									                    <span class="fs-10">21:00</span>
+									                    <span class="fs-10">22:00</span>
+									                    <span class="fs-10">23:00</span>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+								    </div>
+							    </div>
 							</div>
 						</div>
 					</div>
@@ -153,16 +212,13 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>출근날짜</th>
 										<th>출근시각</th>
 										<th>퇴근시각</th>
-										<th></th>
 										<th>근무상태</th>
-										<th></th>
-										<th></th>
 										<th>근무 유형</th>
 									</tr>
 								</thead>
@@ -181,30 +237,14 @@
 				</div>
 
 			</div>
-
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
-
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /Page Wrapper -->
 
 	</div>
 	<!-- /Main Wrapper -->
-
-<!-- Toast 알림 메시지 -->
-<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100">
-	<div id="toastMessage" class="toast hide align-items-center text-white bg-primary border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="d-flex">
-					<div class="toast-body" id="toastBody">
-							<!-- 메시지가 여기에 표시됨 -->
-					</div>
-					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-	</div>
-</div>
-<!-- Toast 알림 메시지 -->
 
 </body>
 <!-- jQuery -->
@@ -243,15 +283,17 @@ let todayDclzStime = $("#todayDclzStime");	// 오늘 나의 출근시간을 표�
 let todayDclzEtime = $("#todayDclzEtime");	// 오늘 나의 퇴근시간을 표시하는 곳
 let pagingArea = $("#pagingArea");			// 페이지 표시하는 div
 let searchBtn = $("#searchBtn");			// 날짜검색버튼
-let LATE = $("#LATE")
-let OVERTIMEHOUR = $("#OVERTIMEHOUR")
+let LATE = $("#LATE");
+let OVERTIMEHOUR = $("#OVERTIMEHOUR");
+let NORMAL = $("#NORMAL");
+let workTime = $("#workTime");
 
 time(); // 시계함수 실행
 setInterval(time, 1000); // 시계함수 1초마다 계속실행
 
 $(function(){
+	console.log()
 	selectThisMonthData();
-
 	printList(1); // 페이지 로드할때 출퇴근목록 출력하기
 	getTodayPunchOut();
 	
@@ -283,7 +325,7 @@ $(function(){
 				data : JSON.stringify({emplNo : userId}),
 				contentType: "application/json;charset=utf-8",
 				success : function(res){
-					showToastMessage("✅출근성공", "success");
+					showToastMessage("✅출근시간이 기록되었습니다.", "success");
 					printList(1);
 					getTodayPunchOut();
 					todayDclzEtime.text("");
@@ -299,7 +341,7 @@ $(function(){
 				data : JSON.stringify({emplNo : userId}),
 				contentType: "application/json;charset=utf-8",
 				success : function(res){
-					showToastMessage("✅퇴근성공", "success");
+					showToastMessage("✅퇴근시간이 기록되었습니다.", "success");
 					printList(1);
 					getTodayPunchOut();
 				},
@@ -308,6 +350,7 @@ $(function(){
 				}				
 			});
 		}
+		selectThisMonthData();
 	});
 	// 출퇴근버튼 클릭 끝
 	
@@ -358,10 +401,7 @@ function printList(page, dateStart, dateEnd){ // 출퇴근 목록 가져오기
 					tr+= `<td></td>`;
 				}
 				tr += `
-						<td></td>
 						<td>\${res.dalList[i].dclzType}</td>
-						<td></td>
-						<td></td>
 						<td>\${res.dalList[i].dclzStatus}</td>
 					</tr>
 				`;
@@ -394,14 +434,15 @@ function getTodayPunchOut(){
 			let lastDclzDate = res.dclzDate
 			// 결과값과 오늘날짜 비교해서 같으면 위에 출력하기
 			if(today == lastDclzDate.substr(0,10)){
-				todayDclzStime.text(res.dclzStime.substr(11))
+				todayDclzStime.text(res.dclzStime.substr(11));
 				if(res.dclzEtime != null){
-					todayDclzEtime.text(res.dclzEtime.substr(11))
+					todayDclzEtime.text(res.dclzEtime.substr(11));
+					console.log("aaaaaaa", res.dclzStime.substr(11), res.dclzEtime.substr(11))
+					updateProgressBar(res.dclzStime.substr(11), res.dclzEtime.substr(11))
 				}
 			}else{
 				console.log("다르다")
 			}
-			
 		},
 		error : function(error){
 			showToastMessage("❌ 목록을 불러오는데 실패했습니다.", "danger");
@@ -417,8 +458,15 @@ function selectThisMonthData(){
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
 			console.log(res);
-			LATE.text(" " + res.LATE + " 회")
-			OVERTIMEHOUR.text(" " + res.OVERTIMEHOUR + " 시간")
+			if(res.LATE != null && res.LATE != ""){
+				LATE.text(" " + res.LATE + " 일");
+			}
+			if(res.OVERTIMEHOUR != null && res.OVERTIMEHOUR != ""){
+				OVERTIMEHOUR.text(" " + res.OVERTIMEHOUR + " 시간");
+			}
+			if(res.NORMAL != null && res.NORMAL != ""){
+				NORMAL.text(" " + res.NORMAL + " 일");
+			}
 		},
 		error : function(){
 			showToastMessage("❌ 목록을 불러오는데 실패했습니다.", "danger");
@@ -434,14 +482,33 @@ function time(){ //현재시간 표시하는 시계.
 	clock.text(hours + "시 " + minutes + "분 " + seconds + "초")
 }
 
-//토스트 메시지 표시 함수 (Bootstrap Toast)
-function showToastMessage(message, type = "primary") {
-  let toast = $("#toastMessage");
-  toast.removeClass("bg-primary bg-success bg-danger bg-warning");
-  toast.addClass(`bg-\${type}`);
-  $("#toastBody").text(message);
-  let toastInstance = new bootstrap.Toast(toast[0]);
-  toastInstance.show();
+function updateProgressBar(startTime, endTime) {
+
+    const startHour = 6;
+    const endHour = 23;
+    const totalHours = endHour - startHour; // 총 17시간 범위
+
+    const [startHourInput, startMinInput] = startTime.split(":").map(Number);
+    const [endHourInput, endMinInput] = endTime.split(":").map(Number);
+
+    if ([startHourInput, startMinInput, endHourInput, endMinInput].some(isNaN)) {
+    	showToastMessage("올바른 시간 형식이 아닙니다. 'HH:MM:SS' 형식으로 입력하세요.", "warning");
+        return;
+    }
+    if (startHourInput < startHour || endHourInput > endHour || startHourInput > endHourInput || startMinInput > endMinInput) {
+    	showToastMessage("시간 범위는 06:00:00 ~ 23:00:00 사이여야 하며, 시작 시간이 종료 시간보다 작아야 합니다.", "warning");
+        return;
+    }
+
+    const startPercentage = ((startHourInput - startHour) + (startMinInput / 60)) / totalHours * 100;
+
+    const timeDifference = (endHourInput - startHourInput) + ((endMinInput - startMinInput) / 60);
+    const widthPercentage = (timeDifference / totalHours) * 100;
+
+    const progressBar = document.getElementById("progressBar");
+    progressBar.style.left = startPercentage + "%"; // 시작 위치
+    progressBar.style.width = widthPercentage + "%"; // 진행 바 길이
+    workTime.text((endHourInput - startHourInput) + "시간 " + (endMinInput - startMinInput) + "분");
 }
 </script>
 </html>

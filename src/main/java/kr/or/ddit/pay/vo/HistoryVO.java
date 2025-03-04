@@ -14,6 +14,5 @@ public class HistoryVO {
   private Date hisStime;
   private Date hisEtime;
   private Date hisApvDate;
-  private String field;
   
 }

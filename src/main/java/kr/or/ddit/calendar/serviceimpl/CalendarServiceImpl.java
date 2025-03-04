@@ -36,8 +36,8 @@ public class CalendarServiceImpl implements ICalendarService{
 	}
 
 	@Override
-	public void update(CalendarVO cal) {
-		mapper.update(cal);
+	public int update(CalendarVO cal) {
+		return mapper.update(cal);
 		
 	}
 
@@ -46,10 +46,23 @@ public class CalendarServiceImpl implements ICalendarService{
 		return mapper.selectSchNo(schNo);
 	}
 
+	@Override
+	public List<CalendarVO> selectPersonal(String emplNo) {
+		return mapper.selectPersonal(emplNo);
+	}
 
 	@Override
-	public List<CalendarVO> selectAll(String emplNo) {
-		return mapper.selectAll(emplNo);
+	public List<CalendarVO> selectDepartment(String groupId) {
+		return mapper.selectDepartment(groupId);
+	}
+
+
+	@Override
+	public List<CalendarVO> selectAll(String emplNo, String groupId) {
+		CalendarVO calVO = new CalendarVO();
+		calVO.setEmplNo(emplNo);
+		calVO.setGroupId(groupId);
+		return mapper.selectAll(calVO);
 	}
 
 	

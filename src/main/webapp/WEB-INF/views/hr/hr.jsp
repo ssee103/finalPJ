@@ -18,33 +18,6 @@
 	<!-- 조직도 관련 땡겨와야 하는 것 2개.  -->
 	<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
-
-	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-	<!-- Apple Touch Icon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
-	<!-- Theme Script js -->
-	<script src="assets/js/theme-script.js"></script>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/css/bootstrap.min.css">
-	<!-- Feather CSS -->     
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/icons/feather/feather.css">
-	<!-- Tabler Icon CSS -->    
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/tabler-icons/tabler-icons.css">
-	<!-- Bootstrap Tagsinput CSS-->
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
-	<!-- Owl carousel CSS -->  
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/css/owl.carousel.min.css">
-	<!-- Select2 CSS -->        
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/select2/css/select2.min.css">
-	<!-- Fontawesome CSS -->     
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/fontawesome/css/fontawesome.min.css">
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/fontawesome/css/all.min.css">
-	 <!-- Color Picker Css -->  
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/flatpickr/flatpickr.min.css">
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/plugins/@simonwep/pickr/themes/nano.min.css">
-	<!-- Main CSS -->          
-	<link rel="stylesheet" href="${pageContext.request.contextPath }assets/css/style.css">
 	</head>
 
 	<body>
@@ -75,59 +48,8 @@
 		    %>
 		];
 		</script>
-		<!-- 부서 및 팀 관리 모달 -->
-		<div class="modal fade" id="departmentTeamModal" tabindex="-1" aria-labelledby="departmentTeamModalLabel" aria-hidden="true">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h5 class="modal-title" id="departmentTeamModalLabel">관리</h5>
-		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		            </div>
-		            <div class="modal-body">
-		                <form id="modalForm">
-		                    <div id="departmentForm" style="display: none;">
-		                        <label for="deptCodeDepartment">부서 코드:</label>
-		                        <input type="text" id="deptCodeDepartment" name="deptCode" required>
-		                        <br>
-		                        <label for="dprlr">부서장:</label>
-		                        <input type="text" id="dprlr" name="dprlr">
-		                        <br>
-		                        <label for="deptName">부서 이름:</label>
-		                        <input type="text" id="deptName" name="deptName" required>
-		                    </div>
-		                    
-		                    <div id="teamForm" style="display: none;">
-		                        <label for="teamCode">팀 코드:</label>
-		                        <input type="text" id="teamCode" name="teamCode" required>
-		                        <br>
-		                        <label for="deptCodeTeam">부서 코드:</label>
-		                        <input type="text" id="deptCodeTeam" name="deptCode" required>
-		                        <br>
-		                        <label for="teamHeader">팀장:</label>
-		                        <input type="text" id="teamHeader" name="teamHeader">
-		                        <br>
-		                        <label for="teamName">팀 이름:</label>
-		                        <input type="text" id="teamName" name="teamName" required>
-		                    </div>
-		                    
-		                    <div id="delDepartmentForm" style="display: none;">
-		                        <label for="delDepartmentCode">부서 코드:</label>
-		                        <input type="text" id="delDepartmentCode" name="deptCode" required>
-		                    </div>
-		                    
-		                    <div id="delTeamForm" style="display: none;">
-		                        <label for="delTeamCode">팀 코드:</label>
-		                        <input type="text" id="delTeamCode" name="teamCode" required>
-		                    </div>
-		                </form>
-		            </div>
-		            <div class="modal-footer">
-		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-		                <button type="button" id="saveChangesBtn" class="btn btn-primary">저장</button>
-		            </div>
-		        </div>
-		    </div>
-		</div>
+		<!-- 부서 및 팀 관리 모달 : 해당없음 -->
+		
 		<!-- Main Wrapper -->
 		<div class="main-wrapper">
 	
@@ -147,14 +69,7 @@
 							<div class="active slimscroll h-100">
 								<div class="slimscroll-active-sidebar">					
 									<div class="p-3">
-										<div class="shadow-md bg-white rounded p-2 mb-4">
-											<button id="toggleDepartmentFormBtn" class="btn btn-primary" data-action="addDepartment">부서 추가</button>
-											<button id="toggleTeamFormBtn" class="btn btn-primary" data-action="addTeam">팀 추가</button><br>	
-										</div>
-										<div class="shadow-md bg-white rounded p-2 mb-4">
-											<button id="toggleDepartmentDelFormBtn" class="btn btn-primary" data-action="delDepartment">부서 삭제</button>
-											<button id="toggleTeamDelFormBtn" class="btn btn-primary" data-action="delTeam">팀 삭제</button><br>
-										</div>
+										<!-- 해당없음 : 버튼 -->
 										<div class="shadow-md bg-white rounded p-2 mb-4"">
 											<div id="tree" class="tui-tree-wrap" style="background-color: white; width: 100%;">	
 												<script>
@@ -297,10 +212,10 @@
 					</div>
 				</div>
 			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
-	</div>
-	<div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
-		<p>Developed By <a href="javascript:void(0);" class="text-primary">HERMES</a></p>
 	</div>
 	<!-- /Page Wrapper -->
 	<!-- /Main Wrapper -->
@@ -487,10 +402,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<!-- Datatable JS -->
-	<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -498,10 +409,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

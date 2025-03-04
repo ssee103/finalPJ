@@ -19,4 +19,8 @@ public interface IChartMapper {
 
 	public Map<String, Object> getVacationData();
 
+	public Map<String, Object> getYearsOfService();
+
+	public Map<String, Object> getVaction();
+
 }

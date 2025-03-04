@@ -43,7 +43,7 @@ function showToastMessage(message, type = "primary") {
 				<!-- 여기에 메시지가 들어감 -->
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" id="confirmCancel" data-bs-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-secondary me-2" id="confirmCancel" data-bs-dismiss="modal">취소</button>
 				<button type="button" class="btn btn-primary" id="confirmOk">확인</button>
 			</div>
 		</div>

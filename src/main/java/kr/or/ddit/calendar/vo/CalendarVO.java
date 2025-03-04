@@ -1,7 +1,9 @@
 package kr.or.ddit.calendar.vo;
 
 
-import java.util.Date;
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -12,10 +14,12 @@ public class CalendarVO {
 	private String emplNo;
 	private String groupId;
 	private String schTitle;
-	private Date schSDate;
-	private Date schEDate;
+	private String schSDate;
+	private String schEDate;
 	private String schColor;
 	private String schTextColor;
 	private boolean schAllDay; //하루종일 여부
+
+	
 	
 }

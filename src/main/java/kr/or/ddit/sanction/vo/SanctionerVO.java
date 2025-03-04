@@ -16,4 +16,9 @@ public class SanctionerVO {
 	private String dcrbAt;			// 전결 여부
 	private String finalAt;			// 최종 결재 여부
 	
+	// 직위 표시용 필드
+	private String sanctnerPosition;
+	// 사원번호 표시용 필드
+	private String sanctnerRealNo;
+	
 }

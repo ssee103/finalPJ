@@ -27,6 +27,17 @@ public class VacationRestController {
 	@Autowired
 	IVacationService vacationService;
 	
+	@PostMapping("/getMyVacation")
+	public ResponseEntity<Map<String, Object>> getMemberVacation(@RequestBody PaginationInfoVO<HistoryVO> pageVO){
+		int totalRecord = vacationService.getMemberVacationHistoryTotalRecord(pageVO);
+		pageVO.setTotalRecord(totalRecord);
+		List<HistoryVO> vacationList = vacationService.getMemberVacationList(pageVO);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("vacationList", vacationList);
+		resultMap.put("pageVO", pageVO);
+		return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+	}
+	
 	// 부서원의 출근기록을 가져오는 메소드
 	@PostMapping("/getMemberVacation")
 	public ResponseEntity<Map<String, Object>> getMemberVacation(@RequestBody Map<String, String> paramMap){

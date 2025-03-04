@@ -19,11 +19,15 @@ public interface ICalendarMapper {
 
 	public void delete(int schNo);
 
-	public void update(CalendarVO cal);
+	public int update(CalendarVO cal);
 
 	public CalendarVO selectSchNo(int schNo);
 
-	public List<CalendarVO> selectAll(String emplNo);
+	public List<CalendarVO> selectAll(CalendarVO calVO);
+
+	public List<CalendarVO> selectPersonal(String emplNo);
+
+	public List<CalendarVO> selectDepartment(String groupId);
 
 
 	

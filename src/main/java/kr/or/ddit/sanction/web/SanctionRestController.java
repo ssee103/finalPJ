@@ -1,8 +1,11 @@
 package kr.or.ddit.sanction.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +20,7 @@ import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
 import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
+import kr.or.ddit.sanction.vo.MySanctnerVO;
 import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
 import kr.or.ddit.sanction.vo.VacationVO;
@@ -269,6 +273,83 @@ public class SanctionRestController {
 		int cnt = service.refReadUpdate(userId, docNo);
 		
 		return cnt;
+	}
+	
+	@PostMapping("/insertCustomApr")
+	public int insertCustomApr(@RequestBody MySanctnerVO msvo) {
+		log.info("커스텀 결재자 생성 컨트롤러 실행");
+		log.info("커스텀 결재자 생성 msvo: " + msvo);
+		
+		int cnt = service.insertCustomApr(msvo);
+		
+		return cnt;
+	}
+	
+	@GetMapping("/getCustomSanctionLine")
+	public List<MySanctnerVO> getCustomSanctionLine(String userId) {
+		log.info("커스텀 결재자 목록 받아오기 컨트롤러 실행");
+		log.info("커스텀 결재자 목록 userId: " + userId);
+		
+		List<MySanctnerVO> msvo = service.getCustomSanctionLine(userId);
+		
+		return msvo;
+	}
+	
+	@PostMapping("/rejectUpdate")
+	public int rejectUpdate(@RequestBody SanctionerVO svo) {
+		log.info("반려 버튼 처리 컨트롤러 실행");
+		log.info("반려 처리 svo: " + svo);
+		
+		int cnt = service.rejectUpdate(svo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/updtDocStatus")
+	public int updtDocStatus(String docNo, String status) {
+		log.info("문서 상태 업데이트 컨트롤러 실행");
+		log.info("문서 상태 업데이트 docNo: " + docNo);
+		
+		int cnt = service.updtDocStatus(docNo, status);
+		log.info("문서 상태 업데이트 결과 cnt: " + cnt);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/replaceDocHtml")
+	public int replaceDocHtml(DocumentVO dvo) {
+		log.info("문서 html 교체 컨트롤러 실행");
+		log.info("문서 html 교체 dvo: " + dvo);
+		
+		int cnt = service.replaceDocHtml(dvo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/deleteCustomApr")
+	public int deleteCustomApr(int msNo) {
+		log.info("커스텀 결재자 삭제 컨트롤러 실행");
+		log.info("커스텀 결재자 삭제 msNo: " + msNo);
+		
+		int cnt = service.deleteCustomApr(msNo);
+		
+		return cnt;
+	}
+	
+	@PostMapping("/updateOpinion")
+	public ResponseEntity<Integer> updateOpinion(@RequestBody Map<String, String> data) {
+		String userId = data.get("userId");
+		String docNo = data.get("docNo");
+		String sanctnOpinion = data.get("sanctnOpinion");
+		
+		int cnt = service.updateOpinion(userId, docNo, sanctnOpinion);
+		
+		if(cnt > 0) {
+			return ResponseEntity.ok(cnt);
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cnt);
+		}
+		
 	}
 	
 }

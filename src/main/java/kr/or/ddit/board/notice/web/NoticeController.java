@@ -1,14 +1,8 @@
 package kr.or.ddit.board.notice.web;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,11 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import jakarta.servlet.http.HttpSession;
-import kr.or.ddit.board.ServiceResult;
 import kr.or.ddit.board.notice.service.impl.INoticeService;
 import kr.or.ddit.board.notice.vo.NoticeVO;
 import kr.or.ddit.cmm.service.IFileService;
@@ -49,8 +41,6 @@ public class NoticeController {
 	public String noticeList(
 			@RequestParam(name="page", required = false, defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String searchWord,
-			HttpSession session,
-			EmpAuthVO auth,
 			Model model) {
 		//paginationInfoVO를 활용한 페이징 및 검색
 		PaginationInfoVO<NoticeVO> pagingVO = new PaginationInfoVO<>();
@@ -69,10 +59,12 @@ public class NoticeController {
 		int totalRecord = noticeService.selectCount(searchWord);
 		//총 게시글 수 저장, 총 페이지 수 설정
 		pagingVO.setTotalRecord(totalRecord);
+		
+		
+		
 		List<NoticeVO> noticeList = noticeService.noticeList(pagingVO);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("paging", pagingVO);
-		session.setAttribute("userAuth", auth.getAuthCode());
 		return "board/noticeList";
 	}
 	

@@ -62,17 +62,17 @@
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육명" style="width: 100px;" id="edcTitle">
+									<input type="text" class="form-control" placeholder="신청자명" style="width: 100px;">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육분류" style="width: 100px;" id="edcSort">
+									<input type="text" class="form-control" placeholder="강의제목" style="width: 100px;" id="edcTitle">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육대상" style="width: 100px;" id="edcTarget">
+									<input type="text" class="form-control" placeholder="교육해당부서" style="width: 160px;" id="edcTarget">
 								</div>
 							</div>
 							<input type="button" class="btn btn-primary d-flex align-items-center" value="검색" id="searchBtn">
@@ -83,14 +83,14 @@
 							<table class="table datatable">
 								<thead class="thead-light">
 									<tr>
-										<th>신청자명</th>
-										<th>강의제목</th>
-										<th>교육담당</th>
-										<th>수강기간</th>
-										<th>교육해당부서</th>
-										<th>교육대상</th>
-										<th>수강신청일</th>
-										<th></th>
+										<th style="text-align: center;">신청자명</th>
+										<th style="text-align: center;">강의제목</th>
+										<th style="text-align: center;">교육담당</th>
+										<th style="text-align: center;">교육해당부서</th>
+										<th style="text-align: center;">교육대상직급</th>
+										<th style="text-align: center;">수강신청일</th>
+										<th style="text-align: center;">수강기간</th>
+										<th style="text-align: center;">승인/반려</th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -159,18 +159,30 @@
 											
 						            	    tr += `
 												<tr>
-						            	    		<td>\${edu.emplNm}(\${edu.edcAplc})</td>
-							            	    	<td>\${edu.edcTitle}</td>
-						                            <td>\${edu.educator}</td>
-						                            <td>
+						            	    		<td style="text-align: center;">\${edu.emplNm}(\${edu.edcAplc})</td>
+						            	    		<td style="text-align: center;">
+								            	        <p class="fs-14 text-dark fw-medium">
+								            	            <a href="/hrms/education/user/userTrainingDetail/\${edu.edcNo}">
+								            	                \${edu.edcTitle}
+								            	            </a>
+								            	        </p>
+								            	    </td>
+								            	    <td style="text-align: center;">
+								            	        <p class="fs-14 text-dark fw-medium">
+								            	            <a href="/hrms/education/user/userTrainingDetail/\${edu.edcNo}">
+								            	                \${edu.educator}
+								            	            </a>
+								            	        </p>
+								            	    </td>
+								            	    <td style="text-align: center;">\${edu.edcTarget}</td>
+								            	    <td style="text-align: center;">\${edu.edcGrade}</td>
+								            	    <td style="text-align: center;">\${edu.erDate}</td>
+						                            <td style="text-align: center;">
 						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
-						                            <td>\${edu.edcSort}</td>
-						                            <td>\${edu.edcTarget}</td>
-						                            <td>\${edu.erDate}</td>
-						                            <td>
+						                            <td style="text-align: center;">
 							                            <div class="mb-2">
-															<button class="btn btn-primary accept-btn">승인</a>
+															<button class="btn btn-primary accept-btn" >승인</a>
 															<button class="btn btn-primary cancel-btn">반려</a>
 														</div>
 						                            </td>
@@ -209,36 +221,71 @@
 		    let day = String(date.getDate()).padStart(2, "0");
 		    return `\${year}/\${month}/\${day}`;
 		}
-		
+		</script>
+		<script>
 		$(document).ready(function () {
-		    // 승인 버튼 클릭 이벤트
 		    $(document).on("click", ".accept-btn", function () {
-		        let edcAplc = $(this).closest("tr").find("td:first").text().match(/\((.*?)\)/)[1]; // edcAplc 값 추출
-		        updateRequestStatus(edcAplc, "Y"); // 'Y' = 승인
-		    });
+		        let row = $(this).closest("tr");
+
+		        let requestData = {
+		            edcAplc: row.find("td:first").text().match(/\((.*?)\)/)[1],
+		            edcNo: row.find("a").attr("href").split("/").pop(), 
+		            edcTitle: row.find("td:nth-child(2) a").text(), 
+		            educator: row.find("td:nth-child(3) a").text(),
+		            edcPeriod: row.find("td:nth-child(4)").text().trim(), 
+		            edcSort: row.find("td:nth-child(5)").text().trim(), 
+		            edcTarget: row.find("td:nth-child(6)").text().trim(),
+		            erDate: row.find("td:nth-child(7)").text().trim(), 
+		            erStatus: "Y" 
+		        };
+		        console.log("보낼 데이터:", requestData);
+		        updateRequestStatus(requestData);
+		    }); 
 
 		    // 반려 버튼 클릭 이벤트
 		    $(document).on("click", ".cancel-btn", function () {
-		        let edcAplc = $(this).closest("tr").find("td:first").text().match(/\((.*?)\)/)[1]; // edcAplc 값 추출
-		        updateRequestStatus(edcAplc, "N"); // 'N' = 반려
-		    });
-
-		    // 교육 신청 상태 업데이트 (승인 또는 반려)
-		    function updateRequestStatus(edcAplc, status) {
+		        let row = $(this).closest("tr");
 		        let requestData = {
-		            edcAplc: edcAplc,
-		            erStatus: status
+		            edcAplc: row.find("td:first").text().match(/\((.*?)\)/)[1],
+		            edcNo: row.find("a").attr("href").split("/").pop(),
+		            erStatus: "N" // 반려 상태
 		        };
-
 		        console.log("보낼 데이터:", requestData);
-
+		        updateRequestStatus(requestData);
+		    });
+		    
+		    /*
+		    responseData
+		    
+		    {edcAplc: "202501002", edcNo: "115",…}
+		    edcAplc
+		    :  "202501002"
+		    edcNo
+		    : "115"
+		    edcPeriod
+		    : "2025-02-19 ~ 2025-02-19"
+		    edcSort
+		    : "경영"
+		    edcTarget
+		    : "전체"
+		    edcTitle
+		    : "\n\t\t\t\t\t\t\t\t            \t                테스트수업\n\t\t\t\t\t\t\t\t            \t            "
+		    educator
+		    : "\n\t\t\t\t\t\t\t\t            \t                sdsd\n\t\t\t\t\t\t\t\t            \t            "
+		    erDate
+		    : "2025-02-27T00:00:00.000+00:00"
+		    erStatus
+		    : "Y"
+		    
+		    */
+		    function updateRequestStatus(requestData) {
 		        $.ajax({
 		            url: "/hrms/education/admin/rest/updateEdcRequestStatus",
 		            type: "POST",
 		            contentType: "application/json",
 		            data: JSON.stringify(requestData),
 		            success: function (response) {
-		                alert(status === "Y" ? "승인 완료!" : "반려 완료!");
+		                alert(requestData.erStatus === "Y" ? "승인 완료!" : "반려 완료!");
 		                location.reload();
 		            },
 		            error: function (xhr, status, error) {

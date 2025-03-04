@@ -17,6 +17,8 @@ $.ajax({
 		let deptSal = res.deptSal;
 		let recruitCount = res.recruitCount;
 		let appCount = res.appCount;
+		let yearsOfService = res.yearsOfService;
+		let vacation = res.vacation;
 		
 		function generateData(baseval, count, yrange) {
 		  var i = 0;
@@ -33,7 +35,49 @@ $.ajax({
 		  return series;
 		}
 
-
+	// 미사용 연차
+	if ($('#radial-chart').length > 0) {
+	    var radialChart = {
+	      chart: {
+	        height: 350,
+	        type: 'radialBar',
+	        toolbar: {
+	          show: false,
+	        }
+	      },
+	      // colors: ['#4361ee', '#888ea8', '#e3e4eb', '#d3d3d3'],
+	      plotOptions: {
+	        radialBar: {
+	          dataLabels: {
+	            name: {
+	              fontSize: '22px',
+	            },
+	            value: {
+	              fontSize: '16px',
+	            },
+	            total: {
+	              show: true,
+	              label: '합계',
+	              formatter: function (w) {
+	                return vacation['TOTAL'] + '%';
+	              }
+	            }
+	          }
+	        }
+	      },
+	      series: [vacation['USAGE'], vacation['REMAIN'], vacation['TOTAL']],
+	      labels: ['사용 연차', '미사용 연차', '합계'],
+	    }
+	
+	    var chart = new ApexCharts(
+	      document.querySelector("#radial-chart"),
+	      radialChart
+	    );
+	
+	    chart.render();
+	  }
+		
+		
   // 지난1년동안의 월별지각횟수
   if ($('#s-line').length > 0) {
     var sline = {
@@ -235,241 +279,63 @@ $.ajax({
 	    chart.render();
 	  }
 	
-  // Simple Line Area 2번
-  if ($('#s-line-area').length > 0) {
-    var sLineArea = {
-      chart: {
-        height: 350,
-        type: 'area',
-        toolbar: {
-          show: false,
-        }
-      },
-      colors: ['#F26522', '#888ea8'],
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      series: [{
-        name: 'series1',
-        data: [31, 40, 28, 51, 42, 109, 100]
-      }, {
-        name: 'series2',
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
+  // 부서별 평균 근속연수
+  if ($('#s-col3').length > 0) {
+		var sCol = {
+	       chart: {
+	         height: 350,
+	         type: 'bar',
+	         toolbar: {
+	           show: false,
+	         }
+	       },
+	       plotOptions: {
+	         bar: {
+	           horizontal: false,
+	           columnWidth: '55%',
+	           endingShape: 'rounded'
+	         },
+	       },
+	       colors: ['#F26522', '#4361ee'],
+	       dataLabels: {
+	         enabled: false
+	       },
+	       stroke: {
+	         show: true,
+	         width: 2,
+	         colors: ['transparent']
+	       },
+	       series: [{
+	         name: '부서별 평균 근속연수',
+	         data: [yearsOfService['01'], yearsOfService['02'],yearsOfService['03'],yearsOfService['04'],yearsOfService['05']]
+	       }],
+	       xaxis: {
+	         categories: ['경영 인사', '마케팅', '연구 개발', '운영', '재무 회계'],
+	       },
+	       yaxis: {
+	         title: {
+	           text: '\ (년)'
+	         }
+	       },
+	       fill: {
+	         opacity: 1
 
-      xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00", "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00", "2018-09-19T06:30:00"],
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      }
-    }
+	       },
+	       tooltip: {
+	         y: {
+	           formatter: function (val) {
+	             return "\ " + val + " 년"
+	           }
+	         }
+	       }
+	     }
 
-    var chart = new ApexCharts(
-      document.querySelector("#s-line-area"),
-      sLineArea
-    );
+	     var chart = new ApexCharts(
+	       document.querySelector("#s-col3"),
+	       sCol
+	     );
 
-    chart.render();
-  }
-
-  
-
-
-  // Simple Column Stacked 4번
-  if ($('#s-col-stacked').length > 0) {
-    var sColStacked = {
-      chart: {
-        height: 350,
-        type: 'bar',
-        stacked: true,
-        toolbar: {
-          show: false,
-        }
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: 'bottom',
-            offsetX: -10,
-            offsetY: 0
-          }
-        }
-      }],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-        },
-      },
-      colors: ['#F26522', '#E70D0D', '#03C95A', '#1B84FF'],
-      series: [{
-        name: 'PRODUCT A',
-        data: [44, 55, 41, 67, 22, 43]
-      }, {
-        name: 'PRODUCT B',
-        data: [13, 23, 20, 8, 13, 27]
-      }, {
-        name: 'PRODUCT C',
-        data: [11, 17, 15, 15, 21, 14]
-      }, {
-        name: 'PRODUCT D',
-        data: [21, 7, 25, 13, 22, 8]
-      }],
-      xaxis: {
-        type: 'datetime',
-        categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT', '01/05/2011 GMT', '01/06/2011 GMT'],
-      },
-      legend: {
-        position: 'right',
-        offsetY: 40
-      },
-      fill: {
-        opacity: 1
-      },
-    }
-
-    var chart = new ApexCharts(
-      document.querySelector("#s-col-stacked"),
-      sColStacked
-    );
-
-    chart.render();
-  }
-
-  // Simple Bar 5번
-  if ($('#s-bar').length > 0) {
-    var sBar = {
-      chart: {
-        height: 350,
-        type: 'bar',
-        toolbar: {
-          show: false,
-        }
-      },
-      colors: ['#F26522'],
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      series: [{
-        data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
-      }],
-      xaxis: {
-        categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'Germany'],
-      }
-    }
-
-    var chart = new ApexCharts(
-      document.querySelector("#s-bar"),
-      sBar
-    );
-
-    chart.render();
-  }
-
-  // Mixed Chart 6번
-  if ($('#mixed-chart').length > 0) {
-    var options = {
-      chart: {
-        height: 350,
-        type: 'line',
-        toolbar: {
-          show: false,
-        }
-      },
-      colors: ['#F26522', '#888ea8'],
-      series: [{
-        name: 'Website Blog',
-        type: 'column',
-        data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160]
-      }, {
-        name: 'Social Media',
-        type: 'line',
-        data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16]
-      }],
-      stroke: {
-        width: [0, 4]
-      },
-      title: {
-        text: 'Traffic Sources'
-      },
-      labels: ['01 Jan 2001', '02 Jan 2001', '03 Jan 2001', '04 Jan 2001', '05 Jan 2001', '06 Jan 2001', '07 Jan 2001', '08 Jan 2001', '09 Jan 2001', '10 Jan 2001', '11 Jan 2001', '12 Jan 2001'],
-      xaxis: {
-        type: 'datetime'
-      },
-      yaxis: [{
-        title: {
-          text: 'Website Blog',
-        },
-
-      }, {
-        opposite: true,
-        title: {
-          text: 'Social Media'
-        }
-      }]
-
-    }
-
-    var chart = new ApexCharts(
-      document.querySelector("#mixed-chart"),
-      options
-    );
-
-    chart.render();
-  }
-
-  // Radial Chart 8번
-  if ($('#radial-chart').length > 0) {
-    var radialChart = {
-      chart: {
-        height: 350,
-        type: 'radialBar',
-        toolbar: {
-          show: false,
-        }
-      },
-      // colors: ['#4361ee', '#888ea8', '#e3e4eb', '#d3d3d3'],
-      plotOptions: {
-        radialBar: {
-          dataLabels: {
-            name: {
-              fontSize: '22px',
-            },
-            value: {
-              fontSize: '16px',
-            },
-            total: {
-              show: true,
-              label: 'Total',
-              formatter: function (w) {
-                return 249
-              }
-            }
-          }
-        }
-      },
-      series: [44, 55, 67, 83],
-      labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
-    }
-
-    var chart = new ApexCharts(
-      document.querySelector("#radial-chart"),
-      radialChart
-    );
-
-    chart.render();
+	     chart.render();
   }
 
 		},

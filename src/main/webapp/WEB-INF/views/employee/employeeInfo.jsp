@@ -31,7 +31,11 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
+		
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -40,11 +44,6 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">사원 정보 </h2>
-					</div>
-					<div class="head-icons ms-2">
-						<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-							<i class="ti ti-chevrons-up"></i>
-						</a>
 					</div>
 				</div>
 				<!-- /Breadcrumb -->
@@ -327,17 +326,16 @@
 							</div> --> <!-- 정보 끝 (버튼 바로 위) -->
 							
 								<div class="d-flex align-items-center justify-content-end">
-									<button type="button" class="btn btn-outline-light border me-3" id="changePwdBtn">비밀번호 변경</button>
+									<button type="button" class="btn btn-outline-light border me-2" id="changePwdBtn">비밀번호 변경</button>
 									<button type="submit" class="btn btn-primary">수정</button>
 								</div>
 						</form>
 					</div>
 				</div>
 			</div>
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /Page Wrapper -->
 
@@ -359,7 +357,7 @@
 	        <input type="password" id="changePwd2" class="form-control"/>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelFinalBtn">취소</button>
+	        <button type="button" class="btn btn-secondary me-2" data-dismiss="modal" id="cancelFinalBtn">취소</button>
 	        <button type="button" class="btn btn-primary" id="changeFinalBtn">저장</button>
 	      </div>
 	    </div>
@@ -599,7 +597,7 @@ $(function(){
 	$("#changeFinalBtn").on("click", function(){
 		
 		if($("#changePwd").val() != $("#changePwd2").val()) {
-			alert("두 비밀번호가 일치하지 않습니다.");
+			showToastMessage("두 비밀번호가 일치하지 않습니다.", "warning");
 		} else {
 			
 			let pwd = {

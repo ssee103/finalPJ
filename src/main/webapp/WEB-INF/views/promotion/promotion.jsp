@@ -29,7 +29,10 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
@@ -78,15 +81,15 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>사원번호</th>
 										<th>사원명</th>
 										<th>직급</th>
 										<th>부서</th>
-										<th>근속연수</th>
-										<th>성과평가점수</th>
+										<th>근속연수 <i class="fas fa-sort sort-icon" id="yearsSort"></i></th>
+										<th>성과평가점수 <i class="fas fa-sort sort-icon" id="scoresSort"></i></th>
 										<th>교육내역</th>
 										<th></th>
 									</tr>
@@ -108,7 +111,7 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>사원번호</th>
@@ -130,10 +133,9 @@
 				<!--/심사대상추가 후 밑에 표시  -->
 			</div>
 
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 
 		</div>
 		<!-- /Page Wrapper -->
@@ -182,19 +184,45 @@ let tableTbodyDown = $("#table-tbody-down");
 let pagingAreaUp = $("#pagingAreaUp");
 let terminateBtn = $("#terminateBtn"); 
 
-$(function(){
+let yearsSort = $("#yearsSort");
+let scoresSort = $("#scoresSort");
+let sorting = 1;
 
+$(function(){
+	
 	getEmplList(1);
 	getPromList();
 	getSelect();
 	
-	searchBtn.on("click", function(){ 
-		let emplNoSearch = $("#emplNo").val();
-		let emplNmSearch = $("#emplNm").val();
-		let emplPositionSearch = $("#emplPosition").val();
-		let deptCodeSearch = $("#deptCode").val();
-		getEmplList(1, emplNoSearch, emplNmSearch, deptCodeSearch, emplPositionSearch);
+	yearsSort.on("click", function(){
+		if(sorting >= 3){
+			sorting = 1;
+			searchFun(sorting);
+			console.log(sorting);
+			return;
+		}else{
+			sorting++;
+			searchFun(sorting);
+			console.log(sorting);
+			return;
+		}
 	});
+	scoresSort.on("click", function(){
+		if(sorting <= 3 || sorting >= 6){
+			sorting = 4;
+			searchFun(sorting);
+			console.log(sorting);
+			return;
+		}else{
+			sorting++;
+			searchFun(sorting);
+			console.log(sorting);
+			return;
+		}
+	});
+	
+
+	searchBtn.on("click", searchFun);
 	
 	// 페이지버튼 클릭이벤트
 	pagingAreaUp.on("click", "a", function(){ 
@@ -204,14 +232,14 @@ $(function(){
 		let emplNm = $("#emplNm").val();
 		let emplPosition = $("#emplPosition").val();
 		let deptCode = $("#deptCode").val();
-		getEmplList(page, emplNo, emplNm, emplPosition, deptCode);
+		getEmplList(page, emplNo, emplNm, emplPosition, deptCode, sorting);
 	});
 	
 	//심사대상자 추가버튼
 	$(document).on("click", ".addTargetBtn", function(){
 		let emplPosition = $(this).closest('tr').find('td').eq(2).text().trim();
 		if(emplPosition == "부장"){
-			alert("부장급 이상은 더이상 승진할 수 없습니다.");
+			showToastMessage("부장급 이상은 더이상 승진할 수 없습니다.", "warning");
 			return;
 		}
 		let emplNo = $(this).closest('tr').find('td').eq(0).text().trim();
@@ -233,21 +261,21 @@ $(function(){
 			textArr.push(text);
 		});
 		if(!(textArr.length > 0)){
-			alert("심사대상자가 없음");
+			showToastMessage("심사대상자가 없습니다.", "warning");
 			return;
 		}
 		promCancel(textArr);
 	})
 })
 
-// 검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함검색기능이 이상함
 //목록
-function getEmplList(page, emplNo, emplNm, deptCode, position){
+function getEmplList(page, emplNo, emplNm, deptCode, position, sorting){
 	let data = {page:page}
 	if(emplNo != null) data.emplNo = emplNo;
 	if(emplNm != null) data.emplNm = emplNm;
 	if(deptCode != null) data.deptCode = deptCode;
 	if(position != null) data.position = position;
+	if(sorting != null) data.sorting = sorting;
 	$.ajax({
 		url : "/hrms/prom/getEmplList",
 		type : "post",
@@ -317,7 +345,7 @@ function promoteTarget(emplNo){
 		data : JSON.stringify({emplNo:emplNo}),
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
-			alert(res);
+			showToastMessage(emplNo + "번의 사원이 심사대상자에 추가되었습니다.", "success");
 			getPromList();
 		},
 		error : function(){}
@@ -362,7 +390,6 @@ function promEmpl(emplNo){
 		data : JSON.stringify({emplNo:emplNo}),
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
-			alert(res);
 			getEmplList(1);
 			getPromList();
 		},
@@ -378,13 +405,21 @@ function promCancel(emplList){
 		data : JSON.stringify(emplList),
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
-			alert(res);
 			getEmplList(1);
 			getPromList();
 		},
 		error : function(){}
 
 	});
+}
+
+// 검색함수
+function searchFun(sorting){
+	let emplNoSearch = $("#emplNo").val();
+	let emplNmSearch = $("#emplNm").val();
+	let emplPositionSearch = $("#emplPosition").val();
+	let deptCodeSearch = $("#deptCode").val();
+	getEmplList(1, emplNoSearch, emplNmSearch, deptCodeSearch, emplPositionSearch, sorting);
 }
 </script>
 

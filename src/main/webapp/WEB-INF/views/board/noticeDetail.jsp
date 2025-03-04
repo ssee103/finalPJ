@@ -31,18 +31,10 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
@@ -89,17 +81,17 @@
                                     </div>
                                     <div class="text-center">
                                         <div class="mb-3">
-											<div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-sm-3 row-cols-1 justify-content-center">
+											<div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-sm-3 row-cols-1 justify-content-center border-bottom">
 												<c:choose>
 													<c:when test="${empty fileList}">
 													<p style="font-size:15px">첨부파일이 존재하지 않습니다.</p>
 													</c:when>
 													<c:otherwise>
-														<div class="card access-wrap border-0 flex-fill">
+														<div class="access-wrap border-0 flex-fill">
 															<div class="row justify-content-start">
 																<c:forEach items="${fileList}" var="file">
 																	<div class="col-12"> <!--d-inline-flex  -->
-																	   <div class="card p-2 border-0 shadow-sm">
+																	   <div class="p-2 border-0">
 																	      <div class="d-flex align-items-center">
 																	      	<c:set var="fileName" value="${file.fileName}"/>
 																			<c:set var="words" value="${fn:split(fileName,'.')}"/>
@@ -138,6 +130,12 @@
 												</c:choose>
 											</div>
                                         </div>
+						                <div class="d-flex justify-content-end align-items-center mb-4" style="max-width: 200px; margin-left: auto;">
+						               		<c:if test="${fn:contains(emp.authList,'ROLE_ADMIN') }">
+							               		<button type="button" class="btn btn-primary d-flex justify-content-center align-items-center me-2" id="updateBtn">수정</button>
+							        			<button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center border" id="deleteBtn">삭제</button>
+						               		</c:if>			
+						                </div>
                                     </div>
                                 </div>
                             </div>
@@ -146,41 +144,13 @@
                 </div>
 				<!-- /Invoices -->
 
-                <div class="d-flex justify-content-center align-items-center mb-4">
-               		<c:if test="${sessionScope.userAuth eq 'ROLE_ADMIN' }">
-	               		<button type="button" class="btn btn-primary d-flex justify-content-center align-items-center me-2" id="updateBtn">수정</button>
-	        			<button type="button" class="btn btn-white d-flex justify-content-center align-items-center border" id="deleteBtn">삭제</button>
-               		</c:if>			
-                   	<!-- Delete Modal -->
-						<!-- <div class="modal fade" id="delete_modal">
-							<div class="modal-dialog modal-dialog-centered">
-								<div class="modal-content">
-									<div class="modal-body text-center">
-										<span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
-											<i class="ti ti-trash-x fs-36"></i>
-										</span>
-										<h4 class="mb-1">Confirm Delete</h4>
-										<p class="mb-3">You want to delete all the marked items, this cant be undone once you delete.</p>
-										<div class="d-flex justify-content-center">
-											<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-											<a href="faq.html" class="btn btn-danger">Yes, Delete</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> -->
-		<!-- /Delete Modal -->
-                </div>
                 <form action="/hrms/notice/noticeDelete" method="post" id="delForm">
                 	<input type="hidden" name="noticeNo" value="${notice.noticeNo}"/>
                 </form>
 		    </div>
 
 			<!-- Footer -->
-			<div class="footer d-sm-flex align-items-center justify-content-between bg-white border-top p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed & Developed By <a href="#" class="text-primary">Dreams</a></p>
-			</div>
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
 			<!-- /Footer -->
         </div>
 		<!-- /Page Wrapper -->
@@ -202,10 +172,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<%-- <!-- Datatable JS -->
-	<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	 --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -214,17 +180,15 @@
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
 	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
-	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/script.js"></script>
 </body>
 <script type="text/javascript">
+
 $(function(){
+
 	let delForm = $("#delForm");
 	let updateBtn = $("#updateBtn");
 	let deleteBtn = $("#deleteBtn");
@@ -238,9 +202,11 @@ $(function(){
 	
 	//삭제버튼
 	deleteBtn.on("click", function(){
-		if(confirm("정말 삭제하시겠습니까?")){
-			delForm.submit();
-		}
+		showConfirmModal("정말 삭제하시겠습니까?").then((isConfirmed) => {
+			if(isConfirmed){
+				delForm.submit();
+			}
+		});
 	});
 });
 

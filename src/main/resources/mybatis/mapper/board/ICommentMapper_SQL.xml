@@ -101,9 +101,14 @@
 	<delete id="commentDelete" parameterType="String">
 	    DELETE FROM comments
 	    WHERE comment_no = #{commentNo}
-	    <if test="commentNos != null and commentNos != '1'">
+	    <if test="commentNos != '1'">
 	        AND comment_nos = #{commentNos}
 	    </if>
+	</delete>
+	
+	<delete id="subCmtDelete" parameterType="String">
+		DELETE FROM comments 
+		WHERE comment_no = #{commentNo}
 	</delete>
 
 	

@@ -19,48 +19,6 @@
 	<title>공지사항 ${name}</title>
     <script src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script>
 
-	<style type="text/css">
-	 /* 배경을 어둡게 하는 오버레이 */
-	    .alert-overlay {
-	        display: none;
-	        position: fixed;
-	        top: 0;
-	        left: 0;
-	        width: 100%;
-	        height: 100%;
-	        background: rgba(0, 0, 0, 0.5);
-	        z-index: 9999;
-	    }
-	
-	    /* 알림창 스타일 */
-	    .alert-window {
-	        display: none;
-	        position: fixed;
-	        top: 50%;
-	        left: 50%;
-	        transform: translate(-50%, -50%);
-	        z-index: 10000;
-	        background-color: white;
-	        padding: 20px;
-	        border-radius: 10px;
-	        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-	        width: 300px;
-	        text-align: center;
-	    }
-	
-	    .custom-alert-icon i {
-	        font-size: 40px;
-	        color: blue;
-	    }
-	
-	    .btn-close {
-	        background: none;
-	        border: none;
-	        font-size: 20px;
-	        cursor: pointer;
-	    }
-
-</style>
 </head>
 
 
@@ -80,20 +38,11 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
-
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
+		
 		<!-- Page Wrapper -->
 		<div class="page-wrapper cardhead">
 			<div class="content">
@@ -110,6 +59,12 @@
 
 				<div class="row">
 					<div class="col-lg-12">
+					<a href="/hrms/notice/noticeList" class="back-icon d-flex align-items-center fs-15 fw-medium mb-3 d-inline-flex">
+						<span class=" d-flex justify-content-center align-items-center rounded-circle me-2">
+							<i class="ti ti-arrow-left"></i>
+						</span>
+						목록으로 돌아가기
+					</a>
 						<div class="card">
 							<div class="card-header">
 								<h5 class="card-title">공지사항 ${name}</h5>
@@ -142,11 +97,11 @@
 											<div class="mb-3">
 												<div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-sm-3 row-cols-1 justify-content-center">
 													<c:if test="${status eq 'u'}">
-														<div class="card access-wrap border-0 flex-fill">
+														<div class="access-wrap border-0 flex-fill">
 															<div class="row justify-content-start">
 																	<c:forEach items="${fileList}" var="file">
 																		<div class="col-12">
-																		   <div class="card p-2 border-0 shadow-sm">
+																		   <div class="p-2 border-0">
 																		      <div class="d-flex align-items-center">
 																		      	<c:set var="fileName" value="${file.fileName}"/>
 																				<c:set var="words" value="${fn:split(fileName,'.')}"/>
@@ -188,10 +143,10 @@
 										<div class="text-end">
 											<input type="button" value="${name}" id="addBtn" class="btn btn-primary"/>
 											<c:if test="${status eq 'u'}">
-												<input type="button" id="cancelBtn" value="취소" class="btn btn-dark float-right">
+												<input type="button" id="cancelBtn" value="취소" class="btn btn-secondary float-right">
 											</c:if>
 											<c:if test="${status ne 'u'}">
-												<input type="button" id="listBtn" value="목록" class="btn btn-dark float-right">
+												<input type="button" id="listBtn" value="취소" class="btn btn-secondary float-right">
 											</c:if>
 										</div>
 									</div>
@@ -201,10 +156,9 @@
 				</div>
 			</div>
 
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 			
 			
 		</div>
@@ -227,10 +181,6 @@
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<%-- <!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
- --%>
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -238,10 +188,6 @@
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -253,7 +199,6 @@
 </body>
 <script type="text/javascript">
 const userId = sessionStorage.getItem("userId");
-console.log("aaaaa");
 $(function(){
 	CKEDITOR.replace("noticeContent", {
 		//filebrowserUploadUrl : "/notice/imageUpload.do"
@@ -276,11 +221,11 @@ $(function(){
 		
 		
 		if(noticeTitle == null || noticeTitle == ""){
-			alert("제목을 입력해주세요!");
+			showToastMessage("제목을 입력해주세요!", "warning");
 			return false;
 		}
 		if(noticeContent == null || noticeContent == ""){
-			alert("내용을 입력해주세요!");
+			showToastMessage("내용을 입력해주세요!", "warning");
 			return false;
 		}
 		
@@ -297,24 +242,10 @@ $(function(){
 		location.href="/hrms/notice/noticeDetail?noticeNo=${notice.noticeNo}";
 	});
 	
+	listBtn.on("click", function(){
+		location.href="/hrms/notice/noticeList";
+	})
+	
 });
-
-function alertWindow(msg){
-	let  = $("#alertMsg").text(msg);
-	$("#alertWindow, #alertOverlay").fadeIn();
-	
-	
-	alertWindow("등록성공");
-	
-	$("#acceptBtn").click(function () {
-		$("#alertWindow, #alertOverlay").fadeOut();
-	});
-	
-}
-
-
-
-
 </script>
-
 </html>

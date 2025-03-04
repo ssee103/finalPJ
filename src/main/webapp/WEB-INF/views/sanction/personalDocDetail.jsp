@@ -56,6 +56,14 @@
  font-weight: bold;
 }
 
+#aprDiv{
+ margin-right: 166px !important;
+}
+
+#docNoView {
+ margin-left: 166px !important;
+}
+
 </style>
 <body>
 
@@ -133,8 +141,10 @@
 										<td id="myAllow"></td>
 									</tr>
 									<tr>
-										<td class="sort">결재 선</td>
-										<td id="sanctionLine" colspan="3"></td>
+										<td class="sort">결재 선(내림차순)</td>
+										<td id="sanctionLine"></td>
+										<td class="sort">결재 확정 일시</td>
+										<td id="finalDate"></td>
 									</tr>
 									<tr>
 										<td class="sort">참조자</td>
@@ -149,15 +159,24 @@
 						</div>
 					</div>
 					
+					<div id="rejectResnDiv" class="col-md-12" style="display: none;">
+						<div class="card">
+							<div class="card-header">
+								<span style="font-weight: bold;">결재 의견:</span>
+								<span id="rejectResn">
+									
+								</span>
+							</div>
+						</div>
+					</div>
+					
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<div id="docContent">
 								
 								</div>
-								
 							</div>
-							
 						</div>
 					</div>
 					
@@ -277,6 +296,7 @@ function getDocumentDetail(docNo, myEmplPosition) {
 function renderDocumentDetail(data, myEmplPosition) {
     const docStatusMap = { '01': '결재 중', '02': '승인', '03': '반려' };
     const dcrbAllowMap = { 'Y': '허용', 'N': '불허' };
+    const dcrbAllow = dcrbAllowMap[data.dcrbAllow];
     const dcrbRight = myEmplPosition !== '01' ? "보유" : "미보유";
 
     $("#docNo").text(data.docNo);
@@ -285,20 +305,38 @@ function renderDocumentDetail(data, myEmplPosition) {
     $("#docStatus").text(docStatusMap[data.docApv] || "알 수 없음");
     $("#submitDate").text(data.sanctnRqstdt);
     $("#expiredDate").text(data.docPeriod);
-    $("#allowAt").text(dcrbAllowMap[data.dcrbAllow] || "알 수 없음");
-    $("#myAllow").text(dcrbRight);
+    
+    if(dcrbAllow == "허용") {
+    	$("#allowAt").html(`<span class=' badge badge-success-transparent'>\${dcrbAllow}</span>`);
+    } else {
+    	$("#allowAt").html(`<span class=' badge badge-pink-transparent'>\${dcrbAllow}</span>`);
+    }
+    
+    if(dcrbRight == "보유") {
+    	$("#myAllow").html(`<span class=' badge badge-success-transparent'>\${dcrbRight}</span>`);
+    } else {
+    	$("#myAllow").html(`<span class=' badge badge-pink-transparent'>\${dcrbRight}</span>`);
+    }
 
     if (data.dcrbAllow === 'Y' && dcrbRight === '보유') {
         $("#proxyBtn").show();
     }
 
     if (data.aprRefList && data.aprRefList.length > 0) {
+    	// 결재자 리스트 렌더링(결재선)
         renderApprovers(data.aprRefList);
+    }
+    
+    // 결재 확정 일시
+    if(data.finalDate != null) {
+    	$("#finalDate").text(data.finalDate);
+    } else {
+    	$("#finalDate").text("결재 이전 상태입니다.");
     }
     
     // 첨부 파일 출력
     let fileHtml = "";
-    if(data.fileList.length > 0) {
+    if(data.fileList != null && data.fileList.length > 0) {
     	for(let i = 0; i < data.fileList.length; i++){
         	fileHtml += `
         		<div><a href="/downloadFile?fileIdentify=\${data.fileList[i].fileIdentify}&fileNo=\${data.fileList[i].fileNo}">\${data.fileList[i].fileName}</a></div>
@@ -311,23 +349,38 @@ function renderDocumentDetail(data, myEmplPosition) {
 	$("#docFileView").html(fileHtml);
 	
     $("#docContent").html(data.docContent);
+    if($("#docNoView").text() == "문서 번호:") {
+    	$("#docNoView").append(" " + data.docNo);
+    }
+    
+    // 반려 사유 출력
+ 	// aprRefList 배열에서 sanctnOpinion이 null이 아닌 항목을 찾습니다.
+    let validApprover = data.aprRefList.find(approver => approver.sanctnOpinion !== null);
+
+    // 찾은 항목이 있으면 해당 sanctnOpinion 값을 변수에 담고, 없으면 null 처리합니다.
+    let sanctnOpinion = validApprover ? validApprover.sanctnOpinion : null;
+    
+    if(sanctnOpinion != null) {
+    	$("#rejectResnDiv").show();
+    	$("#rejectResn").text(sanctnOpinion);
+    }
 }
 
 /** ✅ 결재자 리스트 렌더링 */
 function renderApprovers(approverList) {
     let sanctionHtml = approverList.map(approver => {
         if (approver.sanctnStatus == '승인') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-success-transparent">\${approver.sanctnStatus}</span></div>`;
-        } else if (approver.sanctnStatus == '결재 중') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-pink-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-success-transparent">\${approver.sanctnStatus}</span></div>`;
+        } else if (approver.sanctnStatus == '열람') {
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-info-transparent">\${approver.sanctnStatus}</span></div>`;
         } else if(approver.sanctnStatus == '전결') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
         } else if(approver.sanctnStatus == '결재 대기') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-dark-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-dark-transparent">\${approver.sanctnStatus}</span></div>`;
         } else if(approver.sanctnStatus == '위임 전결') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-secondary-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-secondary-transparent">\${approver.sanctnStatus}</span></div>`;
         } else if(approver.sanctnStatus == '반려') {
-            return `<div>\${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
         }
     }).join("");
     $("#sanctionLine").html(sanctionHtml);
@@ -354,9 +407,9 @@ function renderReference(docNo) {
 					}
 					
 					if(readTxt == "읽음") {
-						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-info-transparent'>\${readTxt}</span></div>`);
+						$("#refLine").append(`<div>(\${item.refPosition}) \${item.refNo} <span class=' badge badge-info-transparent'>\${readTxt}</span></div>`);
 					} else {
-						$("#refLine").append(`<div>\${item.refNo} <span class=' badge badge-pink-transparent'>\${readTxt}</span></div>`);
+						$("#refLine").append(`<div>(\${item.refPosition}) \${item.refNo} <span class=' badge badge-pink-transparent'>\${readTxt}</span></div>`);
 					}
 				});
 			} else {

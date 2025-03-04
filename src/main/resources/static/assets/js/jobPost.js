@@ -69,12 +69,12 @@ function loadJobPostList(page = 1, searchWord = "", status = "Y") {
       $.each(data.dataList, function (index, job) {
         let row = `
           <tr>
-            <td>${job.recTitle}</td>
+            <td class="text-start">${job.recTitle}</td>
             <td>${formatDate(job.recSdate)} ~ ${formatDate(job.recEdate)}</td>
             <td>${job.deptName}</td>
             <td>${job.positionName}</td>
             <td>${job.usageStatus}</td>
-            <td><button class="btn btn-primary view-detail" data-rec-no="${job.recNo}" data-rec-usage="${status}" data-dept-code="${job.deptCode}" data-rec-position="${job.recPosition}">지원자 보기</button></td>
+            <td><button class="btn btn-primary view-detail" data-rec-no="${job.recNo}" data-rec-usage="${status}" data-dept-code="${job.deptCode}" data-rec-position="${job.recPosition}">자세히 보기</button></td>
           </tr>
         `;
         tbody.append(row);

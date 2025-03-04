@@ -17,11 +17,16 @@
 
 		<!-- 모달창들 -->
 		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
-
+		<!-- /모달창들 -->
+		
 		<!-- Page Wrapper -->
 				:
 				:
 				:
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
+			
 		<!-- /Page Wrapper -->
 	<!-- /Main Wrapper -->
 </body>

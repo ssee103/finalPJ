@@ -18,6 +18,4 @@ public interface IVacationService {
 
 	public List<HistoryVO> getMemberVacationList(PaginationInfoVO<HistoryVO> pageVO);
 
-
-
 }

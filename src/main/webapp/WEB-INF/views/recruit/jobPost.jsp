@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,15 +23,7 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
+		
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -44,7 +35,7 @@
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
 						<div class="mb-2">
 							<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRecruitModal">
-								채용공고 작성
+								<i class="ti ti-circle-plus me-2"></i>신규
 							</button>
 						</div>
 					</div>
@@ -82,7 +73,7 @@
 							<!-- 진행중 공고 탭 -->
 						  <div class="tab-pane fade show active" id="ongoing" role="tabpanel" aria-labelledby="ongoing-tab">
 						    <div class="custom-datatable-filter table-responsive">
-						      <table class="table datatable">
+						      <table class="table datatable text-center">
 						        <thead class="thead-light">
 						          <tr>
 						            <th>제목</th>
@@ -103,7 +94,7 @@
 						  <!-- 종료/완료 공고 탭 -->
 						  <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
 						    <div class="custom-datatable-filter table-responsive">
-						      <table class="table datatable">
+						      <table class="table datatable text-center">
 						        <thead class="thead-light">
 						          <tr>
 						            <th>제목</th>
@@ -226,7 +217,7 @@
 						</div>
 						<!-- /modal-body -->
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+							<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
 							<button type="submit" class="btn btn-primary">등록</button>
 						</div>
 					</form>
@@ -238,18 +229,9 @@
 	</div>
 	<!-- /Main Wrapper -->
 
-	<!-- Toast 알림 메시지 -->
-	<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100">
-		<div id="toastMessage" class="toast hide align-items-center text-white bg-primary border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="d-flex">
-				<div class="toast-body" id="toastBody">
-					<!-- 메시지가 여기에 표시됨 -->
-				</div>
-				<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-		</div>
-	</div>
-	<!-- Toast 알림 메시지 -->
+	<!-- 모달창들 -->
+	<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+	<!-- /모달창들 -->
 
 	<!-- jQuery -->
 	<script src="${pageContext.request.contextPath }/assets/js/jquery-3.7.1.min.js"></script>
@@ -263,16 +245,12 @@
 	<script src="${pageContext.request.contextPath }/assets/js/jquery.slimscroll.min.js"></script>
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
-	<%-- Datatable JS (주석 처리된 부분 그대로 유지) --%>
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/bootstrap-datetimepicker.min.js"></script>
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>

@@ -27,6 +27,7 @@ public interface IPropMapper {
 	
 	// 개인 대여 물품확인 페이지 - 반납기능
 	public int updateReturnDate(int propNo);
+	public int updateRentalReturnDate(int propNo);
 	
 	// 사원들에게 제공하는 물품리스트 관리 페이지
 	public List<PropertiesVO> findAllWithSort();
@@ -54,6 +55,7 @@ public interface IPropMapper {
 	
 	// getPropAllList
 	public List<PropertiesVO> selectPropList(@Param("page") PaginationInfoVO<PropertiesVO> pageVO, @Param("prop") PropertiesVO propVO);
+
 
 
 }

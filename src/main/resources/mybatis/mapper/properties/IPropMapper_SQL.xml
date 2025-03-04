@@ -87,6 +87,8 @@
 			AND prop_qty > 0
 	</update>
 	
+	
+	
 	<!-- 대여가능한 물품조회 페이지 - 대여 상태 조회 -->
 	<select id="checkRentalStatus" parameterType="map" resultType="int">
 	    SELECT COUNT(*)
@@ -125,6 +127,15 @@
 	    WHERE PROP_NO = #{propNo}
 	    AND EP_RDATE IS NULL
 	</update>
+	
+	<!-- 대여가능한 물품조회 페이지 - 물건 대여반납 -->
+	<update id="updateRentalReturnDate" parameterType="INTEGER">
+	    UPDATE properties
+	    SET prop_qty = prop_qty + 1
+	    WHERE prop_no = #{propNo} 
+	</update>
+	
+	
 	
 	<!-- 사원들에게 제공하는 물품리스트 관리 페이지 -->
 	<select id="findAllWithSort" resultMap="PropertiesMap">
@@ -249,4 +260,9 @@
 			WHERE b.rnum >= #{page.startRow} AND b.rnum <= #{page.endRow}
 		]]>
 	</select>
+	
+	
+
+	
+	
 </mapper>

@@ -39,7 +39,11 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
+		
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -48,22 +52,6 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">사원 정보 </h2>
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="index.html"><i class="ti ti-smart-home"></i></a>
-								</li>
-								<li class="breadcrumb-item">
-									Pages
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">Profile </li>
-							</ol>
-						</nav>
-					</div>
-					<div class="head-icons ms-2">
-						<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-							<i class="ti ti-chevrons-up"></i>
-						</a>
 					</div>
 				</div>
 				<!-- /Breadcrumb -->
@@ -357,43 +345,17 @@
 									</div>
 								</div>
 							</div>
-							<div class="border-bottom mb-3">
-								<h6 class="mb-3">퇴사 관련 정보</h6> <!-- 퇴사 관련 정보 -->
-								<div class="row">
-									<div class="col-md-6">
-										<div class="row align-items-center mb-3">
-											<div class="col-md-4">
-												<label class="form-label mb-md-0">퇴사 일자</label>
-											</div>
-											<div class="col-md-8">
-												<input type="date" id="retireDate" class="form-control">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="row align-items-center mb-3">
-											<div class="col-md-4">
-												<label class="form-label mb-md-0">사유</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" id="retireResn" class="form-control">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div> <!-- 정보 끝 (버튼 바로 위) -->
 							<div class="d-flex align-items-center justify-content-end">
-								<a href="/hrms/employee/employeeInfo"><button type="button" class="btn btn-outline-light border me-3" id="cancelBtn">취소</button></a>
-								<button type="button" class="btn btn-primary" id="saveBtn">저장</button>
+								<a href="/hrms/employee/employeeInfo"><button type="button" class="btn btn-secondary border me-2" id="cancelBtn">취소</button></a>
+								<button type="button" class="btn btn-primary" id="saveBtn">등록</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /Page Wrapper -->
 
@@ -427,7 +389,7 @@
 	                <!-- <div id="addrLayer" style="width:500px;height:300px;"></div> -->
 	            </div>
 	            <div class="modal-footer">
-		        	<button type="button" id="clearSignature" class="btn btn-secondary">서명 지우기</button>
+		        	<button type="button" id="clearSignature" class="btn btn-secondary me-2">서명 지우기</button>
 		        	<button type="button" id="saveSignature" class="btn btn-primary">서명 저장</button>
 				</div>
 	        </div>
@@ -518,12 +480,12 @@ $(function(){
 			success: function(res){
 				console.log("##########: ", res);
 				
-					alert("이미지 등록이 완료되었습니다.");
+				showToastMessage("이미지 등록이 완료되었습니다.", "success");
 					$("#divForImg img").attr("src", "/profile_images/" + res);
 				
 			},
 			error: function(error){
-				alert("이미지 등록에 오류가 발생했습니다.");
+				showToastMessage("이미지 등록에 오류가 발생했습니다.", "danger");
 			}
 		});
 		
@@ -637,7 +599,7 @@ $(function(){
 									bankSelector.val(res);
 								},
 								error: function(error) {
-									alert("문제가 발생했습니다.");
+									showToastMessage("문제가 발생했습니다.", "danger");
 								}
 							})
 							
@@ -673,66 +635,70 @@ $(function(){
 	
 	// 수정 후 저장
 	$("#saveBtn").on("click", function(){
-		
-		let emplGender = $(".emplGender:checked").val();
-		console.log("### emplGender: ", emplGender);
-		
-		let emplTelno = $("#emplTelno").val();
-		let emplEmail = $("#emplEmail").val();
-		let zipCode = $("#zipCode").val();
-		let addrMain = $("#addrMain").val();
-		let addrDetail = $("#addrDetail").val();
-		let emplHobby = $("#emplHobby").val();
-		let emplMrnry = $("#emplMrnry").val();
-		let householderAt = $(".householderAt:checked").val();
-		console.log("### householderAt: ", householderAt);
-		
-		let vehicleNumber = $("#vehicleNumber").val();
-		
-		// 급여 관련 정보
-		let bankCode2 = $("#bankCode").val();
-		let bankName = $("#bankName").val();
-		let account = $("#account").val();
-		
-		console.log("업데이트 눌렀을때 파라미터: ", account);
-		console.log("업데이트 눌렀을때 파라미터: ", emplEmail);
-		
-		let data2 = {
-				emplNo : userId,	// 조건절 용도의 사원번호
-				emplGender : emplGender,
-				emplTelno : emplTelno,
-				emplEmail : emplEmail,
-				zipCode : zipCode,
-				addrMain : addrMain,
-				addrDetail : addrDetail,
-				emplHobby : emplHobby,
-				emplMrnry : emplMrnry,
-				householderAt : householderAt,
-				vehicleNumber : vehicleNumber,
-				bankCode : bankCode2,
-				bankName : bankName,
-				account : account
-		};
-		
-		console.log("### data2: ", data2);
-		
-		$.ajax({
-			url: "/employee/employeeUpdate",
-			method: "post",
-			data: JSON.stringify(data2),
-			dataType: "json",
-			contentType: "application/json; charset=UTF-8",
-			success: function(res){
-				console.log("업데이트 응답: ", res);
-				
-				if(res == 1) {
-					alert("수정이 완료되었습니다.");
-					 location.href = "/hrms/employee/employeeInfo";
-				} else {
-					alert("수정에 실패했습니다.");
+		showConfirmModal("수정내용을 저장하시겠습니까?").then((isConfirmed) => {
+			let emplGender = $(".emplGender:checked").val();
+			console.log("### emplGender: ", emplGender);
+			
+			let emplTelno = $("#emplTelno").val();
+			let emplEmail = $("#emplEmail").val();
+			let zipCode = $("#zipCode").val();
+			let addrMain = $("#addrMain").val();
+			let addrDetail = $("#addrDetail").val();
+			let emplHobby = $("#emplHobby").val();
+			let emplMrnry = $("#emplMrnry").val();
+			let householderAt = $(".householderAt:checked").val();
+			console.log("### householderAt: ", householderAt);
+			
+			let vehicleNumber = $("#vehicleNumber").val();
+			
+			// 급여 관련 정보
+			let bankCode2 = $("#bankCode").val();
+			let bankName = $("#bankName").val();
+			let account = $("#account").val();
+			
+			console.log("업데이트 눌렀을때 파라미터: ", account);
+			console.log("업데이트 눌렀을때 파라미터: ", emplEmail);
+			
+			let data2 = {
+					emplNo : userId,	// 조건절 용도의 사원번호
+					emplGender : emplGender,
+					emplTelno : emplTelno,
+					emplEmail : emplEmail,
+					zipCode : zipCode,
+					addrMain : addrMain,
+					addrDetail : addrDetail,
+					emplHobby : emplHobby,
+					emplMrnry : emplMrnry,
+					householderAt : householderAt,
+					vehicleNumber : vehicleNumber,
+					bankCode : bankCode2,
+					bankName : bankName,
+					account : account
+			};
+			
+			console.log("### data2: ", data2);
+			
+			$.ajax({
+				url: "/employee/employeeUpdate",
+				method: "post",
+				data: JSON.stringify(data2),
+				dataType: "json",
+				contentType: "application/json; charset=UTF-8",
+				success: function(res){
+					console.log("업데이트 응답: ", res);
+					
+					if(res == 1) {
+						showToastMessage("수정이 완료되었습니다.", "success");
+						 location.href = "/hrms/employee/employeeInfo";
+					} else {
+						showToastMessage("수정에 실패했습니다.", "danger");
+					}
 				}
-			}
+			});
+			
+			
 		});
+		
 		
 	});
 	
@@ -752,7 +718,7 @@ $(function(){
 		$("#saveSignature").on("click", function(){
 			
 			if (signaturePad.isEmpty()) {
-		      	alert("서명 후 저장해주세요.");
+				showToastMessage("서명 후 저장해주세요.", "warning");
 		      	return;
 		    }
 			
@@ -770,10 +736,10 @@ $(function(){
 				data: JSON.stringify(payload),
 				contentType: 'application/json; charset=UTF-8',
 				success: function(res) {
-					alert("서명이 저장되었습니다.");
+					showToastMessage("서명이 저장되었습니다.", "success");
 				},
 				error: function(error) {
-			        alert("서명 저장에 오류가 발생하였습니다.");
+					showToastMessage("서명 저장에 오류가 발생하였습니다.", "danger");
 		      	}
 			});
 			

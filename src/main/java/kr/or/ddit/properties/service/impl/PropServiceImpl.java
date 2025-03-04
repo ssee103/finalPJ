@@ -53,6 +53,12 @@ public class PropServiceImpl implements IPropService {
         return updatedRows > 0; 
 	}
 	
+	@Override
+	public void increaseProp(int propNo) {
+		 int updatedRows = propMapper.updateRentalReturnDate(propNo);
+	     return;
+	}
+	
 	// 사원들에게 제공하는 물품리스트 관리 페이지
 	@Override
 	public List<PropertiesVO> findAll() {
@@ -133,5 +139,7 @@ public class PropServiceImpl implements IPropService {
 	public List<PropertiesVO> selectPropList(PaginationInfoVO<PropertiesVO> pageVO, PropertiesVO propVO){
 		return propMapper.selectPropList(pageVO, propVO);
 	}
+
+
 }
 

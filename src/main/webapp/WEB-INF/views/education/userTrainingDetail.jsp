@@ -28,7 +28,7 @@
                 <div class="row align-items-center mb-4">
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
-                            <a href="/hrms/education/admin/adminAllTrainingListSearch">
+                            <a href="/hrms/education/user/userAllTrainingListSearch">
                                 <i class="ti ti-arrow-left me-2"></i>Back to List
                             </a>
                         </h6>
@@ -133,7 +133,7 @@
 						                                <c:forEach var="cur" items="${curriculumList}">
 						                                    <div class="list-group-item border rounded mb-2 p-2">
 						                                        <h4 class="fs-17">${cur.curName}</h4><br/>
-						                                        <h4 class="fs-15">: ${cur.curExplain}</h4>
+						                                        <p> : ${cur.curExplain}</p>
 						                                    </div>
 						                                </c:forEach>
 						                            </c:when>

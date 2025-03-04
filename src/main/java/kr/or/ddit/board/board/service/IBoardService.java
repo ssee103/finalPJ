@@ -40,4 +40,6 @@ public interface IBoardService {
 
 	public int commentUpdate(CommentVO cmtVO);
 
+	public int subCmtDelete(String commentNo, String commentNos);
+
 }

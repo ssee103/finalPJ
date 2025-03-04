@@ -99,4 +99,9 @@ public class BoardServiceImpl implements IBoardService{
 		return cmtMapper.commentUpdate(cmtVO);
 	}
 
+	@Override
+	public int subCmtDelete(String commentNo, String commentNos) {
+		return cmtMapper.subCmtDelete(commentNo, commentNos);
+	}
+
 }

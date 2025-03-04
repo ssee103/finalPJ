@@ -27,7 +27,25 @@
 		from (
 		    select 
 		    	a.*
-		        , ROW_NUMBER() OVER (ORDER BY a.empl_no DESC) rnum
+		        , ROW_NUMBER() OVER (
+		        	<choose>
+		        		<when test="sorting == 2">
+							ORDER BY a.years_of_service DESC
+		        		</when>
+		        		<when test="sorting == 3">
+							ORDER BY a.years_of_service ASC
+		        		</when>
+		        		<when test="sorting == 5">
+							ORDER BY a.score DESC
+		        		</when>
+		        		<when test="sorting == 6">
+							ORDER BY a.score ASC
+		        		</when>
+		        		<otherwise>
+				        	ORDER BY a.empl_no DESC
+		        		</otherwise>
+		        	</choose>
+		        ) rnum
 	    FROM (
 			SELECT
 			    e.empl_no,
@@ -48,7 +66,7 @@
 			            SELECT ed.edc_title
 			            FROM emp_edc edc
 	                    LEFT JOIN education ed ON edc.edc_no = ed.edc_no
-			            WHERE edc.empl_no = e.empl_no
+			            WHERE TO_CHAR(edc.empl_no) = e.empl_no
 			            ORDER BY edc.edc_no
 			            FETCH FIRST 2 ROWS ONLY
 			        )
@@ -70,7 +88,6 @@
 			<if test="deptCode != null and deptCode != ''">
 				AND e.dept_code = #{deptCode}
 			</if>
-			ORDER BY e.empl_no DESC
 	    <include refid="CmmSQL.pagingFooterWithVO"/>
 	</select>
 	

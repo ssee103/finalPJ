@@ -39,22 +39,17 @@
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육명" style="width: 100px;" id="edcTitle">
+									<input type="text" class="form-control" placeholder="강의제목" style="width: 100px;" id="edcTitle">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="강사" style="width: 100px;" id="educator">
+									<input type="text" class="form-control" placeholder="교육담당" style="width: 100px;" id="educator">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육분류" style="width: 100px;" id="edcSort">
-								</div>
-							</div>
-							<div class="me-3">
-								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육대상" style="width: 100px;" id="edcTarget">
+									<input type="text" class="form-control" placeholder="교육대상부서" style="width: 160px;" id="edcTarget">
 								</div>
 							</div>
 							<input type="button" class="btn btn-primary d-flex align-items-center" value="검색" id="searchBtn">
@@ -65,14 +60,14 @@
 							<table class="table datatable">
 								<thead class="thead-light">
 									<tr>
-										<th>강의제목</th>
-										<th>교육담당</th>
-										<th>수강정원</th>
-										<th>수강기간</th>
-										<th>교육대상</th>
-										<th>모집기간</th>
-										<th>교육해당부서</th>
-										<th>신청버튼</th>
+										<th style="text-align: center;">강의제목</th>
+										<th style="text-align: center;">교육담당</th>
+										<th style="text-align: center;">수강정원</th>
+										<th style="text-align: center;">교육해당부서</th>
+										<th style="text-align: center;">교육대상</th>
+										<th style="text-align: center;">모집기간</th>
+										<th style="text-align: center;">수강기간</th>
+										<th style="text-align: center;">신청버튼</th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -87,7 +82,7 @@
 						let searchBtn = $("#searchBtn");
 						let pagingArea = $("#pagingArea");
 						getList(1);
-					$(function(){
+						$(function(){
 							searchBtn.on("click", function(){
 								let edcTitle = $("#edcTitle");
 								let educator = $("#educator");
@@ -101,6 +96,7 @@
 							pagingArea.on("click", "a", function(){
 								event.preventDefault();
 								let page = $(this).data("page");
+								let edcNo = $("edcNo");
 								let edcTitle = $("#edcTitle");
 								let educator = $("#educator");
 								let edcPsncpa = $("#edcPsncpa");
@@ -116,13 +112,12 @@
 							
 						});
 						
-						function getList(page, edcTitle, educator, edcSort, edcTarget) {
+						function getList(page, edcTitle, educator, edcSort, edcTarget, edcNo) {
 						    let pagingArea = $("#pagingArea");
 						    let dataTable_tbody = $("#dataTable-tbody");
-
-						    // 기본 데이터 설정
 						    let data = { page: page };
 
+						    if (edcNo != null) data.edcNo = edcNo;
 						    if (edcTitle != null) data.edcTitle = edcTitle;
 						    if (educator != null) data.educator = educator;
 						    if (edcSort != null) data.edcSort = edcSort;
@@ -136,15 +131,22 @@
 						        data: JSON.stringify(data),
 						        contentType: "application/json;charset=utf-8",
 						        success: function (res) {
-						            console.log("응답 데이터:", res);
-
 						            let tr = "";
+						            let today = new Date();   // 오늘날짜 받아오기
 
 						            if (res.eduAllList && res.eduAllList.length > 0) {
 						            	res.eduAllList.forEach(function(edu) {
+						            		let recruitEdate = new Date(edu.recruitEdateFormatted); 
 						            	    let recruitPeriod = `\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}`;
 						            	    let edcPeriod = `\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}`;
 
+						                    let enrollButton;
+						                    if (recruitEdate < today) {
+						                        enrollButton = `<button class="btn btn-secondary" disabled>수강마감</button>`;
+						                    } else {
+						                        enrollButton = `<button class="btn btn-primary enroll-btn" data-edc-no="\${edu.edcNo}">수강신청</button>`;
+						                    }
+						                    
 						            	    tr += `
 												<tr>
 							            	    	<td>
@@ -154,25 +156,22 @@
 								            	            </a>
 								            	        </p>
 								            	    </td>
-						                            <td>\${edu.educator}</td>
-						                            <td>\${edu.edcPsncpa}</td>
-						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
-						                            </td>
+						                            <td style="text-align: center;">\${edu.educator}</td>
+						                            <td style="text-align: center;">\${edu.edcPsncpa}</td>
 						                            <td>\${edu.edcTarget}</td>
-						                            <td>
+						                            <td style="text-align: center;">\${edu.edcGrade}</td>
+						                            <td style="text-align: center;">
 						                                <span class="text-nowrap">\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}</span>
 						                            </td>
-						                            <td>\${edu.edcSort}</td>
-						                            <td>
-								                            <div class="mb-1">
-								                                <button class="btn btn-primary enroll-btn" data-edc-no="\${edu.edcNo}">수강신청</button>
-								                            </div>
+						                            <td style="text-align: center;">
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
+						                            </td>
+						                            <td style="text-align: center;">
+								                        <div class="mb-1">\${enrollButton}</div>
 						                            </td>
 						            	        </tr>	
 						            	    `;
 						            	});
-						                // 데이터 삽입
 						                dataTable_tbody.html(tr);
 						            } else {
 						                dataTable_tbody.html(`<tr><td colspan="8" class="text-center">데이터가 없습니다.</td></tr>`);
@@ -198,12 +197,10 @@
 		<!-- /Page Wrapper -->
 		
 		<%
-		    // 로그인한 사용자의 empl_no 값을 가져오는 코드 (백엔드에서 model로 넘겨줘야 함)
 		    String edcAplc = (String) session.getAttribute("edcAplc");
 		%>
 
 		<script>
-		// 날짜 형식을 "yyyy-MM-dd HH:mm"으로 변환하는 함수
 		function formatDateTime(dateString) {
 		    if (!dateString) return "";
 		    
@@ -214,26 +211,21 @@
 		    
 		    return `\${year}-\${month}-\${day}`;
 		}
-		
-		
 	</script>
 	<%
-	    // 로그인한 사용자의 empl_no 값을 가져오는 코드 (백엔드에서 model로 넘겨줘야 함)
 	    String emplNo = (String) session.getAttribute("emplNo");
 	%>
 	<script>
-	    // JavaScript에서 emplNo 값을 변수로 저장
 	    let edcAplc = "<%= emplNo %>";
 
 	    $(document).ready(function () {
-	        $(".enroll-btn").on("click", function () {
+	    	$("#dataTable-tbody").on("click", ".enroll-btn", function () {
 	            let edcNo = $(this).data("edcNo");
 
 	            let today = new Date();
 	            let erDate = today.getFullYear() + "-" +
 	                         String(today.getMonth() + 1).padStart(2, "0") + "-" + 
 	                         String(today.getDate()).padStart(2, "0");
-
 
 	            if (!edcAplc) {
 	                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
@@ -246,9 +238,7 @@
 	                erDate: erDate,  // yyyy/MM/dd 형식
 	                erStatus: ''
 	            };
-
-	            console.log("보낼 데이터:", requestData);
-
+	            // console.log("보낼 데이터:", requestData);
 	            $.ajax({
 	                url: "/hrms/education/user/rest/insertEdcReqeust",
 	                type: "POST",
@@ -260,14 +250,12 @@
 	                },
 	                error: function (xhr, status, error) {
 	                    console.error("수강 신청 실패:", xhr.responseText);
-	                    alert("수강 신청 중 오류가 발생했습니다.");
+	                    alert("이미 수강신청한 과목입니다.");
 	                }
 	            });
 	        });
 	    });
 	</script>
-
-		
 	</div>
 	<!-- /Main Wrapper -->
 

@@ -62,7 +62,7 @@
         , e.empl_telno AS emplTelno  
         , (SELECT c.cc_name
            FROM common_code c
-           WHERE c.cg_group = 'DCLZ_STATUS' 
+           WHERE c.cg_group = 'DCLZ_TYPE' 
            AND c.cc_code = (SELECT dl.dclz_type 
                                FROM diligence_and_laziness dl
                                WHERE dl.empl_no = e.empl_no 

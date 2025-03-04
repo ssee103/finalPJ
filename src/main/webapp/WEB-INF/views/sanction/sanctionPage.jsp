@@ -177,22 +177,28 @@ h1{
 									data-bs-target="#defineLineModal">결재 라인 지정</button>&nbsp;	
 <!-- 								<button class="btn btn-secondary" id="defineRefBtn" data-bs-toggle="modal"  -->
 <!-- 									data-bs-target="#defineRefModal">참조자 지정</button> &nbsp; -->
-								<button class="btn btn-secondary">커스텀 결재 라인</button> &nbsp;	
+								<button class="btn btn-secondary" id="customSanctnerLine" data-bs-toggle="modal" 
+									data-bs-target="#getCustomModal">결재 라인 템플릿</button> &nbsp;	
 								<button class="btn btn-outline-light border me-3">임시 저장</button>
 								
 								<!-- 모달 바깥 결재자&참조자 영역 -->	
 								<div id="outModalAprRef" style="display: flex; margin-right: 20px; margin-top: 20px;">
 									<div style="margin-right: 100px;">
-										<h5 class="card-title">지정한 결재자 라인</h5>
+										<h5 class="card-title">결재자 라인 (내림차순)</h5>
+										<span id="aprDefault">지정 된 결재자가 없습니다.</span>
 										<div id="chosenLine">
-										
+											
 										</div>
 									</div>
 									<div style="margin-right: 20px;">
-										<h5 class="card-title">지정한 참조자 라인</h5>
+										<h5 class="card-title">참조자 라인</h5>
+										<span id="refDefault">지정 된 참조자가 없습니다.</span>
 										<div id="chosenRef">
-										
+											
 										</div>
+									</div>
+									<div style="margin-right: 20px;">
+										<button class="btn btn-outline-light border me-3" id="removeLine">결재선 초기화</button>
 									</div>
 								</div>	
 							</div>
@@ -315,10 +321,68 @@ h1{
 	      
 	      <!-- 모달 푸터 -->
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" style="margin: 2px;">커스텀 결재 라인 저장</button>
+	        <button type="button" class="btn btn-secondary" id="showCustomModal" style="margin: 2px;" data-bs-toggle="modal" 
+									data-bs-target="#customModal">커스텀 결재 라인 저장</button>
 	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin: 2px;">닫기</button>
 	        <button type="button" class="btn btn-secondary" id="removeSanctioner" style="margin: 2px;">초기화</button>
 	        <button type="button" class="btn btn-primary" id="saveLine" style="margin: 2px;">저장</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 커스텀 결재선 저장 Modal -->
+	<div class="modal fade" id="customModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-sm"> <!-- modal-xl: 큰 모달 -->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="previewModalLabel">커스텀 결재선 저장</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+	      </div>
+	      <div class="modal-body">
+	      	커스텀 결재 선 제목: <input type="text" class="form-control" id="customTitle" placeholder="템플릿 제목을 지정해주세요."/>
+	      </div>
+	      <div class="modal-body" style="border: 1px solid black;">지정 된 결재 선(↓)</div>
+	      <div class="modal-body" id="customDiv">
+	        <!-- 미리보기 내용을 여기에 삽입 -->
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> &nbsp;
+	        <button type="button" class="btn btn-primary" id="saveCustom">결재선 저장</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 커스텀 결재선 Modal -->
+	<div class="modal fade" id="getCustomModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg"> <!-- modal-xl: 큰 모달 -->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="previewModalLabel">커스텀 결재선</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+	      </div>
+	      <div class="modal-body" id="getCustomDiv">
+	        <!-- 미리보기 내용을 여기에 삽입 -->
+	        <table class="table datatable">
+		        <thead>
+		        	<tr>
+		        		<th>번호</th>
+		        		<th>제목</th>
+		        		<th>결재 선</th>
+		        		<th>생성일</th>
+		        		<th>삭제</th>
+		        	</tr>
+	        	</thead>
+	        	<tbody>
+	        	</tbody>
+	        </table>
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> &nbsp;
+	        <button type="button" class="btn btn-primary" id="outCustomBtn">결재선 지정</button>
 	      </div>
 	    </div>
 	  </div>
@@ -385,10 +449,10 @@ h1{
 </body>
 <script>
 
+const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
+console.log("userId: ", userId);
+
 $(function(){
-	
-	const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
-	console.log("userId: ", userId);
 	
 	let docSortSelect = $("#docSortSelect");
 	
@@ -425,6 +489,8 @@ $(function(){
 					$("#docDiv").empty();
 				}
 				
+				$("#passiveChk").removeAttr("checked");
+				
 				if(option == "01") {	// 연차 신청서
 					
 					if(res[0].dsPassive == 'Y') {
@@ -440,7 +506,7 @@ $(function(){
 				
 				if(option == "03") {
 					
-					if(res[0].dsPassive == 'Y') {
+					if(res[2].dsPassive == 'Y') {
 						$("#passiveChk").attr("checked", "checked");
 					}
 					
@@ -455,7 +521,7 @@ $(function(){
 				
 				if(option == "04") {
 					
-					if(res[0].dsPassive == 'Y') {
+					if(res[3].dsPassive == 'Y') {
 						$("#passiveChk").attr("checked", "checked");
 					}
 					
@@ -469,6 +535,10 @@ $(function(){
 				}
 				
 				if(option == "99") {
+					
+					if(res[4].dsPassive == 'Y') {
+						$("#passiveChk").attr("checked", "checked");
+					}
 					
 					CKEDITOR.instances.ckEditor.setData(res[4].dsForm);
 					
@@ -579,10 +649,6 @@ $(function(){
 						    let totalScoreStr = editor.document.getById("totalScore");
 						    totalScoreStr.setHtml(totalScore + "점");
 						}
-						
-						
-
-						
 						
 						
 						// #chosenLine 영역의 각 결재자 요소를 순회
@@ -788,8 +854,11 @@ $(function(){
 				            }
 				        	
 				            // 참조자 지정인 경우 referenceDiv에서 중복 체크
-				            if ( $("#referenceDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0 ) {
-				                referenceDiv.append(`<span class="reference" data-emplNo="\${foundNode.data}">\${clickedText}</span><br/>`);
+				            if ( $("#referenceDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0 ) {	// 문제 없을 경우
+				                referenceDiv.append(`<div>
+				                        <span class="reference" data-emplNo="\${foundNode.data}">\${clickedText}</span>
+				                        <button class="btn btn-sm btn-outline-danger remove-reference">❌</button>
+				                    </div>`);
 				            } else {
 				                console.log("참조자가 중복되었습니다.");
 				                alert("참조자가 중복되었습니다.");
@@ -802,8 +871,14 @@ $(function(){
 				            }
 				        	
 				            // 결재자 지정인 경우 sanctionerLineDiv에서 중복 체크
-				            if ($("#sanctionerLineDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0) {
-				                sanctionerLineDiv.append(`<span class="sanctioner" data-emplNo="\${foundNode.data}">\${clickedText}</span><br/>`);
+				            if ($("#sanctionerLineDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0) {	// 문제 없을 경우
+				                sanctionerLineDiv.append(`<div>
+				                        <span class="sanctioner" data-emplNo="\${foundNode.data}">\${clickedText}</span>
+				                        <button class="btn btn-sm btn-outline-secondary move-up">⬆</button>
+				                        <button class="btn btn-sm btn-outline-secondary move-down">⬇</button>
+				                        <button class="btn btn-sm btn-outline-danger remove-sanctioner">❌</button>
+				                        </div>
+				                    `);
 				            } else {
 				                console.log("결재자가 중복되었습니다.");
 				                alert("결재자가 중복되었습니다.");
@@ -845,15 +920,18 @@ $(function(){
 	
 	// 결재자 지정 후 저장 클릭
     $("#saveLine").on("click", function(){
-    	// 이전 요소 비워주기
-    	$("#chosenLine").empty();
     	
-    	$("#outModalAprRef").show();
     	
     	var approversHTML = $("#sanctionerLineDiv").html();
     	var referencesHTML = $("#referenceDiv").html();
-        $("#chosenLine").html(approversHTML);
-        $("#chosenRef").html(referencesHTML);
+        $("#chosenLine").append(approversHTML);
+        $("#chosenRef").append(referencesHTML);
+        if(approversHTML != "") {
+        	$("#aprDefault").hide();
+        }
+        if(referencesHTML != "") {
+        	$("#refDefault").hide();
+        }
         $("#defineLineModal").modal("hide");
     });
 	
@@ -867,9 +945,208 @@ $(function(){
 	    
 	});
 	
+	// 커스텀 결재선 저장 버튼 클릭(결재자 지정 모달 안에서)
+	$("#showCustomModal").on('click', function(){
+		var approversHTML = $("#sanctionerLineDiv").html();
+		$("#customDiv").html(approversHTML);
+	});
+	
+	// 결재선 저장 버튼 클릭(커스텀 결재자 모달 안에서)
+	$("#saveCustom").on("click", function(){
+		// 선택된 결재자들 사원코드
+		let emplNoApr = $('#customDiv .sanctioner').map(function() {
+		    return $(this).attr('data-emplno');
+		}).get();  // .get()을 사용하면 배열 형태로 반환됩니다.
+		
+		let customTitle = $("#customTitle").val();
+		
+		let customData = {
+			emplNo: userId,
+			msTitle: customTitle,
+			csanctnerNoList: emplNoApr
+		};
+		
+		console.log("customData: ", customData);
+		
+		$.ajax({
+			url: "/sanction/insertCustomApr",
+			method: "post",
+			data: JSON.stringify(customData),
+			dataType: 'json',
+			contentType: "application/json; charset=UTF-8",
+			success: function(res) {
+				console.log("커스텀 결재자 저장 res: ", res);
+				if(res == 1) {
+					alert("커스텀 결재선 저장이 완료되었습니다.");
+					$("#customModal").modal("hide");
+				} else {
+					alert("커스텀 결재선 저장 중 오류가 발생했습니다.");
+					$("#customModal").modal("hide");
+				}
+			}
+		});
+		
+	});
+	
+	// 커스텀 결재라인 버튼 클릭 이벤트(sanctionPage에서)
+	$("#customSanctnerLine").on("click", function(){
+		getCustomAprLine();
+	});
+	
+	// 본문 페이지 결재선 초기화 버튼 이벤트
+	$("#removeLine").on("click", function(){
+		$("#chosenLine").empty();
+		$("#chosenRef").empty();
+		$("#aprDefault").show();
+		$("#refDefault").show();
+	});
+		
 	
 	
 }); // readyFunction 범위 종료
+
+// 커스텀 결재자 목록 받아오기 함수
+function getCustomAprLine() {
+	
+	$("#getCustomDiv tbody").empty();
+	
+	let userIdData = {userId: userId};
+	
+	$.ajax({
+		url: "/sanction/getCustomSanctionLine",
+		method: "get",
+		data: userIdData,
+		dataType: 'json',
+		success: function(res){
+			console.log("커스텀 결재자 목록 res: ", res);
+			
+			$.each(res, function(index, doc) {
+				
+				const tdId = `aprTd-\${index}`;
+				
+				$("#getCustomDiv tbody").append(`
+							<tr>
+								<td>\${doc.msNo}</td>
+								<td><a class="msTitle">\${doc.msTitle}</a></td>
+								<td id='\${tdId}'>
+									
+								</td>
+								<td>\${doc.msDate}</td>
+								<td><button class="delCustomBtn btn btn-outline-light border me-3" data-msno="\${doc.msNo}">삭제</button></td>
+							</tr>
+						`);
+				
+				$.each(doc.customAprList, function(index, approver){
+					$(`#\${tdId}`).append(`
+							<div><span class="sanctioner" data-emplno="\${approver.csanctnerNo}">
+			        		(\${approver.emplPosition}) \${approver.emplNm}
+					        </span></div>
+					        `);
+				});
+
+			}); // each 종료 영역
+		} // success 종료 영역
+	});
+}
+
+//제목 클릭 이벤트
+$(document).on("click", ".msTitle", function() {	// 문서 전체$(document)에서 'click' 이벤트가 클래스가 'msTitle'인 요소에 발생하면 핸들러를 실행하겠다
+	// 클릭한 제목이 포함된 행의 3번째 <td> (0부터 시작하므로 eq(2))를 찾아 결재자 정보를 가져옵니다.
+	var approversHtml = $(this).closest("tr").find("td").eq(2).html();
+	console.log("approversHtml", approversHtml);
+	
+	// jQuery로 가상 DOM을 생성하여 버튼 추가
+    var modifiedHtml = $("<div>").html(approversHtml); // jQuery 객체로 변환
+
+    // 각 결재자 요소에 상하 버튼과 삭제 버튼 추가
+    modifiedHtml.find(".sanctioner").each(function() {
+        var emplNo = $(this).data("emplno"); // 기존 결재자 데이터 유지
+        var approverName = $(this).text().trim();
+        
+        console.log("emplNo: ", emplNo);
+        console.log("approverName: ", approverName);
+
+        // 새로운 HTML 구조 생성
+        var newHtml = `
+            <div>
+                <span class="sanctioner" data-emplno="\${emplNo}">\${approverName}</span>
+                <button class="btn btn-sm btn-outline-secondary move-up">⬆</button>
+                <button class="btn btn-sm btn-outline-secondary move-down">⬇</button>
+                <button class="btn btn-sm btn-outline-danger remove-sanctioner">❌</button>
+            </div>
+        `;
+
+        // 기존 요소를 새로운 HTML로 변경
+        $(this).parent().replaceWith(newHtml);
+    });
+	
+	$("#chosenLine").html(modifiedHtml.html());
+	$("#getCustomModal").modal("hide");
+	$("#aprDefault").hide();
+});
+
+$('#getCustomModal').on('hidden.bs.modal', function() {
+	  $(this).find('tbody').empty();
+});
+
+// 삭제 버튼 클릭 이벤트
+$(document).on("click", ".delCustomBtn", function() {
+	let msNoStr = $(this).data("msno");
+	let msNo = parseInt(msNoStr);
+	let customData = {msNo: msNo };
+	
+	// 삭제 처리
+	$.ajax({
+		url: "/sanction/deleteCustomApr",
+		method: "post",
+		data: customData,
+		dataType: 'json',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		success: function(res) {
+			if(res == 1) {
+				alert("커스텀 결재자의 삭제가 완료되었습니다.");
+				getCustomAprLine();
+			} else {
+				alert("커스텀 결재자 삭제 중 오류가 발생했습니다.");
+			}
+		}
+	});
+});
+
+$(document).ready(function () {
+
+    // 🔹 상위 요소에서 이벤트 위임을 사용하여 동적 요소에 대한 클릭 이벤트 처리
+    $(document).on("click", ".move-up", function () {
+        var current = $(this).closest("div");
+        var prev = current.prev();
+        if (prev.length !== 0) {
+            prev.before(current); // 현재 요소를 이전 요소 앞에 배치
+        }
+    });
+
+    $(document).on("click", ".move-down", function () {
+        var current = $(this).closest("div");
+        var next = current.next();
+        if (next.length !== 0) {
+            next.after(current); // 현재 요소를 다음 요소 뒤에 배치
+        }
+    });
+
+    // 🔹 개별 삭제 버튼 클릭 시 해당 요소 제거
+    $(document).on("click", ".remove-reference", function () {
+        $(this).closest("div").remove();
+        if ($("#referenceDiv").children().length === 0) {
+            $("#refDefault").show(); // 참조자 없으면 기본 메시지 표시
+        }
+    });
+
+    $(document).on("click", ".remove-sanctioner", function () {
+        $(this).closest("div").remove();
+        if ($("#sanctionerLineDiv").children().length === 0) {
+            $("#aprDefault").show(); // 결재자 없으면 기본 메시지 표시
+        }
+    });
+});
 	
 </script>
 </html>

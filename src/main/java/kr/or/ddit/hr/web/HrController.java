@@ -43,6 +43,21 @@ public class HrController {
         return "hr/hr"; // JSP (WEB-INF/views/hr/hr.jsp)
     }
 	
+	@GetMapping("/hrAdmin")
+	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
+	public String goHrAdmin(DepartmentVO deparment,Model model) {
+        
+        List<DepartmentVO> departments = hrService.getAllDepartments();
+        if (departments.isEmpty()) {
+            System.out.println("DB 데이터 없음.");
+        } else {
+            System.out.println("부서 개수: " + departments.size());
+            departments.forEach(dept -> System.out.println("Department: " + dept.getDeptName()));
+        }
+        model.addAttribute("departments", departments); 
+        return "hr/hrAdmin"; // JSP (WEB-INF/views/hr/hrAdmin.jsp)
+    }
+	
 	@GetMapping("/members")
 	@ResponseBody
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")

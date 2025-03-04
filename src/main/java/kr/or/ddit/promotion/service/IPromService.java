@@ -14,7 +14,7 @@ public interface IPromService {
 	public int getTotalRecord(String emplNo, String emplNm, String deptCode, String position);
 
 	public List<EvaluationVO> getEvaluList(PaginationInfoVO<EvaluationVO> pageVO, String emplNo,
-			String emplNm, String deptCode, String position);
+			String emplNm, String deptCode, String position, String sorting);
 
 	public int promoteTarget(String emplNo);
 

@@ -59,6 +59,8 @@ public class AdminServiceImpl implements IAdminService{
 		Map<String, Object> recruitCount = chartMapper.getRecruitCount();
 		Map<String, Object> appCount = chartMapper.getAppCount();
 		Map<String, Object> vacationData = chartMapper.getVacationData();
+		Map<String, Object> yearsOfService = chartMapper.getYearsOfService();
+		Map<String, Object> vacation = chartMapper.getVaction();
 		
 		
 		resultMap.put("lateMap", lateMap);
@@ -67,6 +69,8 @@ public class AdminServiceImpl implements IAdminService{
 		resultMap.put("recruitCount", recruitCount);
 		resultMap.put("appCount", appCount);
 		resultMap.put("vacationData", vacationData);
+		resultMap.put("yearsOfService", yearsOfService);
+		resultMap.put("vacation", vacation);
 		return resultMap;
 	}
 

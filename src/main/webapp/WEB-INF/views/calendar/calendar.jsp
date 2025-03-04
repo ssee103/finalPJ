@@ -33,20 +33,6 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
-
-
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -54,6 +40,12 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">일정관리</h2>
+						  <button id="showAll" class="btn btn-secondary">전체 일정</button>
+					    <button id="showPersonal" class="btn btn-primary">개인 일정</button>
+					    <button id="showDepartment" class="btn btn-success">부서 일정</button>
+					</div>
+					<div class="calendar-filter">
+					  
 					</div>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 						<div class="mb-2">
@@ -150,6 +142,11 @@
 										<input type="color" id="eventTextColor" value="#ffffff"/>
 									</div>
 								</div>
+								<div>
+									<label>부서일정
+										<input type="checkbox" id="group" value="group">
+									</label>
+								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -204,10 +201,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<%-- <!-- Datatable JS -->
-	<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	 --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -215,10 +208,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -229,9 +218,10 @@
 <script type="text/javascript">
 let calendar, currentEventId, selectedDate = null
 const userId = sessionStorage.getItem("userId"); //아이디 세션 가져오기
-console.log("아이디 :" + userId);
+let userDeptCode = "${emp.deptCode}"; //로그인한 사람의 부서코드 가져오기
 
 $(document).ready(function() {
+	
 	const calendarEl = document.getElementById('calendar');
 	
 	// 캘린더 생성
@@ -245,6 +235,9 @@ $(document).ready(function() {
 	},
 		editable: true,
 		selectable: true,
+		droppable: true,
+		eventStartEditable: true,
+		eventDurationEditable: true,
 		eventOverlap: true,
 		slotEventOverlap: true,
 		displayEventTime: true,
@@ -253,9 +246,9 @@ $(document).ready(function() {
 		//일정 데이터 가져오기
 		events: function (fetchInfo, successCallback, failureCallback) {
 			let data = {
-				emplNo : userId 
+				emplNo : userId,
+				groupId : userDeptCode
 			}
-			console.log("data.emplNo : " + data.emplNo)
 			$.ajax({
 				url: `/api/events/selectById`,
 				type: 'post',
@@ -265,9 +258,13 @@ $(document).ready(function() {
 				success: function (events) {
 					const convertedEvents = events.map(event => {
 						const DateTime = luxon.DateTime;
-						let start = DateTime.fromISO(event.start).setZone("local").toISO();
-						let end = event.end ? DateTime.fromISO(event.end).setZone("local").toISO() : start;
-						return { ...event, start, end };
+						/* let start = DateTime.fromISO(event.start).setZone("local").toISO();
+						let end = event.end ? DateTime.fromISO(event.end).setZone("local").toISO() : start; */
+						
+						let start = DateTime.fromFormat(event.start, "yyyy-MM-dd HH:mm:ss", { zone: "Asia/Seoul" }).toISO();
+			                let end = event.end ? DateTime.fromFormat(event.end, "yyyy-MM-dd HH:mm:ss", { zone: "Asia/Seoul" }).toISO() : start;
+					
+						return { ...event, start, end, extendedProps: { type: event.type } }; //타입추가
 					});
 					successCallback(convertedEvents);
 				},
@@ -281,13 +278,19 @@ $(document).ready(function() {
 		
 		//드래그 이벤트 
 		eventDrop:function(info){
-			
+			console.log("INFO : ", info);
+			console.log("전 : ", info.event.start.toISOString());
+			console.log("후 : ", info.event.start.toISOString().replace("T", " ").substr(0, 19));
+			let schSDate = info.event.start.toISOString().replace("T", " ").substr(0, 19);
+			let schEDate = info.event.end.toISOString().replace("T", " ").substr(0, 19);
 			let udata = {
 					schNo	 :	info.event.id,
 					schTitle : info.event.title,
-					schSDate : info.event.start.toISOString(),
-					schEDate : info.event.end ? info.event.end.toISOString() : null,
-					schColor : info.event.backgroundColor
+					schSDate : schSDate,
+					schEDate : schEDate,
+					schColor : info.event.backgroundColor,
+					schTextColor: info.event.textColor,
+			        schAllDay: info.event.allDay
 			};
 			
 			$.ajax({
@@ -299,6 +302,8 @@ $(document).ready(function() {
 					alert("이벤트 수정성공");
 					calendar.refetchEvents();
 				},
+				
+				
 				error: function (xhr, status, error) {
                     console.error("Error updating event:", error);
                 }
@@ -327,7 +332,7 @@ $(document).ready(function() {
              $('#eventStart').val(start);
              $('#eventEnd').val(end);
              $('#eventColor').val(info.event.backgroundColor || '#3788d8');
-             $('#eventTextColor').val(info.event.textColor || '#ffffff');
+             $('#eventTextColor').val(info.event.textColor || '#ffffff');	
              $('#eventForm').show();
 		} */
 		
@@ -335,66 +340,107 @@ $(document).ready(function() {
 		calendar.render();
 });
 
+//일정구분 
+$(function(){
+	$("#showPersonal").on("click", function(){
+		fillterEvents("personal");
+	});
+	
+	$("#showDepartment").on("click", function(){
+		fillterEvents("department");
+	});
+	
+	$("#showAll").on("click", function(){
+		fillterEvents("all");
+	});
+	
+});
+
+function fillterEvents(filterType){
+	let allEvents = calendar.getEvents();
+	
+	let data = { emplNo: userId, groupId: userDeptCode, filter: filterType };
+	allEvents.forEach(event => {
+        if (filterType === "all") {
+            event.setProp('display', 'auto'); // ✅ 전체 일정 보이기
+        } else if (filterType === "personal") {
+            event.setProp('display', event.extendedProps.type === "personal" ? 'auto' : 'none');
+        } else if (filterType === "department") {
+            event.setProp('display', event.extendedProps.type === "department" ? 'auto' : 'none');
+        }
+    });
+	
+}
+
 // 캘린더 닫기
 function closeForm() {
 	$('#eventForm').hide();
 }
 
-/*  // 추가하기 누르면 폼띄우기
-function showEventForm(date) {
-	currentEventId = null; // 새로운 일정 추가 시 ID 초기화
-	$('#saveButton').show(); // ✅ 저장 버튼 표시
-	$('#updateButton').hide(); // ✅ 수정 버튼 숨김
-	$('#deleteButton').hide(); // ✅ 삭제 버튼 숨김
-	$('#eventTitle').val('');
-	$('#eventDescription').val('');
-	$('#eventStart').val(date);
-	$('#eventEnd').val(date);
-	$('#eventColor').val('#3788d8');
-	$('#eventTextColor').val('#ffffff');
-	$('#eventAllDay').prop('checked', false);
-	toggleTimeFields();
-	$('#eventForm').show();
-}
-
-// ✅ "추가하기" 버튼 클릭 시 입력 폼 표시
-$('#addEventButton').on('click', function () {
-	showEventForm('');
-});
- */
 // ✅ 이벤트 저장 기능 (새 일정 추가)
 function saveEvent() {
+	let isGroup = $("#group").prop("checked"); // 체크 상태 확인
+	let start = $('#eventStart').val();
+	let end = $('#eventEnd').val();
+	
+	const DateTime = luxon.DateTime;
+	
+	let startDateTime = DateTime.fromISO(start, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss"); 
+	let endDateTime = end? DateTime.fromISO(end, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss") : startDateTime;
+		
+	
 	let eventData = {
 		schTitle: $('#eventTitle').val(),
-		schSDate: $('#eventStart').val(),
-		schEDate: $('#eventEnd').val(),
+		schSDate: startDateTime,
+		schEDate: endDateTime,
 		schColor: $('#eventColor').val(),
-		schTextColor: $('#eventTextColor').val(),
+		schTextColor: $('#eventTextColor').val() || '#ffffff',
 		schAllDay: $('#eventAllDay').prop('checked'),
 		emplNo : userId
 	};
+	if(isGroup){
+		eventData.groupId = userDeptCode;
+	}
 
 	// ✅ `allDay` 일정 변환
-	const DateTime = luxon.DateTime;
-	if (eventData.allDay) {
-		eventData.schSDate = DateTime.fromISO(eventData.schSDate, { zone: "Asia/Seoul" }).toISODate() + "T00:00:00";
-		eventData.schEDate = eventData.schSDate; 
-	}else{
+	
+	if(eventData.schAllDay){
+		eventData.schSDate = DateTime.fromISO(start, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd 00:00:00");
+		eventData.schEDate = DateTime.fromISO(start, { zone: "Asia/Seoul" }).toFormat("yyyy-MM-dd 23:59:59");
+	}
+	
+	console.log("데이터확인:", eventData);
+	
+	
+	
+	/* if (eventData.schAllDay) {
+		console.log("하루종일임?");
+		console.log(eventData.schSDate + "T00:00:00");
+		eventData.schSDate = eventData.schSDate + "T00:00:00";
+		eventData.schEDate = start + "T23:59:59"; 
+	} */
+	
+	/*  else{
+		console.log("하루종일 아님?");
 		//일반일정일 경우 endDate가 없으면 startDate와 동일하게 설정
 		if (!eventData.schEDate || eventData.schEDate.trim() === "") {
 			eventData.schEDate = eventData.schSDate;
-	}
-            	
-	// ✅ 일반 일정의 경우 UTC로 변환
-	eventData.schSDate = DateTime.fromISO(eventData.schSDate, { zone: "Asia/Seoul" }).toUTC().toISO();
-	eventData.schEDate = DateTime.fromISO(eventData.schEDate, { zone: "Asia/Seoul" }).toUTC().toISO();
-	} 
-
+		}
+         
+		eventData.schSDate = eventData.schSDate.indexOf(" ") > 0 ? eventData.schSDate.split(" ")[0] + "T" + eventData.schSDate.split(" ")[1] :  eventData.schSDate;
+		eventData.schEDate = eventData.schEDate.indexOf(" ") > 0 ? eventData.schEDate.split(" ")[0] + "T" + eventData.schEDate.split(" ")[1] :  eventData.schEDate;
+		
+		console.log(eventData.schSDate);
+		console.log(eventData.schEDate);
+		// ✅ 일반 일정의 경우 UTC로 변환
+		// eventData.schSDate = DateTime.fromISO(eventData.schSDate, { zone: "Asia/Seoul" }).toUTC().toISO();
+		// eventData.schEDate = DateTime.fromISO(eventData.schEDate, { zone: "Asia/Seoul" }).toUTC().toISO();
+	} */  
+	
 	$.ajax({
 		url: '/api/events',
 		type: 'POST',
 		contentType: 'application/json;charset=utf-8',
-		dataType : 'text',
 		data: JSON.stringify(eventData),
 		success: function (result) {
 			console.log("성공?:",result);
@@ -410,20 +456,26 @@ function saveEvent() {
 	});
 }
 
-// 일정을 보여주기
 
-
-//삭제
-/* function deleteEvent(){
-	if(!confirm("정말로 삭제하시겠습니까?")) return;
+/* //일정 삭제
+function deleteEvent(){
+	if(!confirm("정말 삭제하시겠습니까?")) return;
 	
 	$.ajax({
-		url:	`/api/events/\${}`,
-		type:
-		success:	
+		url : `/api/events/\${schNo}`,
+		type : "post",
+		success : function(){
+			calendar.refetchEvents();
+			closeForm();
+			alert('새 일정이 추가되었습니다!');
+		},
+		error: function (xhr, status, error) {
+			console.error("Error adding event:", error);
+		}
 	})
-}  */
+} */
 
+//하루종일 체크하면 시간x 아니면 시간까지 표시
 function toggleTimeFields() {
 	const allDay = $('#eventAllDay').prop('checked');
 	$('#eventStart').attr('type', allDay ? 'date' : 'datetime-local');

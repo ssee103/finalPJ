@@ -32,18 +32,6 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -65,19 +53,18 @@
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
 						<h5>건의사항 목록</h5>
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-							<div class="card-tools">
-								<form class="input-group input-group-sm" method="post" id="searchForm" style="width: 250px;">
+							<div class="card-tools"  style="margin-left: -50px;">
+								<form class="input-group input-group-sm " method="post" id="searchForm"  style="width: 350px;">
 									<input type="hidden" name="page" id="page"/>
 									<div class="dropdown">
-									<select class="dropdown-toggle btn"  name="searchType">
+									<select class="dropdown-toggle btn me-3" style="height: 38px; width: 110px;"  name="searchType">
 										<option value="title" <c:if test="${searchType eq 'title'}">selected</c:if>>제목</option>
 										<option value="writer" <c:if test="${searchType eq 'writer'}">selected</c:if>>작성자</option>
 									</select>
-									
 									</div>
-									<input type="text" name="searchWord" class="form-control me-3" value="${searchWord }" placeholder="검색">
+									<input type="text" name="searchWord" class="form-control me-3" value="${searchWord }" placeholder="검색" style="height: 38px;">
 									<div class="input-group-append">
-										<button type="submit" class="btn btn-primary d-flex align-items-center">검색</button>
+										<button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="height: 38px; min-width: 80px; text-align: center;">검색</button>
 									</div>
 								</form>
 							</div>
@@ -139,6 +126,9 @@
 					</div>
 				</div>
 			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /Page Wrapper -->
 
@@ -160,10 +150,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<%-- <!-- Datatable JS -->
-	<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	 --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -171,10 +157,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

@@ -2,6 +2,7 @@ package kr.or.ddit.calendar.web;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,12 +39,12 @@ public class CalendarRestController {
 	//일정추가
 	@PostMapping
 	public ResponseEntity<?> insertCalendar(@RequestBody CalendarVO cal){
-		
-		if(cal.isSchAllDay()) {
-			cal.setSchSDate(convertToMidnight(cal.getSchSDate()));
-			cal.setSchEDate(cal.getSchEDate() != null ? convertToEndOfDay(cal.getSchEDate()) : cal.getSchSDate()) ;
-		}
+//		if(cal.isSchAllDay()) {
+//			cal.setSchSDate(convertToMidnight(cal.getSchSDate()));
+//			cal.setSchEDate(cal.getSchEDate() != null ? convertToEndOfDay(cal.getSchEDate()) : cal.getSchSDate()) ;
+//		}
 		service.insert(cal);
+		
 		return ResponseEntity.ok("성공적으로 저장되었습니다.");
 	}
 
@@ -51,7 +52,11 @@ public class CalendarRestController {
 	@PostMapping("/selectById")
 	public List<Map<String, Object>> selectAll(@RequestBody Map<String, String> empMap){
 		log.info("emplNo : " + empMap.get("emplNo"));
-		List<CalendarVO> cals = service.selectAll(empMap.get("emplNo"));
+		log.info("userDeptCode : " + empMap.get("groupId"));
+		log.info("filter : " + empMap.get("filter"));
+		
+		List<CalendarVO> cals = service.selectAll(empMap.get("emplNo"),empMap.get("groupId"));
+		
 		return cals.stream().map(event -> {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", event.getSchNo());
@@ -61,21 +66,24 @@ public class CalendarRestController {
 			map.put("color", event.getSchColor());
 			map.put("textColor", event.getSchTextColor());
 			map.put("allDay", event.isSchAllDay());
+			map.put("type", event.getGroupId() != null ? "department" : "personal");
+			map.put("groupId",event.getGroupId());
 			return map;
 		}).collect(Collectors.toList());
 	}
 	
 	//수정
 	@PutMapping("/{schNo}")
-	public ResponseEntity<String> updateCalendar(@PathVariable int schNo, @RequestBody CalendarVO cal){
+	public ResponseEntity<String> updateCalendar(@RequestBody CalendarVO cal){
 		
-		CalendarVO isCal = service.selectSchNo(schNo);
+		log.info("mmmmmmmmmmmmmmmmmm:" + cal.getSchNo()); //O
 		
-		isCal.setSchSDate(cal.getSchSDate());
-		isCal.setSchEDate(cal.getSchEDate());
+//		if(cal.isSchAllDay()) {
+//			cal.setSchSDate(convertToMidnight(cal.getSchSDate()));
+//			cal.setSchEDate(cal.getSchEDate() != null ? correctAllDaySchEDate(cal.getSchSDate(), cal.getSchEDate()) : cal.getSchSDate());
+//		}
 		
-		cal.setSchNo(schNo);
-		service.update(isCal);
+		int result = service.update(cal);
 		
 		return ResponseEntity.ok("일정 업데이트 성공");
 	}
@@ -100,12 +108,14 @@ public class CalendarRestController {
 	        return schEDate;
 	}
 
+	//allDay 일정의 schEDate 를 23:59:59 으로 변환
 	private Date convertToEndOfDay(Date date) {
 		if (date == null) return null;
 		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().minusSeconds(1));
 	}
-
+	
+	//allDay 일정의 schSDate 를 00:00:00 으로 변환
 	private Date convertToMidnight(Date date) {
 		if (date == null) return null;
 		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

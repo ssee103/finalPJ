@@ -39,6 +39,9 @@
 
             transform:translateY(-50%); 
         }
+.form-label{
+	width: 100px;
+}
 </style>
 <body>
 
@@ -65,49 +68,13 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">전체사원 목록</h2>
-						<!-- 
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="index.html"><i class="ti ti-smart-home"></i></a>
-								</li>
-								<li class="breadcrumb-item">
-									CRM
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">Activity</li>
-							</ol>
-						</nav> 
-						-->
 					</div>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 						<div class="me-2 mb-2">
-							<!-- 
-							<div class="dropdown">
-								<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-									<i class="ti ti-file-export me-1"></i>Export
-								</a>
-								<ul class="dropdown-menu  dropdown-menu-end p-3">
-									<li>
-										<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-file-type-pdf me-1"></i>Export as PDF</a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" class="dropdown-item rounded-1"><i class="ti ti-file-type-xls me-1"></i>Export as Excel </a>
-									</li>
-								</ul>
-							</div> 
-							-->
 						</div>
 						<div class="mb-2">
-							<button class="btn-open-modal btn btn-primary d-flex align-items-center">신규 사원 등록</button>
-							<!-- <button class="btn btn-primary btn-open-modal"><i class="ti ti-circle-plus me-2"></i>사원 추가</button> -->
+							<button class="btn-open-modal btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>신규</button>
 						</div>
-						<!-- 
-						<div class="ms-2 head-icons">
-							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-								<i class="ti ti-chevrons-up"></i>
-							</a>
-						</div>
-						 -->
 					</div>
 				</div>
 				<!-- /Breadcrumb -->
@@ -183,10 +150,9 @@
 
 			</div>
 
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 
 		</div>
 		<!-- /Page Wrapper -->
@@ -200,51 +166,47 @@
 	            <form id="employeeForm">
 	            	<div class="modal-body p-4">
 		            	<div class="row">
-			            	<div class="col-md-4">
-			            		<div class="mb-3">
-					            	<label class="form-label">사원번호 </label>
-					            	<div class="input-icon-end position-relative">
-					            		<input type="text" id="emplNo1" name="emplNo" class="form-control"/>
-					            	</div>
+			            	<div class="col-md-6">
+			            		<div class="mb-3 d-flex align-items-center">
+					            	<label class="form-label me-2">사원번호 </label>
+				            		<input type="text" id="emplNo1" name="emplNo" class="form-control"/>
 					            </div>
 				            </div>
-				            <div class="col-md-4">
-					            <div class="mb-3">
-					            	<label class="form-label">비밀번호 </label>
-					            	<div class="input-icon-end position-relative">
-					            		<input type="text" id="emplPwd1" name="emplPwd" class="form-control"/>
-					            	</div>
+				            <div class="col-md-6">
+					            <div class="mb-3 d-flex align-items-center">
+					            	<label class="form-label me-2">비밀번호 </label>
+				            		<input type="text" id="emplPwd1" name="emplPwd" class="form-control"/>
 					            </div>
 				            </div>
-				            <div class="col-md-4">
-					            <div class="mb-3">
-					            	<label class="form-label">사원명 </label>
-					            	<div class="input-icon-end position-relative">
-					            		<input type="text" id="emplNm1" name="emplNm" class="form-control"/>
-					            	</div>
+						</div>
+						<div class="row">
+				            <div class="col-md-6">
+								<div class="mb-3 d-flex align-items-center">
+					            	<label class="form-label me-2">사원명 </label>
+				            		<input type="text" id="emplNm1" name="emplNm" class="form-control"/>
 					            </div>
 				            </div>
-		            	</div>
-		            	<div class="row">
-		            		<div class="col-md-4">
-		            			<div class="mb-3">
-			            			<label class="form-label">직위 코드 </label>
+		            		<div class="col-md-6">
+		            			<div class="mb-3 d-flex align-items-center">
+			            			<label class="form-label me-2">직위 코드 </label>
 					            	<select id="positionSelect1" name="emplPosition" class="form-control">
 					            			<option>직위 선택</option> <!-- 직위 코드 다 받아와서 동적 출력(공통코드 테이블 내부) -->
 			            			</select>
 		            			</div>
 	            			</div>
-	            			<div class="col-md-4">
-	            				<div class="mb-3">
-	            					<label class="form-label">부서 코드 </label>
+	            		</div>
+		            	<div class="row">
+	            			<div class="col-md-6">
+	            				<div class="mb-3 d-flex align-items-center">
+	            					<label class="form-label me-2">부서 코드 </label>
 				            		<select id="deptCode1" name="deptCode" class="form-control">
 				            			<option>부서 선택</option> <!-- 부서 목록 다 받아와서 동적 출력 -->
 				            		</select>
             					</div>
            					</div>
-           					<div class="col-md-4">
-	            				<div class="mb-3">
-	            					<label class="form-label">팀 코드 </label>
+           					<div class="col-md-6">
+	            				<div class="mb-3 d-flex align-items-center">
+	            					<label class="form-label me-2">팀 코드 </label>
 				            		<select id="teamCode1" name="teamCode" class="form-control">
 				            			<option>팀 선택</option> <!-- 팀 목록 다 받아와서 동적 출력 -->
 				            		</select>
@@ -253,70 +215,79 @@
 	            		</div>
 	            		<div class="row">
 	            			<div class="col-md-6">
-			            		<div class="mb-3">
-			            			<label class="form-label">생년월일 </label>
+			            		<div class="mb-3 d-flex align-items-center">
+			            			<label class="form-label me-2">생년월일 </label>
 			            			<input type="date" id="emplBrthdy1" name="emplBrthdy" class="form-control"/>
 			            		</div>
 			            	</div>
 	            			<div class="col-md-6">
-			            		<div class="mb-3">
-			            			<label class="form-label">입사 일자 </label>
+			            		<div class="mb-3 d-flex align-items-center">
+			            			<label class="form-label me-2">입사 일자 </label>
 			            			<input type="date" id="hireDate1" name="hireDate" class="form-control"/>
 			            		</div>
 			            	</div>
 	            		</div>
 	            		<div class="row">
 	            			<div class="col-md-6">
-			            		<div class="mb-3">
-			            			<label class="form-label">은행코드 </label>
+			            		<div class="mb-3 d-flex align-items-center">
+			            			<label class="form-label me-2">은행코드 </label>
 			            			<select id="bankCode1" name="bankCode" class="form-control">
 			            				<option>은행 선택</option>	<!-- 은행코드 전부 받아오기 -->
 			            			</select>
 			            		</div>
 		            		</div>
 	            			<div class="col-md-6">
-			            		<div class="mb-3">
-			            			<label class="form-label">은행지점명 </label>
+			            		<div class="mb-3 d-flex align-items-center">
+			            			<label class="form-label me-2">은행지점명 </label>
 			            			<input type="text" id="bankName1" name="bankName" class="form-control"/>
 			            		</div>
 		            		</div>
 	            		</div>
-	            		<div class="col-md-12">
-	            			<div class="mb-3">
-	            				<label class="form-label">계좌 번호 </label>
-			            		<input type="text" id="account1" name="account" class="form-control"/>
-			            	</div>
+	            		<div class="row">
+		            		<div class="col-md-12">
+		            			<div class="mb-3 d-flex align-items-center">
+		            				<label class="form-label me-2">계좌 번호 </label>
+				            		<input type="number" id="account1" name="account" class="form-control" placeholder="-없이 입력해주세요"/>
+				            	</div>
+		            		</div>
 	            		</div>
 	            		<div class="col-md-12">
-	            			<div class="mb-3">
-	            				<label class="form-label">기본 급여 </label>
-			            		<input type="text" id="basicSalary1" name="basicSalary" class="form-control"/>
+	            			<div class="mb-3 d-flex align-items-center">
+	            				<label class="form-label me-2">기본 급여 </label>
+			            		<input type="number" id="basicSalary1" name="basicSalary" class="form-control"/>
 			            	</div>
 	            		</div>
 	            		<div class="col-md-12">
 	            			<div class="mb-3">
 	            				<label class="form-label">권한 부여 </label>
-	            				<button id="addAuthBtn" class="btn btn-primary me-2 align-items-center">추가 권한</button>
-	            				<div id="authContainer">
-						        	<select id="authSelect1" name="authSelect" class="authSelect form-control">
-			           					<option>권한 선택</option>
-				           			</select>
+	            				<div id="authContainer" class="mt-2">
+	            					<div class="mb-2 input-group">
+							        	<select id="authSelect1" name="authSelect" class="authSelect form-control">
+				           					<option>권한 선택</option>
+					           			</select>
+					           			<button id="addAuthBtn" class="btn btn-primary me-2 align-items-center">추가 권한</button>
+				           			</div>
 					           	</div>
 	            			</div>
             			</div>
             			
             		</div>
 			            <button type="button" id="saveBtn" class="btn btn-primary me-2 align-items-center">등록</button>
-			            <button class="btn-close-modal btn btn-light me-2 waves-effect">닫기</button>
+			            <button class="btn-close-modal btn btn-secondary me-2 waves-effect">닫기</button>
 	            </form>
 	            <br>
 	            <div class="modal-footer">
-	            	<h4 class="modal-title">일괄등록</h4>
-		            <form id="bulkEmployeeForm" method="post" enctype="multipart/form-data">
-			           	<input type="file" name="excelFile" accept=".xlsx, .xls" required class="form-control" style="float: left; width: auto;"/>&nbsp;
-			           	<button type="button" id="bulkSaveBtn" class="btn btn-primary me-2 align-items-center">일괄 등록</button>
-		           	</form>
-	           	</div>
+				    <div class="col-md-12">
+				        <div class="mb-3 d-flex align-items-center">
+				            <label class="form-label me-2">일괄 등록</label>
+				            <form id="bulkEmployeeForm" method="post" enctype="multipart/form-data" class="d-flex align-items-center w-100">
+				                <input type="file" name="excelFile" accept=".xlsx, .xls" required class="form-control me-2" style="width: 500px;"/>
+				                <button type="button" id="bulkSaveBtn" class="btn btn-primary d-inline-flex align-items-center justify-content-center">등록</button>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
         	</div>
 		</div>
 	</div>

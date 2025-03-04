@@ -75,11 +75,11 @@ $(function(){
 	        return; // 추가 방지
 	    }
         
-		let newAuthWrapper = $("<div class='auth-wrapper'></div>"); // select와 버튼을 감쌀 div 생성
+		let newAuthWrapper = $("<div class='auth-wrapper input-group mb-2'></div>"); // select와 버튼을 감쌀 div 생성
         let newAuthSelect = $("#authSelect1").clone(); // 기존 select 복제
         newAuthSelect.removeAttr("id"); // 새로운 select의 id 제거 (중복 방지)
         
-        let removeBtn = $("<button type='button' class='remove-auth btn btn-light me-2 waves-effect'>취소</button>"); // 취소 버튼 생성
+        let removeBtn = $("<button type='button' class='remove-auth btn btn-danger me-2'>삭제</button>"); // 취소 버튼 생성
         
      	// 취소 버튼 클릭 시 해당 select 제거
         removeBtn.on("click", function() {
@@ -240,7 +240,7 @@ $(function(){
 				alert("사원이 정상적으로 등록되었습니다.");
 				modal.style.display = "none";
 				document.getElementById("employeeForm").reset();
-				
+				printList(1);
 			},
 			error: function(){
 				alert("사원 등록에 실패하였습니다.");

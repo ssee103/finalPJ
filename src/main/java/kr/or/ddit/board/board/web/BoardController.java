@@ -226,11 +226,16 @@ public class BoardController {
 	@PostMapping("/commentDelete")
 	public String commentDelete(String commentNo,String commentNos, Model model) {
 		String goPage = "";
-		log.info("댓글댓글댓글댓글댓글 : " + commentNo);
-		log.info("댓글댓글댓글댓글댓글 : " + commentNos);
 		CommentVO cmtVO = boardService.commentSelect(commentNo,commentNos);
 		
-		int result = boardService.commentDelete(commentNo,commentNos);
+			int result = 0;
+		
+		if(cmtVO.getCommentNos() != "1") {
+			result = boardService.subCmtDelete(commentNo,commentNos);
+		}else {
+			result = boardService.commentDelete(commentNo,commentNos);
+		}
+		
 		
 		if(result > 0 ) {
 			goPage = "redirect:/hrms/board/boardDetail?boardNo=" + cmtVO.getBoardNo();

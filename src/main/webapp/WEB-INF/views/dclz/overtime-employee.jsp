@@ -51,9 +51,6 @@
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
 									<input type="date" class="form-control date-range bookingrange" id="dateStart">
-									<!-- <span class="input-icon-addon">
-										<i class="ti ti-chevron-down"></i>
-									</span> -->
 								</div>
 							</div>
 							~&nbsp;&nbsp;&nbsp;
@@ -75,14 +72,13 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>일자</th>
 										<th>시작시각</th>
 										<th>종료시각</th>
 										<th>근무 시간</th>
-										<th></th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -98,10 +94,7 @@
 
 			</div>
 
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
 
 		</div>
 		<!-- /Page Wrapper -->

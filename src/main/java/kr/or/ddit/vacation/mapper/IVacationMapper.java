@@ -21,5 +21,4 @@ public interface IVacationMapper {
 
 	public List<HistoryVO> getMemberVacationList(PaginationInfoVO<HistoryVO> pageVO);
 
-
 }

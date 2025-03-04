@@ -98,7 +98,7 @@
 					<div class="dropdown profile-dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
 							<span class="avatar avatar-sm online">
-								<img src="${pageContext.request.contextPath }/assets/img/profiles/avatar-12.jpg" alt="Img" class="img-fluid rounded-circle">
+								<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid rounded-circle">
 							</span>
 						</a>
 						<div class="dropdown-menu shadow-none">
@@ -106,7 +106,7 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<span class="avatar avatar-lg me-2 avatar-rounded">
-											<img src="${pageContext.request.contextPath }/assets/img/profiles/avatar-12.jpg" alt="img">
+											<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid rounded-circle">
 										</span>
 										<div>
 											<h5 class="mb-0">${emp.emplNm}</h5>
@@ -200,8 +200,9 @@ function notify(message){ // 메시지 태그 만들기
 		type : "post",
 		contentType : "application/json;charset=utf-8",
 		success : function(res){
+			console.log(res);
 			let result = "";
-			if(res.length > 0){
+			if(res != null && res.notificationList.length > 0){
 				for(let i=0; i<res.notificationList.length; i++){
 					result += `
 						<div class="d-flex flex-column">
@@ -216,24 +217,23 @@ function notify(message){ // 메시지 태그 만들기
 						</div>
 					`;
 				}
-			}
-			result += `
-				<div class="d-flex flex-column">
-					<div class="border-bottom mb-3 pb-3">
-						<div class="d-flex">
-							<div class="flex-grow-1">
-								<p class="mb-1">알림이 없습니다.</p>
-								<span></span>
+			}else{
+				result += `
+					<div class="d-flex flex-column">
+						<div class="border-bottom mb-3 pb-3">
+							<div class="d-flex">
+								<div class="flex-grow-1">
+									<p class="mb-1">알림이 없습니다.</p>
+									<span></span>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			`;
+				`;
+			}
 			noti_content.html(result);
 		},
-		error : function(error){
-			console.log(error);
-		}
+		error : function(error){}
 	});
 }
 </script>

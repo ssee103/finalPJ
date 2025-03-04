@@ -31,4 +31,14 @@ public class CmmController {
 	public String goMain() {
 		return "cmm/main/index";
 	}
+	
+	@GetMapping("/err404")
+	public String go404() {
+		return "cmm/error/error404";
+	}
+	
+	@GetMapping("/err500")
+	public String go500() {
+		return "cmm/error/error500";
+	}
 }

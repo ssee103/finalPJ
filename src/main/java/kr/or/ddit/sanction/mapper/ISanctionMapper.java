@@ -9,6 +9,8 @@ import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
 import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
+import kr.or.ddit.sanction.vo.MsDetailVO;
+import kr.or.ddit.sanction.vo.MySanctnerVO;
 import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
 import kr.or.ddit.sanction.vo.VacationVO;
@@ -69,5 +71,25 @@ public interface ISanctionMapper {
 	public List<DocumentVO> getRefDocuments(String userId);
 
 	public int refReadUpdate(String userId, String docNo);
+
+	public int insertCustomApr(MySanctnerVO msvo);
+
+	public void insertCustomAprDetail(MsDetailVO mdvo);
+
+	public List<MySanctnerVO> getCustomSanctionLine(String userId);
+
+	public int rejectUpdate(SanctionerVO svo);
+
+	public int updtDocStatus(String docNo, String status);
+
+	public int replaceDocHtml(DocumentVO dvo);
+
+	public int deleteCustomApr(int msNo);
+
+	public int selectCustomByMsNo(int msNo);
+
+	public int deleteCustomAprDetail(int msNo);
+
+	public int updateOpinion(String userId, String docNo, String sanctnOpinion);
 	
 }

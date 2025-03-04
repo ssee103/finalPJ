@@ -28,7 +28,7 @@
                 <div class="row align-items-center mb-4">
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
-                            <a href="/hrms/education/admin/adminAllTrainingListSearch">
+                            <a href="/hrms/education/user/userMyTraining">
                                 <i class="ti ti-arrow-left me-2"></i>Back to List
                             </a>
                         </h6>

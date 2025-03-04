@@ -28,7 +28,7 @@
                 <div class="row align-items-center mb-4">
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
-                            <a href="/hrms/education/admin/adminAllTrainingListSearch">
+                            <a href="/hrms/education/user/userMyTraining">
                                 <i class="ti ti-arrow-left me-2"></i>Back to List
                             </a>
                         </h6>
@@ -109,6 +109,20 @@
                                 <p>${education.edcContent}</p>
                             </div>
                         </div>
+                        <div class="card">
+						    <div class="card-body">
+						        <h5 class="mb-3">강의 진행률</h5>
+						        <div class="progress">
+								    <div id="lectureProgress" class="progress-bar bg-primary" role="progressbar" 
+								         style="width: ${education.eeProgress}%"
+								         aria-valuenow="${education.eeProgress}" 
+								         aria-valuemin="0" 
+								         aria-valuemax="100">
+								        ${education.eeProgress}%
+								    </div>
+								</div>
+						    </div>
+						</div>
                         <div class="custom-accordion-items">
 						    <div class="accordion accordions-items-seperate" id="accordionExample">
 						        <div class="accordion-item">
@@ -133,6 +147,9 @@
 						                                <c:forEach var="cur" items="${curriculumList}">
 						                                    <div class="list-group-item border rounded mb-2 p-2">
 						                                        <h4 class="fs-14">${cur.curName}</h4>
+						                                        <button onclick="updateProgress(${cur.curNo})" class="btn btn-success">
+						                                            이 강의 완료
+						                                        </button>
 						                                        <h4 class="ratio ratio-21x9" >${cur.curUrl}</h4>
 						                                    </div>
 						                                </c:forEach>
@@ -149,12 +166,39 @@
 						        </div>
 						    </div>
 						</div>
+						
                     </div>
                 </div>
             </div>
         </div>
     </div>
+	<script>
+	function updateProgress(curOrder) {
+	    $.ajax({
+	        url: "/hrms/education/user/updateProgress",
+	        type: "POST",
+	        data: { edcNo: ${education.edcNo}, curOrder: curOrder },
+	        success: function(response) {
+	            alert("진행률이 업데이트되었습니다!");
+	            
+	            // 새로운 진행률을 받아와서 progress bar에 즉시 반영
+	            $.ajax({
+	                url: "/hrms/education/user/getProgress",
+	                type: "GET",
+	                data: { edcNo: ${education.edcNo} },
+	                success: function(newProgress) {
+	                    $("#lectureProgress").css("width", newProgress + "%").text(newProgress + "%");
+	                }
+	            });
+	        },
+	        error: function(xhr, status, error) {
+	            alert("업데이트 실패: " + error);
+	        }
+	    });
+	}
 
+
+	</script>
     <!-- jQuery -->
 <script src="${pageContext.request.contextPath }/assets/js/jquery-3.7.1.min.js"></script>
 

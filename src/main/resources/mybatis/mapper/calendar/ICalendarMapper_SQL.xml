@@ -21,6 +21,7 @@
 		INSERT INTO schedule (
 				 sch_no
 				,empl_no
+				,group_id
 				,sch_title
 				,sch_sdate
 				,sch_edate
@@ -30,9 +31,10 @@
 		)VALUES(
 				cal_seq.nextval
 				,#{emplNo}
+				,#{groupId}
 				,#{schTitle}
-				,NVL(#{schSDate}, SYSDATE)
-				,#{schEDate}
+				,TO_DATE(#{schSDate}, 'YYYY-MM-DD HH24:MI:SS')
+				,TO_DATE(#{schEDate}, 'YYYY-MM-DD HH24:MI:SS')
 				,#{schAllDay}
 				,#{schColor}
 				,#{schTextColor}
@@ -49,8 +51,8 @@
 		UPDATE schedule
 		SET
 			 sch_title = #{schTitle}
-			,sch_sdate = COALESCE(#{schSDate},sch_sdate)
-			,sch_edate = COALESCE(#{schEDate}, sch_edate)
+			,sch_sdate = COALESCE(TO_DATE(#{schSDate}, 'YYYY-MM-DD HH24:MI:SS'), sch_sdate)
+        	,sch_edate = COALESCE(TO_DATE(#{schEDate}, 'YYYY-MM-DD HH24:MI:SS'), sch_edate)
 			,sch_color= #{schColor}
 			,sch_textcolor= #{schTextColor}
 			,sch_allday= #{schAllDay}
@@ -76,14 +78,14 @@
 			sch_no
 		    ,empl_no
 		    ,sch_title
-		    ,sch_sdate
-		    ,sch_edate
+		    ,TO_CHAR(sch_sdate, 'YYYY-MM-DD HH24:MI:SS') AS sch_sdate
+        	,TO_CHAR(sch_edate, 'YYYY-MM-DD HH24:MI:SS') AS sch_edate
 		    ,sch_allday
 		    ,sch_color
-		    ,sch_textcolor	
+		    ,sch_textcolor
+		    ,group_id
 		FROM schedule
-		WHERE empl_no = #{emplNo}
+		 WHERE (empl_no = #{emplNo} OR group_id = #{groupId})
 	</select>
-	
 	
 </mapper>

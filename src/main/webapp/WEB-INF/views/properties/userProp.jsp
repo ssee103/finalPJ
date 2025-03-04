@@ -66,7 +66,7 @@
 			<!-- Breadcrumb -->
 			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 				<div class="my-auto mb-2">
-					<h2 class="mb-1">대여가능한 물품조회</h2>
+					<h2 class="mb-1">물품 대여</h2>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 					<div class="me-2 mb-2">
@@ -88,7 +88,7 @@
 			<!-- Leads List -->
 			<div class="card">
 				<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-					<h5>대여가능한 물품조회</h5>
+					<h5>대여가능한 물품</h5>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 						<div class="me-3">
 							<div class="input-icon-end position-relative">
@@ -228,10 +228,9 @@
 			</div>
 			<!-- /Leads List -->
 			</div> <!-- content -->
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2001 - 2025 &copy; HRMS.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">HERMES</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 			<!-- 대여 신청 모달 -->
 			<div class="modal fade" id="rentalModal" tabindex="-1" aria-labelledby="rentalModalLabel" aria-hidden="true">
     			<div class="modal-dialog">
@@ -243,23 +242,23 @@
             		<div class="modal-body">
 		                <form id="rentalForm">
 		                    <div class="mb-3">
-		                        <label for="rentalPropName" class="form-label">물품명:</label>
+		                        <label for="rentalPropName" class="form-label">물품명</label>
 		                        <input type="text" id="rentalPropName" class="form-control" readonly>
 		                    </div>
 		                    <div class="mb-3">
-		                        <label for="rentalPropContent" class="form-label">설명:</label>
+		                        <label for="rentalPropContent" class="form-label">설명</label>
 		                        <textarea id="rentalPropContent" class="form-control" rows="3" readonly></textarea>
 		                    </div>
 		                    <div class="mb-3 text-center">
-		                        <label class="form-label">물품 사진:</label><br>
+		                        <label class="form-label">물품 사진</label><br>
 		                        <img id="rentalImage" src="" alt="이미지 없음" style="max-width: 200px;">
 		                    </div>
 		                    <div class="mb-3">
-		                        <label for="rentalSdate" class="form-label">대여일:</label>
+		                        <label for="rentalSdate" class="form-label">대여일</label>
 		                        <input type="date" id="rentalSdate" class="form-control" readonly>
 		                    </div>
 		                    <div class="mb-3">
-		                        <label for="rentalEdate" class="form-label">반납 예정일:</label>
+		                        <label for="rentalEdate" class="form-label">반납 예정일</label>
 		                        <input type="date" id="rentalEdate" class="form-control" required>
 		                    </div>
 		                    <input type="hidden" id="rentalPropNo">
@@ -267,7 +266,7 @@
 		                </form>
             		</div>
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">닫기</button>
+	                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">닫기</button>
 	                <button type="button" id="rentalSaveBtn" class="btn btn-primary">대여 신청</button>
 	            </div>
         </div>
@@ -276,21 +275,9 @@
 </div>
 </div>
 <!-- /Main Wrapper -->
-
- 	<!-- Toast 알림 메시지 -->
-	<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100">
-		<div id="toastMessage" class="toast hide align-items-center text-white bg-primary border-0 shadow-lg" role="showToastMessage" aria-live="assertive" aria-atomic="true">
-				<div class="d-flex">
-						<div class="toast-body" id="toastBody">
-								<!-- 메시지가 여기에 표시됨 -->
-						</div>
-						<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-				</div>
-		</div>
-	</div>
-	<!-- Toast 알림 메시지 -->
-
-
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const rentalButtons = document.querySelectorAll(".rental-btn");
@@ -340,16 +327,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// jsp 에 직접 추가하는경우 toast.addClass(`bg-\${type}`);
-// 토스트 메시지 표시 함수 (Bootstrap Toast)
-function showToastMessage(message, type = "primary") {
-  let toast = $("#toastMessage");
-  toast.removeClass("bg-primary bg-success bg-danger bg-warning");
-  toast.addClass(`bg-\${type}`);
-  $("#toastBody").text(message);
-  let toastInstance = new bootstrap.Toast(toast[0]);
-  toastInstance.show();
-}
 </script>
 </body>
 
@@ -369,10 +346,6 @@ function showToastMessage(message, type = "primary") {
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
-
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -380,10 +353,6 @@ function showToastMessage(message, type = "primary") {
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

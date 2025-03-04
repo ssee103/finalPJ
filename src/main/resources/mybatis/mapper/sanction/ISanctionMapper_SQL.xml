@@ -3,7 +3,11 @@
 <mapper namespace="kr.or.ddit.sanction.mapper.ISanctionMapper">
 
 <select id="getDocSort">
-	select ds_code, ds_type, ds_form, ds_passive
+	select 
+			ds_code, 
+			ds_type, 
+			ds_form, 
+			ds_passive
 	from doc_sort
 	order by ds_flow
 </select>
@@ -15,19 +19,33 @@
 </select>
 
 <select id="getEmplRealInfo" resultType="kr.or.ddit.employee.vo.EmployeeVO" parameterType="kr.or.ddit.employee.vo.EmployeeVO">
-	select empl_no, empl_pwd, empl_nm,
-		
+	select 
+			empl_no, 
+			empl_pwd, 
+			empl_nm,
 			(select cc_name from common_code where cg_group = 'POSITION' and cc_code = #{emplPosition}) as empl_position,
 			(select dept_name from department where dept_code = #{deptCode}) as dept_code, 
 			(select team_name from team where team_code = #{teamCode}) as team_code,
 			empl_signature,
 			TO_CHAR(empl_brthdy, 'YYYY-MM-DD') as empl_brthdy,
 			TO_CHAR(hire_date, 'YYYY-MM-DD') as hire_date, 
-			retire_date, retire_resn, enable, profile_imgpath, basic_salary,bank_code, 
-			bank_name, account, zip_code, addr_main, addr_detail, empl_telno, empl_email, empl_hobby, 
+			retire_date,
+			retire_resn, 
+			enable, 
+			profile_imgpath, 
+			basic_salary,
+			bank_code, 
+			bank_name, account, 
+			zip_code, 
+			addr_main, 
+			addr_detail, 
+			empl_telno, 
+			empl_email, 
+			empl_hobby, 
 			TO_CHAR(empl_mrnry, 'YYYY-MM-DD') as empl_mrnry, 
 			householder_at,
-			vehicle_number, empl_gender
+			vehicle_number, 
+			empl_gender
 	from employee
 	where empl_no = #{emplNo}
 </select>
@@ -52,17 +70,31 @@
 </insert>
 
 <select id="getDocumentsInfo" parameterType="string" resultType="kr.or.ddit.sanction.vo.DocumentVO">
-	select doc_no, ds_code, writer_no, doc_title, TO_CHAR(doc_date, 'YYYY-MM-DD') as doc_date, doc_content, doc_remark, 
-	doc_period, doc_temp, TO_CHAR(sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt, dcrb_allow, doc_apv, final_date, file_identify
-	from document
-	where writer_no = #{userId}
-	order by TO_NUMBER(doc_no) desc
+	SELECT 
+		doc_no
+		, ds.ds_type as ds_code
+		, writer_no
+		, doc_title
+		, TO_CHAR(doc_date, 'YYYY-MM-DD') as doc_date
+		, doc_content
+		, doc_remark
+		, doc_period
+		, doc_temp
+		, TO_CHAR(sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt
+		, dcrb_allow
+		, doc_apv
+		, final_date
+		, file_identify
+	FROM document d
+	LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
+	WHERE writer_no = #{userId}
+	ORDER BY TO_NUMBER(doc_no) DESC
 </select>
 
 <select id="getApvDocInfo" parameterType="string" resultType="kr.or.ddit.sanction.vo.DocumentVO">
 	select 
 	    d.doc_no,
-	    d.ds_code,
+	    ds.ds_type as ds_code,
 	    (select empl_nm from employee where empl_no = d.writer_no) as writer_no,
 	    d.doc_title,
 	    d.doc_content,
@@ -73,6 +105,7 @@
 	    a.sanctn_status,
 	    a.sanctn_date
 	from document d
+	LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
 	join sanctioner a on d.doc_no = a.doc_no
 	where a.sanctner_no = #{userId}
 	order by TO_NUMBER(doc_no) desc
@@ -92,19 +125,23 @@
     <result property="docApv" column="DOC_APV"/>
     <result property="dcrbAllow" column="dcrb_allow"/>
     <result property="fileIdentify" column="file_identify"/>
+    <result property="finalDate" column="final_date"/>
     <!-- 기타 Document 컬럼 매핑 -->
 
     <!-- 결재자 정보를 collection으로 매핑 -->
     <collection property="aprRefList" ofType="kr.or.ddit.sanction.vo.SanctionerVO">
-        <result property="sanctnerNo" column="SANCTNER_NO"/>
-        <result property="sanctnStatus" column="SANCTN_STATUS"/>
-        <result property="sanctnDate" column="SANCTN_DATE"/>
-        <result property="sanctnFlow" column="SANCTN_FLOW"/>
-    </collection>
+	    <result property="sanctnerNo" column="sanctner_no"/>
+	    <result property="sanctnStatus" column="sanctn_status"/>
+	    <result property="sanctnDate" column="sanctn_date"/>
+	    <result property="sanctnFlow" column="sanctn_flow"/>
+	    <result property="sanctnerPosition" column="sanctner_position"/>
+	    <result property="sanctnerRealNo" column="sanctner_real_no"/>
+	    <result property="sanctnOpinion" column="sanctn_opinion"/>
+	</collection>
 </resultMap>
 
 <select id="getApvDocDetail" parameterType="string" resultMap="documentResultMap">
-	select 
+    select 
 	    d.doc_no,
 	    d.ds_code,
 	    e.empl_nm as writer_no,
@@ -114,16 +151,22 @@
 	    d.doc_apv,
 	    d.dcrb_allow,
 	    d.file_identify,
-	    TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt,
-	    (select empl_nm from employee where empl_no = a.sanctner_no) as sanctner_no,
+	    d.sanctn_rqstdt,
+	    d.final_date,
+	    e2.empl_nm as sanctner_no,
 	    (select cc_name from common_code where cc_code = a.sanctn_status and cg_group = 'SANCTN_STATUS') as sanctn_status,
 	    a.sanctn_date,
 	    a.sanctn_flow,
-	    e.empl_position,
-	    e.empl_signature
+	    a.sanctn_opinion,
+	    (select cc_name from common_code 
+             where cg_group = 'POSITION' and cc_code = e2.empl_position) as sanctner_position,
+	    e.empl_position as empl_position,
+	    e.empl_signature,
+	    e2.empl_no as sanctner_real_no
 	from document d
 	join sanctioner a on d.doc_no = a.doc_no
 	join employee e on e.empl_no = d.writer_no
+	join employee e2 on e2.empl_no = a.sanctner_no
 	where d.doc_no = #{docNo}
 	order by a.sanctn_flow
 </select>
@@ -159,7 +202,7 @@
 </update>
 
 <select id="thisDocApvStatus" parameterType="kr.or.ddit.sanction.vo.SanctionerVO" resultType="kr.or.ddit.sanction.vo.SanctionerVO">
-	select sanctn_status, sanctn_flow
+	select sanctn_status, sanctn_flow, sanctn_date
 	from sanctioner
 	where sanctner_no = #{sanctnerNo}
 	and doc_no = #{docNo}
@@ -171,7 +214,8 @@
 	    WHEN sanctn_flow = #{sanctnFlow} THEN '05'
 	    WHEN sanctn_flow > #{sanctnFlow} THEN '06'
 	    ELSE sanctn_status
-	END
+	END,
+		sanctn_date = sysdate
 	where doc_no = #{docNo}
 	  and sanctn_flow >= #{sanctnFlow}
 </update>
@@ -184,7 +228,8 @@
 
 <update id="updateDocStatus" parameterType="string">
 	update document
-	set doc_apv = '02'
+	set doc_apv = '02',
+		final_date = sysdate
 	where doc_no = #{docNo}
 </update>
 
@@ -208,7 +253,9 @@
 
 <update id="allowFinalStatus" parameterType="string">
 	update document
-	set doc_apv = '02'
+	set 
+		doc_apv = '02',
+		final_date = sysdate
 	where doc_no = #{docNo}
 </update>
 
@@ -231,10 +278,13 @@
 </update>
 
 <select id="getRefList" parameterType="string" resultType="kr.or.ddit.sanction.vo.ReferenceVO">
-	select doc_no, 
-		   (select empl_nm from employee where empl_no = ref_no) as ref_no, 
-		   ref_read
-	from reference
+	select r.doc_no, 
+		   (select empl_nm from employee where empl_no = r.ref_no) as ref_no, 
+		   r.ref_read,
+		   (select cc_name from common_code 
+             where cg_group = 'POSITION' and cc_code = e.empl_position) as ref_position
+	from reference r
+	join employee e on r.ref_no = e.empl_no
 	where doc_no = #{docNo}
 </select>
 
@@ -253,5 +303,101 @@
 		ref_read = 'Y'
 	where doc_no = #{docNo}
 	and ref_no = #{userId}
+</update>
+
+<insert id="insertCustomApr" parameterType="kr.or.ddit.sanction.vo.MySanctnerVO" useGeneratedKeys="true">
+	<selectKey keyProperty="msNo" order="BEFORE" resultType="int">
+		select my_sanctner_seq.nextval from dual
+	</selectKey>
+	
+	insert into my_sanctner (ms_no, empl_no, ms_title, ms_date)
+	values(#{msNo}, #{emplNo}, #{msTitle}, sysdate)
+
+</insert>
+
+<insert id="insertCustomAprDetail" parameterType="kr.or.ddit.sanction.vo.MsDetailVO">
+	insert into ms_detail (ms_no, csanctner_no, csanctner_flow)
+	values(#{msNo}, #{csanctnerNo}, #{csanctnerFlow})
+</insert>
+
+<resultMap id="customAprMap" type="kr.or.ddit.sanction.vo.MySanctnerVO">
+    <id property="msNo" column="ms_no"/>
+    <result property="emplNo" column="empl_no"/>
+    <result property="msTitle" column="ms_title"/>
+    <result property="msDate" column="ms_date"/>
+
+    <collection property="customAprList" ofType="kr.or.ddit.sanction.vo.MsDetailVO">
+        <result property="csanctnerNo" column="csanctner_no"/>
+        <result property="csanctnerFlow" column="csanctner_flow"/>
+        <result property="emplNm" column="empl_nm"/>
+    	<result property="emplPosition" column="empl_position"/>
+    </collection>
+</resultMap>
+
+<select id="getCustomSanctionLine" parameterType="string" resultMap="customAprMap">
+	select 	a.ms_no,
+			a.empl_no, 
+			a.ms_title, 
+			TO_CHAR(a.ms_date, 'YYYY-MM-DD') as ms_date,
+			b.csanctner_no, 
+			b.csanctner_flow,
+			d.empl_nm as empl_nm,
+			(select cc_name from common_code 
+             where cg_group = 'POSITION' and cc_code = d.empl_position) as empl_position
+	from my_sanctner a
+	join ms_detail b on a.ms_no = b.ms_no
+	join employee d on b.csanctner_no = d.empl_no
+	where a.empl_no = #{userId}
+	order by b.csanctner_flow
+</select>
+
+<update id="rejectUpdate" parameterType="kr.or.ddit.sanction.vo.SanctionerVO">
+	update sanctioner
+	set sanctn_status = CASE 
+	    WHEN sanctn_flow = #{sanctnFlow} THEN '04'
+	    WHEN sanctn_flow > #{sanctnFlow} THEN '04'
+	    ELSE sanctn_status
+	END,
+		sanctn_date = sysdate
+	where doc_no = #{docNo}
+	  and sanctn_flow >= #{sanctnFlow}
+</update>
+
+<update id="updtDocStatus" parameterType="string">
+	update document
+	set	doc_apv = #{status},
+		final_date = sysdate
+	where doc_no = #{docNo}
+</update>
+
+<update id="replaceDocHtml" parameterType="kr.or.ddit.sanction.vo.DocumentVO">
+	update document
+	set
+		doc_content = #{docContent}
+	where doc_no = #{docNo}	
+</update>
+
+<select id="selectCustomByMsNo" parameterType="int" resultType="int">
+	select COUNT(*)
+	from ms_detail
+	where ms_no = #{msNo}
+</select>
+
+<delete id="deleteCustomAprDetail" parameterType="int">
+	delete from ms_detail
+	where ms_no = #{msNo}
+</delete>
+
+<delete id="deleteCustomApr" parameterType="int">
+	delete from my_sanctner
+	where ms_no = #{msNo}
+</delete>
+
+<update id="updateOpinion" parameterType="string">
+	update sanctioner
+	set
+		sanctn_opinion = #{sanctnOpinion}
+	where sanctner_no = #{userId}
+	and doc_no = #{docNo}	
 </update>
 </mapper>

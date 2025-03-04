@@ -85,19 +85,20 @@ public class PropController {
     @PostMapping("/returnItem")
     public ResponseEntity<String> returnItem(@RequestBody Map<String, Object> requestData) {
         if (!requestData.containsKey("propNo")) {
-            return ResponseEntity.badRequest().body("propNo가 없습니다.");
+            return ResponseEntity.badRequest().body("propNo가 없음");
         }
         int propNo;
         try {
             propNo = Integer.parseInt(requestData.get("propNo").toString());
         } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("propNo 값이 올바르지 않습니다.");
+            return ResponseEntity.badRequest().body("오류");
         }
         boolean success = propSerivce.updateReturnDate(propNo);
         if (success) {
+        	propSerivce.increaseProp(propNo);
             return ResponseEntity.ok("반납 완료");
         } else {
-            return ResponseEntity.badRequest().body("이미 반납된 물품이거나 오류 발생");
+            return ResponseEntity.badRequest().body("오류");
         }
     }
     

@@ -70,11 +70,11 @@
 	</select>
 	
 	<select id="getMemberVacationHistoryTotalRecord" resultType="int">
-		select
-			count(his_no)
-		from history
-		where empl_no = #{emplNo}
-		and his_type = '03'
+		SELECT
+			COUNT(his_no)
+		FROM history
+		WHERE empl_no = #{emplNo}
+		AND his_type = '03'
 		<if test="dateStart != null and dateStart != ''">
 			AND TO_DATE(his_sdate) >= TO_DATE(#{dateStart})
 		</if>
@@ -84,10 +84,10 @@
 	</select>
 	
 	<select id="getMemberVacationList" resultType="kr.or.ddit.sanction.vo.HistoryVO">
-		select
+		SELECT
 			b.*
-		from (
-		    select 
+		FROM (
+		    SELECT 
 		    	a.*
 		        , ROW_NUMBER() OVER (ORDER BY a.his_no DESC) rnum
 		    FROM (
@@ -100,9 +100,9 @@
 					, his_stime
 					, his_etime
 					, his_creatdt
-				from history
-				where empl_no = #{emplNo}
-				and his_type = '03'
+				FROM history
+				WHERE empl_no = #{emplNo}
+				AND his_type = '03'
 				<if test="dateStart != null and dateStart != ''">
 					AND TO_DATE(his_sdate) >= TO_DATE(#{dateStart})
 				</if>
@@ -111,4 +111,5 @@
 				</if>
 		<include refid="CmmSQL.pagingFooter"/>
 	</select>
+	
 </mapper>

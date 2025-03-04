@@ -43,6 +43,7 @@ public class PromotionController {
 		String emplNm = null;
 		String deptCode= null;
 		String position = null;
+		String sorting = null;
 		
 		PaginationInfoVO<EvaluationVO> pageVO = new PaginationInfoVO<>();
 		
@@ -50,13 +51,15 @@ public class PromotionController {
 		if(paramMap.get("emplNm") != null && paramMap.get("emplNm") != "") emplNm = paramMap.get("emplNm");
 		if(paramMap.get("deptCode") != null && paramMap.get("deptCode") != "") deptCode = paramMap.get("deptCode");
 		if(paramMap.get("position") != null && paramMap.get("position") != "") position = paramMap.get("position");
+		if(paramMap.get("sorting") != null && paramMap.get("sorting") != "") sorting = paramMap.get("sorting");
+		log.info("sortingsortingsortingsorting : " + sorting);
 		int totalRecord = promService.getTotalRecord(emplNo, emplNm, deptCode, position);
 		
 		
 		pageVO.setCurrentPage(currentPage);
 		pageVO.setTotalRecord(totalRecord);
 		
-		List<EvaluationVO> evaluList = promService.getEvaluList(pageVO, emplNo, emplNm, deptCode, position);
+		List<EvaluationVO> evaluList = promService.getEvaluList(pageVO, emplNo, emplNm, deptCode, position, sorting);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("pageVO", pageVO);
 		resultMap.put("evaluList", evaluList);

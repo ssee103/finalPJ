@@ -29,8 +29,8 @@ public class PromServiceImpl implements IPromService {
 	}
 	@Override
 	public List<EvaluationVO> getEvaluList(PaginationInfoVO<EvaluationVO> pageVO, String emplNo,
-			String emplNm, String deptCode, String position) {
-		return promMapper.getEvaluList(pageVO, emplNo, emplNm, deptCode, position);
+			String emplNm, String deptCode, String position, String sorting) {
+		return promMapper.getEvaluList(pageVO, emplNo, emplNm, deptCode, position, sorting);
 	}
 	@Override
 	public int promoteTarget(String emplNo) {

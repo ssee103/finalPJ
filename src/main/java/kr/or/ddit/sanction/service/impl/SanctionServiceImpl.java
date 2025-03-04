@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.cmm.service.IFileService;
@@ -16,10 +17,14 @@ import kr.or.ddit.sanction.vo.DocSortVO;
 import kr.or.ddit.sanction.vo.DocumentVO;
 import kr.or.ddit.sanction.vo.EvaluationVO;
 import kr.or.ddit.sanction.vo.HistoryVO;
+import kr.or.ddit.sanction.vo.MsDetailVO;
+import kr.or.ddit.sanction.vo.MySanctnerVO;
 import kr.or.ddit.sanction.vo.ReferenceVO;
 import kr.or.ddit.sanction.vo.SanctionerVO;
 import kr.or.ddit.sanction.vo.VacationVO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class SanctionServiceImpl implements ISanctionService {
 	
@@ -59,9 +64,9 @@ public class SanctionServiceImpl implements ISanctionService {
 	@Override
 	public int createNewDoc(DocumentVO dvo) {
 		
-		String seq = fileService.selectFileSeq();
 		
 		if(dvo.getDocFile() != null) {
+			String seq = fileService.selectFileSeq();
 			
 			for (MultipartFile file : dvo.getDocFile()) {
 		        try {
@@ -73,9 +78,9 @@ public class SanctionServiceImpl implements ISanctionService {
 				}
 			}
 			
+			dvo.setFileIdentify(seq);
 		}
 		
-		dvo.setFileIdentify(seq);
 		int cnt = mapper.createNewDoc(dvo);
 		
 		// 받아온 결재자 사원번호 목록
@@ -275,6 +280,86 @@ public class SanctionServiceImpl implements ISanctionService {
 	public int refReadUpdate(String userId, String docNo) {
 		
 		int cnt = mapper.refReadUpdate(userId, docNo);
+		
+		return cnt;
+	}
+
+	@Override
+	public int insertCustomApr(MySanctnerVO msvo) {
+		
+		int cnt = mapper.insertCustomApr(msvo);
+		
+		int flowOrder = 1;
+		
+		List<String> customAprList = msvo.getCsanctnerNoList();
+		
+		for(String apr : customAprList) {
+			MsDetailVO mdvo = new MsDetailVO();
+			mdvo.setMsNo(msvo.getMsNo());
+			mdvo.setCsanctnerNo(apr);
+			mdvo.setCsanctnerFlow(flowOrder++);
+			mapper.insertCustomAprDetail(mdvo);
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public List<MySanctnerVO> getCustomSanctionLine(String userId) {
+		
+		List<MySanctnerVO> msvo = mapper.getCustomSanctionLine(userId);
+		
+		return msvo;
+	}
+
+	@Override
+	public int rejectUpdate(SanctionerVO svo) {
+		
+		int cnt = mapper.rejectUpdate(svo);
+		
+		return cnt;
+	}
+
+	@Override
+	public int updtDocStatus(String docNo, String status) {
+		
+		int cnt = mapper.updtDocStatus(docNo, status);
+		
+		return cnt;
+	}
+
+	@Override
+	public int replaceDocHtml(DocumentVO dvo) {
+		
+		int cnt = mapper.replaceDocHtml(dvo);
+		
+		return cnt;
+	}
+
+	@Override
+	@Transactional
+	public int deleteCustomApr(int msNo) {
+		
+		int cnt = 0;
+		
+		// 먼저 해당 문서 번호의 개수 받아오기
+		int msNoCount = mapper.selectCustomByMsNo(msNo);
+		
+		// 결재자 자체 먼저 삭제(무결성 오류)
+		int count = mapper.deleteCustomAprDetail(msNo);
+		
+		if(msNoCount == count) {
+			cnt = mapper.deleteCustomApr(msNo);
+			return cnt;
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public int updateOpinion(String userId, String docNo, String sanctnOpinion) {
+		
+		int cnt = mapper.updateOpinion(userId, docNo, sanctnOpinion);
 		
 		return cnt;
 	}

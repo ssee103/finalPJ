@@ -48,7 +48,7 @@
 							<div class="card-header bg-dark">
 								<div class="d-flex align-items-center">
 									<span class="avatar avatar-lg avatar-rounded border border-white border-2 flex-shrink-0 me-2">
-										<img alt="Img" src="#" style="display:none;visibility:hidden;"><noscript><img src="#" alt="Img"></noscript>
+										<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;">
 									</span>
 									<div>
 										<h5 class="text-white mb-1">${emp.emplNm} (${emp.emplNo })</h5>
@@ -85,9 +85,8 @@
 						</div>
 					</div>
 					<div class="col-xl-4 d-flex">
-						<div class="card flex-fill">
+						<div class="card flex-fill border-primary attendance-bg">
 							<div class="card-body">
-								 
 								<div class="attendance-circle-progress mx-auto mb-3" style="width:150px;padding-top: 50px;" data-value='65'>
 									<div class="mb-3 text-center">
 										<h6 class="fw-medium text-gray-5 mb-2">현재 시각</h6>
@@ -103,63 +102,21 @@
 										<i class="ti ti-fingerprint text-primary me-1"></i>
 										퇴근시간 :  <div id="todayDclzEtime"></div>
 									</div>
-									<button class="btn btn-dark w-100" id="punchOutBtn">출근</button>
+								</div>
+								<div class="text-center" style="padding-top: 50px; padding-bottom: 50px">
+									<button class="btn btn-primary w-100" id="punchOutBtn">출근</button>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-xl-4 d-flex">
-						<!-- <div class="card flex-fill border-primary attendance-bg"> -->
-							<div class="card-body">
-								<div class="mb-4 text-center">
-									<h4>캘린더</h4>
-									<div id="calendar"></div>
-								</div>
-							</div>
-						<!-- </div> -->
-					</div>
-				<div class="row"> <!-- 둘 째줄 -->
-					<div class="col-xl-12 d-flex">
-						<div class="row flex-fill">
-							<div class="col-xl-3 col-md-6">
-								<div class="card">
-									<div class="card-body">
-										<span class="avatar avatar-sm bg-primary mb-2"><i class="ti ti-clock-stop"></i></span>
-										<h2 class="mb-2">? / <span class="fs-20 text-gray-5"> ?</span></h2>
-										<h3>근태기록</h3>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6">
-								<div class="card">
-									<div class="card-body">
-										<span class="avatar avatar-sm bg-dark mb-2"><i class="ti ti-clock-up"></i></span>
-										<h2 class="mb-2">? / <span class="fs-20 text-gray-5"> ?</span></h2>
-										<h3>연차기록</h3>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6">
-								<div class="card">
-									<div class="card-body">
-										<span class="avatar avatar-sm bg-info mb-2"><i class="ti ti-calendar-up"></i></span>
-										<h2 class="mb-2">? / <span class="fs-20 text-gray-5"> ?</span></h2>
-										<h3>개인문서함</h3>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6">
-								<div class="card">
-									<div class="card-body">
-										<span class="avatar avatar-sm bg-pink mb-2"><i class="ti ti-calendar-star"></i></span>
-										<h2 class="mb-2">? / <span class="fs-20 text-gray-5"> ?</span></h2>
-										<h3>결재문서함</h3>
-									</div>
-								</div>
+						<div class="card-body">
+							<div class="mb-4 text-center">
+								<h4>캘린더</h4>
+								<div id="calendar"></div>
 							</div>
 						</div>
 					</div>
-				</div>
 				 <!-- 셋째줄 -->
 				<div class="row">
 					<!-- 팀 연락처 들어가는 곳 -->
@@ -169,7 +126,7 @@
 									<div class="d-flex align-items-center justify-content-between flex-wrap">
 										<h5>부서원</h5>
 										<div>
-											<a href="/hrms/hr/hr" class="btn btn-light btn-sm">자세히보기</a>
+											<a href="/hrms/hr/hr" class="btn btn-light btn-sm">더보기</a>
 										</div>
 									</div>
 								</div>
@@ -193,21 +150,21 @@
 								            <button class="btn btn-light btn-sm" style="margin-left: 10px;" id="boardChangeBtn">공지사항</button>
 								        </div>
 								
-								        <a href="#" class="btn btn-light btn-sm" style="margin-right: 10px;" id="boardsDetail">자세히보기</a>
+								        <a href="#" class="btn btn-light btn-sm" style="margin-right: 10px;" id="boardsDetail">더보기</a>
 								    </div>
 								</div>
 
 
 								<!-- 게시판 내부 -->
-								<div class="card-body d-flex justify-content-center align-items-center">
-								    <div class="col-md-10">
-								        <table class="table mb-0">
+								<div class="card-body d-flex justify-content-center align-items-center" style="padding: 0;">
+								    <div class="w-100 h-100">
+								        <table class="table mb-0" style="width: 100%; height: 100%; border-collapse: collapse;">
 								            <thead>
 								                <tr>
-								                    <th>제목</th>
-								                    <th>작성자</th>
-								                    <th>조회수</th>
-								                    <th>작성날짜</th>
+								                    <th style="text-align: center;">제목</th>
+								                    <th style="text-align: center;">작성자</th>
+								                    <th style="text-align: center;">조회수</th>
+								                    <th style="text-align: center;">작성날짜</th>
 								                </tr>
 								            </thead>
 								            <tbody id="boardTable">
@@ -215,6 +172,8 @@
 								        </table>
 								    </div>
 								</div>
+
+
 								<!-- /게시판 내부 -->
 							</div>
 						</div>
@@ -224,12 +183,10 @@
 			</div>
 			<!-- /Page Wrapper -->
 			
-			<!-- footer -->
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
-			<!-- /footer -->
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
+			
 		</div>
 	<!-- /Main Wrapper -->
 <!-- jQuery -->
@@ -246,10 +203,6 @@
 
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
-
-<!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
 
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
@@ -375,7 +328,7 @@ function getTodayPunchOut(){
 			// 결과값의 날짜 구하기
 			let lastDclzDate = res.dclzDate
 			// 결과값과 오늘날짜 비교해서 같으면 위에 출력하기
-			if(today == lastDclzDate.substr(0,10)){
+			if(lastDclzDate != null && lastDclzDate != "" && today == lastDclzDate.substr(0,10)){
 				todayDclzStime.text(res.dclzStime.substr(11))
 				if(res.dclzEtime != null){
 					todayDclzEtime.text(res.dclzEtime.substr(11))
@@ -405,7 +358,7 @@ function printList(){
 		    let today = year + "-" + month + "-" + day // 오늘날짜 예시)2025-02-05
 		    let lastDclzDate = ""; // 가장최근 출근일자를 넣기위한 변수
 		    
-		    if(res.dalList.length > 0){ // 지금까지 한번도 출근을 안했을수도 있으니까 null체크
+		    if(res.dalList != null && res.dalList != "" && res.dalList.length > 0){ // 지금까지 한번도 출근을 안했을수도 있으니까 null체크
 				lastDclzDate = res.dalList[0].dclzDate.substr(0,10); // 가장최근 출근을 찍은 일자. 연,월,일만 가져옴 예시)2025-02-05
 				let lastDclz = res.dalList[0];
 
@@ -505,8 +458,8 @@ function printBoards(data){
 	for(let i=0; i<data.length; i++){
 		let date = data[i].boardDate.substr(0,11);
 		tr += `
-			<tr>
-				<td>\${data[i].boardTitle}</td>
+			<tr class="text-center">
+				<td class="text-start">\${data[i].boardTitle}</td>
 				<td>\${data[i].boardWriter}</td>
 				<td>\${data[i].boardHit}</td>
 				<td>\${date}</td>
@@ -587,6 +540,7 @@ function getCalendar () {
 		                        allDay: event.allDay
 						}));
 						successCallback(convertedEvents);
+						$(".fc-scrollgrid-sync-inner").css("background-color", "white");
 					},
 					error: function (xhr, status, error) {
 						console.log("실패");

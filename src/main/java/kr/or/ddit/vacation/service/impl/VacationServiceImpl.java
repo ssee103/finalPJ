@@ -38,6 +38,5 @@ public class VacationServiceImpl implements IVacationService{
 	public List<HistoryVO> getMemberVacationList(PaginationInfoVO<HistoryVO> pageVO) {
 		return vacationMapper.getMemberVacationList(pageVO);
 	}
-	
 
 }

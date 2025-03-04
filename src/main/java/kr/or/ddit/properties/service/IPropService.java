@@ -22,6 +22,7 @@ public interface IPropService {
 		
 	// 개인 대여 물품확인 페이지 - 반납기능
 	public boolean updateReturnDate(int propNo);	
+	public void increaseProp(int propNo);
 	
 	// 사원들에게 제공하는 물품리스트 관리 페이지
 	public List<PropertiesVO> findAll();
@@ -49,6 +50,8 @@ public interface IPropService {
 
 	/* getPropAllList */
 	public int selectPropListCount(PropertiesVO propVO);
+
+
 
 	
 

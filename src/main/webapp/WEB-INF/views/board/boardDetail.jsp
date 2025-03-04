@@ -31,19 +31,11 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
+		
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -110,11 +102,11 @@
 													<p style="font-size:15px">첨부파일이 존재하지 않습니다.</p>
 													</c:when>
 													<c:otherwise>
-														<div class="card access-wrap border-0 flex-fill">
+														<div class="access-wrap border-0 flex-fill">
 															<div class="row justify-content-start">
 																<c:forEach items="${fileList}" var="file">
 																	<div class="col-12"> <!--d-inline-flex  -->
-																	   <div class="card p-2 border-0 shadow-sm">
+																	   <div class="p-2 border-0">
 																	      <div class="d-flex align-items-center">
 																	      	<c:set var="fileName" value="${file.fileName}"/>
 																			<c:set var="words" value="${fn:split(fileName,'.')}"/>
@@ -158,32 +150,13 @@
 					                	<c:choose>
 					                		<c:when test="${sessionScope.userId eq board.boardWriter }">
 							                   <button type="button" class="btn btn-primary me-2" id="updateBtn">수정</button>
-							                   <button type="button" class="btn btn-white border" id="deleteBtn">삭제</button>
+							                   <button type="button" class="btn btn-secondary border" id="deleteBtn">삭제</button>
 					                		</c:when>
 					                		<c:otherwise>
 					                			<button type="button" class="btn btn-primary me-2" id="updateBtn" style="display: none;">수정</button>
-							                   <button type="button" class="btn btn-white border" id="deleteBtn" style="display: none;">삭제</button>
+												<button type="button" class="btn btn-secondary border" id="deleteBtn" style="display: none;">삭제</button>
 					                		</c:otherwise>
 					                	</c:choose>
-					                   	<!-- Delete Modal -->
-											<!-- <div class="modal fade" id="delete_modal">
-												<div class="modal-dialog modal-dialog-centered">
-													<div class="modal-content">
-														<div class="modal-body text-center">
-															<span class="avatar avatar-xl bg-transparent-danger text-danger mb-3">
-																<i class="ti ti-trash-x fs-36"></i>
-															</span>
-															<h4 class="mb-1">Confirm Delete</h4>
-															<p class="mb-3">You want to delete all the marked items, this cant be undone once you delete.</p>
-															<div class="d-flex justify-content-center">
-																<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-																<a href="faq.html" class="btn btn-danger">Yes, Delete</a>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div> -->
-										<!-- /Delete Modal -->
 					                </div>
                                 </div>
                             </div>
@@ -204,20 +177,20 @@
 					                                               	<c:when test="${cmt.commentAnon eq 'Y' }">
 					                                               		<c:choose>
 					                                               			<c:when test="${sessionScope.userId eq cmt.commentWriter}">
-						                                               			<h5 class="text-gray fs-14">작성자 : <span class="text-dark">익명(본인)</span> </h5>
+						                                               			<h5 class="text-gray fs-14"><span class="text-dark">익명(본인)</span> </h5>
 					                                               			</c:when>
 					                                               			<c:otherwise>
-					                                               				<h5 class="text-gray fs-14">작성자 : <span class="text-dark">익명</span> </h5>
+					                                               				<h5 class="text-gray fs-14"><span class="text-dark">익명</span> </h5>
 					                                               			</c:otherwise>	
 					                                               		</c:choose>
 					                                               	</c:when>
 					                                               	<c:otherwise>
-						                                                <h5 class="text-gray fs-14">작성자 : <span class="text-dark">${cmt.commentWriter}</span> </h5>
+						                                                <h5 class="text-gray fs-14"><span class="text-dark">${cmt.commentWriter}</span> </h5>
 					                                               	</c:otherwise>
 				                                               </c:choose>
 				                                               <div class="d-flex justify-content-between align-items-center">
 				                                               		<div class="d-flex align-items-center gap-2">
-						                                               <span class="text-muted small">${cmt.commentDate}</span>
+						                                               <span class="text-muted small">${fn:substring(cmt.commentDate,0,16)}</span>
 						                                               <span>${cmt.commentTitle}</span>
 						                                                 <!--대댓글 버튼  -->
 						                                               <c:choose>
@@ -232,12 +205,17 @@
 				                                               		<div class="d-flex align-items-center gap-1">
 													                	<c:choose>
 													                		<c:when test="${sessionScope.userId eq cmt.commentWriter}">
-																                   <button type="button" class="btn btn-sm btn-primary px-2 py-1 cmtUbtn">수정</button>
-																                   <button type="button" class="btn btn-sm btn-white border px-2 py-1 cmtDbtn">삭제</button>
+													                			<form action="/hrms/board/commentDelete" method="post" class="cmtDelForm">
+													                				<input type="hidden" name="commentNo" value="${cmt.commentNo}"/>
+													                				<input type="hidden" name="commentNos" value="${cmt.commentNos}"/>
+													                				<input type="hidden" name="depth" value="${cmt.depth}"/>
+																	                   <button type="button" class="btn btn-sm btn-primary px-2 py-1 cmtUbtn">수정</button>
+																	                   <button type="button" class="btn btn-sm btn-secondary border px-2 py-1 cmtDbtn">삭제</button>
+													                			</form>
 													                		</c:when>
 													                		<c:otherwise>
 													                			<button type="button" class="btn btn-sm btn-primary px-2 py-1 cmtUbtn" style="display: none;">수정</button>
-															                   	<button type="button" class="btn btn-sm btn-white border px-2 py-1 cmtDbtn" style="display: none;">삭제</button>
+															                   	<button type="button" class="btn btn-sm btn-secondary border px-2 py-1 cmtDbtn" style="display: none;">삭제</button>
 													                		</c:otherwise>
 													                	</c:choose>
 				                                               		</div>
@@ -250,6 +228,7 @@
 							                				<form action="/hrms/board/replyCommentInsert" method="post" class="replyForm">
 							                					<input type="hidden" name="commentWriter" value="${sessionScope.userId}"/>
 							                					<input type="hidden" name="boardNo" value="${board.boardNo}"/>
+							                					<input type="hidden" name="commentNos" id="cmtNos"/> <!--츄츄  -->
 							                					<input type="hidden" name="commentNo" value="${cmt.commentNo}"/>
 							                					<input type="hidden" name="commentAnon" class="replyAnonHidden" value="N"/>
 							                					<textarea class="form-control form-control-sm replyContent" rows="2" name="commentTitle" placeholder="답글 작성"></textarea>
@@ -263,11 +242,12 @@
 							                			<!--/대댓글 입력창  -->
 							                		</div>
 							                		<!--댓글 삭제 폼  -->
-							                		 <form action="/hrms/board/commentDelete" method="post" id="cmtDelForm">
-									                	<input type="hidden" name="commentNo" value="${cmt.commentNo}"/>
-									                	<input type="hidden" name="commentNos" value="${cmt.commentNos}"/>
+							                		<%--  <form action="/hrms/board/commentDelete" method="post" id="cmtDelForm">
+							                		 
+									                	<input type="text" name="commentNo" value="${cmt.commentNo}"/>
+									                	<input type="text" name="commentNos" value="${cmt.commentNos}"/>
 									                	<input type="hidden" name="depth" value="${cmt.depth}"/>
-									                </form>
+									                </form> --%>
 							                	</c:forEach>
 					                		</c:otherwise>
 					                	</c:choose>
@@ -305,10 +285,7 @@
 		    </div>
 
 			<!-- Footer -->
-			<div class="footer d-sm-flex align-items-center justify-content-between bg-white border-top p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed & Developed By <a href="#" class="text-primary">Dreams</a></p>
-			</div>
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
 			<!-- /Footer -->
         </div>
 		<!-- /Page Wrapper -->
@@ -332,10 +309,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<%-- <!-- Datatable JS -->
-	<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	 --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -343,10 +316,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -364,7 +333,7 @@ $(function(){
 	let cmtBtn = $("#cmtBtn");
 	let cmtArea = $("#cmtArea");
 	let cmtForm = $("#cmtForm");
-	let cmtDelForm = $("#cmtDelForm");
+	let cmtDelForm = $(".cmtDelForm");
 	let cmtUbtn = $(".cmtUbtn");
 	let cmtDbtn = $(".cmtDbtn");
 	//수정버튼 클릭시 수정폼페이지 이동
@@ -376,9 +345,11 @@ $(function(){
 	
 	//삭제버튼
 	deleteBtn.on("click", function(){
-		if(confirm("정말 삭제하시겠습니까?")){
-			delForm.submit();
-		}
+		showConfirmModal("정말 삭제하시겠습니까?").then((isConfirmed) => {
+			if(isConfirmed){
+				delForm.submit();
+			}
+		});
 	});
 	
 	//////////////////////////////////////////댓글 영역
@@ -391,7 +362,7 @@ $(function(){
 		$("#cmtAnonHidden").val(cmtAnon ? "Y" : "N");
 	
 		if(comment == null || comment == ""){
-			alert("댓글 내용을 입력해주세요!");
+			showToastMessage("댓글 내용을 입력해주세요!", "warning");
 			return false;
 		}
 		cmtForm.submit();
@@ -412,16 +383,20 @@ $(function(){
 		form.find(".replyAnonHidden").val(replyAnon ? "Y" : "N");
 		
 		if(comment == null || comment == ""){
-			alert("댓글 내용을 입력해주세요!");
+			showToastMessage("댓글 내용을 입력해주세요!", "warning");
 			return false;
 		}
 		form.submit();
 	})
 	
 	cmtDbtn.on("click",function(){
-		if(confirm("정말 삭제하시겠습니까?")){
-			cmtDelForm.submit();
-		}
+		
+		showConfirmModal("정말 삭제하시겠습니까?").then((isConfirmed) => {
+			if(isConfirmed){
+				$(this).closest("form").submit();
+			}
+		});
+		
 	})
 	
 });

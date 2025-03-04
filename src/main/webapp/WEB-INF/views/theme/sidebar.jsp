@@ -61,8 +61,6 @@
 								<li><a href="/hrms/attendance/page">출퇴근</a></li>
 								<li><a href="/hrms/dclz/overtime/employee">연장근무</a></li>
 								<li><a href="#">야간근무</a></li>
-								<li><a href="#">출장</a></li>
-								<li><a href="#">조퇴</a></li>
 							</ul>
 						</li>
 						<li class="submenu">
@@ -90,11 +88,13 @@
 								<li>
 									<a href="/hrms/hr/hr">조직도</a>
 								</li>
+								<c:if test="${admin eq true }">
+									<li>
+										<a href="/hrms/hr/hrAdmin">조직도 관리</a>
+									</li>
+								</c:if>
 								<li>
-									<a href="#">나의 인사카드 관리</a>
-								</li>
-								<li>
-									<a href="#">징계</a>
+									<a href="/hrms/employee/employeeInfo">나의 인사카드 관리</a>
 								</li>
 							</ul>
 						</li>
@@ -105,14 +105,14 @@
 							</a>
 							<ul>
 								<li>
-									<a href="/hrms/prop/userProp">대여가능물품</a>
+									<a href="/hrms/prop/userProp">물품 대여하기</a>
 								</li>
 								<li>
-									<a href="/hrms/prop/userRentalAll">대여한 물품</a>
+									<a href="/hrms/prop/userRentalAll">대여한 물품보기</a>
 								</li>
 								<c:if test="${admin eq true }">
 									<li>
-										<a href="/hrms/prop/propList">전체 대여물품</a>
+										<a href="/hrms/prop/propList">전체 대여물품 관리</a>
 									</li>
 								</c:if>
 							</ul>
@@ -123,13 +123,13 @@
 								<span class="menu-arrow"></span>
 							</a>
 							<ul>
-								<li><a href="/hrms/education/user/userAllTrainingListSearch">사내교육</a></li>
-								<li><a href="/hrms/education/user/userMyTraining">수강중인 교육</a></li>
+								<li><a href="/hrms/education/user/userAllTrainingListSearch">사내교육 수강신청</a></li>
+								<li><a href="/hrms/education/user/userMyTraining">수강중인 사내교육</a></li>
 								<c:if test="${admin eq true }">
-									<li><a href="/hrms/education/admin/adminAllTrainingListSearch">사내교육 목록</a></li>
+									<li><a href="/hrms/education/admin/adminAllTrainingListSearch">사내교육목록 관리</a></li>
 								</c:if>
 								<c:if test="${admin eq true }">
-									<li><a href="/hrms/education/admin/adminAllTrainingApplication">교육신청자 목록</a></li>
+									<li><a href="/hrms/education/admin/adminAllTrainingApplication">교육신청자 관리</a></li>
 								</c:if>
 							</ul>
 						</li>
@@ -139,13 +139,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="/hrms/vacation/page">
 								<i class="ti ti-calendar-event"></i><span>&nbsp;휴가</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<i class="ti ti-building"></i><span>&nbsp;복리후생</span>
 							</a>
 						</li>
 						
@@ -181,7 +176,6 @@
 									<li><a href="/hrms/attendance/authorityPage">출퇴근 기록</a></li>
 									<li><a href="/hrms/dclz/overtime/authorityPage">연장근무 기록</a></li>
 									<li><a href="/hrms/vacation/authorityPage">휴가 기록</a></li>
-									<li><a href="#">더추가하기</a></li>
 								</ul>
 							</li>
 						</c:if>

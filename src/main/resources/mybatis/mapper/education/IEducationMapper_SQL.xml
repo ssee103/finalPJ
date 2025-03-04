@@ -51,39 +51,7 @@
 			AND edc_sort LIKE '%' || #{education.edcSort} || '%'
 		</if>
 	</sql>
-	
-	<select id="사용자_교육전체_목록_조회" parameterType="kr.or.ddit.education.vo.EducationVO">
-		SELECT 
-			  edc_no
-			, edc_sort
-			, edc_way
-			, educator
-			, edc_target
-			, edc_grade
-			, edc_psncpa
-			, edc_title
-			, edc_content
-			, recruit_sdate
-			, recruit_edate
-			, edc_sdate
-			, edc_edate
-			, edc_active
-		FROM education
-	</select>
-	
-	<select id="내가 신청한 교육명, 책 이름" parameterType="kr.or.ddit.education.vo.EducationVO">
-		SELECT
-		    em.empl_no,
-			e.edc_title,                             <!-- 강의 제목  -->
-			b.book_name
-		FROM edc_request r
-		JOIN employee em ON em.empl_no = r.edc_aplc
-		JOIN education e ON e.edc_no = r.edc_no
-		JOIN edc_book eb ON eb.edc_no = e.edc_no
-		JOIN book b      ON b.book_no = eb.book_no
-		WHERE em.empl_no = 'test';
-	</select>
-	
+
 	<insert id="insertBook" parameterType="kr.or.ddit.education.vo.BookVO">
 	INSERT INTO book (
 		  BOOK_NO
@@ -99,6 +67,7 @@
     )
 	</insert>
 	
+	<!-- 유저 - 나의 교육 조회 -->
 	<select id="selectEducationListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EducationVO">
 		SELECT COUNT(edc_no)
 		FROM education
@@ -143,6 +112,9 @@
 		]]>
 	</select>
 	
+	
+	
+	
 	<!-- 교육 상세 정보 조회 1 -->
     <select id="getEducationDetail" parameterType="int" resultType="kr.or.ddit.education.vo.EducationVO">
         SELECT
@@ -168,13 +140,14 @@
   <!--  교육 커리큘럼 조회 2 -->
     <select id="getCurriculumByEdcNo" parameterType="int" resultType="kr.or.ddit.education.vo.CurriculumVO">
 	    SELECT 
-	          cur_no 
-	        , edc_no
-	        , cur_name
-	        , cur_url
-	        , cur_explain
-	    FROM curriculum 
-	    WHERE edc_no = '1' 
+	          c.cur_no 
+	        , c.cur_name
+	        , c.cur_explain
+	        , c.cur_url
+	        , e.edc_no AS edcNo
+	    FROM curriculum c
+	    JOIN education e ON c.cur_no = e.cur_no
+	    WHERE e.edc_no = #{edcNo}
 	    ORDER BY cur_no ASC 
 	</select>
 
@@ -217,13 +190,16 @@
   <!--  관리자의 교육 커리큘럼 조회 2 -->
     <select id="getCurriculumAdminByEdcNo" parameterType="int" resultType="kr.or.ddit.education.vo.CurriculumVO">
 	    SELECT 
-	          cur_no 
-	        , edc_no
-	        , cur_name
-	        , cur_url
-	        , cur_explain
-	    FROM curriculum 
-	    WHERE edc_no = '1' 
+	          c.cur_no 
+	        , c.cur_name
+	        , c.cur_explain
+	        , c.cur_url
+	        , c.cur_order
+	        , c.cur_title
+	        , e.edc_no AS edcNo
+	    FROM curriculum c
+	    JOIN education e ON c.cur_no = e.cur_no
+	    WHERE e.edc_no = #{edcNo}
 	    ORDER BY cur_no ASC 
 	</select>
 
@@ -265,13 +241,14 @@
   	<!-- 나의 교육 내용 조회 2 -->
     <select id="getCurriculumMyLectureByEdcNo" parameterType="int" resultType="kr.or.ddit.education.vo.CurriculumVO">
 	    SELECT 
-	          cur_no 
-	        , edc_no
-	        , cur_name
-	        , cur_url
-	        , cur_explain
-	    FROM curriculum 
-	    WHERE edc_no = '1' 
+	          c.cur_no 
+	        , c.cur_name
+	        , c.cur_explain
+	        , c.cur_url
+	        , e.edc_no AS edcNo
+	    FROM curriculum c
+	    JOIN education e ON c.cur_no = e.cur_no
+	    WHERE e.edc_no = #{edcNo}
 	    ORDER BY cur_no ASC 
 	</select>
 
@@ -288,14 +265,15 @@
         WHERE e.edc_no = #{edcNo}
     </select>
     
-    
+    <!-- 나의 교육 진행중 조회 -->
     <select id="selectEducationMyListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
 		SELECT COUNT(ee_number)
 		FROM emp_edc
-		WHERE empl_no = '202501002'
+		WHERE empl_no = #{emplNo}
 	</select>
 	
-	<select id="selectEducationMyList" parameterType="map" resultType="kr.or.ddit.education.vo.EducationVO">
+	<!-- 나의 교육 진행중 조회 -->
+	<select id="selectEducationMyList" parameterType="string" resultType="kr.or.ddit.education.vo.EducationVO">
 		SELECT * 
 		    FROM (
 		        SELECT 
@@ -315,7 +293,7 @@
 		        FROM education e
 		        LEFT JOIN emp_edc ee 
 		            ON e.EDC_NO = ee.EDC_NO  
-		        WHERE ee.EMPL_NO = '202501002'
+		        WHERE ee.EMPL_NO = #{emplNo}
 		    <include refid="edcTitleSearchList"/>
 			<include refid="educatorSearchList"/>
 			<include refid="edcTargetSearchList"/>
@@ -326,10 +304,54 @@
 		]]>
 	</select>
 	
+	<!--  ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ -->
+	
+	
+	<!-- 나의 교육 전체 조회 -->
+    <select id="selectEducationMyHistoryListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
+		SELECT COUNT(ee_number)
+		FROM emp_edc
+		WHERE empl_no = #{emplNo}
+	</select>
+	
+	<!-- 나의 교육 전체 조회 -->
+	<select id="selectEducationMyHistoryList" parameterType="string" resultType="kr.or.ddit.education.vo.EducationVO">
+		SELECT * 
+		    FROM (
+		        SELECT 
+		            e.EDC_NO AS edcNo,
+		            e.EDC_SORT AS edcSort,
+		            e.EDUCATOR AS educator,
+		            e.EDC_TARGET AS edcTarget,
+		            e.EDC_GRADE AS edcGrade,
+		            e.EDC_TITLE AS edcTitle,
+		            e.EDC_CONTENT AS edcContent,
+		            e.EDC_SDATE AS edcSdate,
+		            e.EDC_EDATE AS edcEdate,
+		            e.EDC_ACTIVE AS edcActive,
+		            NVL(ee.EE_STATUS, '미신청') AS eeStatus,  
+		            NVL(TO_CHAR(ee.EE_CDATE, 'YYYY-MM-DD HH24:MI:SS'), '-') AS eeCdate,
+		            ROW_NUMBER() OVER (ORDER BY e.EDC_NO DESC) rnum
+		        FROM education e
+		        LEFT JOIN emp_edc ee 
+		            ON e.EDC_NO = ee.EDC_NO  
+		        WHERE ee.EMPL_NO = #{emplNo}
+		    <include refid="edcTitleSearchList"/>
+			<include refid="educatorSearchList"/>
+			<include refid="edcTargetSearchList"/>
+			<include refid="edcSortSearchList"/>
+		        ) a
+		<![CDATA[
+			WHERE a.rnum >= #{page.startRow} AND a.rnum <= #{page.endRow}
+		]]>
+	</select>
+	
+	
+	
 	 <select id="selectEduApplicationListCount" resultType="int" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
 		SELECT COUNT(ee_number)
 		FROM emp_edc
-		WHERE empl_no = '202501002'
+		WHERE empl_no = #{emplNo}
 	</select>
 	
 	<select id="selectEduApplicationList" parameterType="map" resultType="kr.or.ddit.education.vo.EducationVO">
@@ -393,6 +415,14 @@
 	    FROM EDUCATION
 	    GROUP BY EDC_GRADE
 	</select>
+	
+	<select id="selectAllCur" resultType="kr.or.ddit.education.vo.CurriculumVO">
+	    SELECT DISTINCT CUR_TITLE AS curTitle, 
+		    MIN(CUR_NO) AS curNo
+	    FROM CURRICULUM
+	    GROUP BY CUR_TITLE
+	</select>
+	
 
 	<insert id="insertEducationWithCurriculum" parameterType="kr.or.ddit.education.vo.EducationVO" useGeneratedKeys="false">
 		<selectKey keyProperty="edcNo" resultType="int" order="BEFORE">
@@ -414,6 +444,7 @@
 			, EDC_EDATE
 			, EDC_ACTIVE
 			, BOOK_NO
+			, CUR_NO
 		)
 	    VALUES (
 	    	  #{edcNo}
@@ -431,6 +462,7 @@
 	    	, #{edcEdate}
 	    	, #{edcActive}
 	    	, #{bookNo}
+	    	, #{curNo}
 	    )
 	</insert>
 	
@@ -448,11 +480,158 @@
 	    WHERE edc_aplc = #{edcAplc}
 	</update>
 	
+	<!-- 특정 신청 정보 조회 -->
+	<select id="getEdcRequestByAplcAndEdcNo" parameterType="map" resultType="kr.or.ddit.education.vo.EdcRequestVO">
+	    SELECT edc_no, edc_aplc
+	    FROM edc_request
+	    WHERE edc_aplc = #{edcAplc}
+	    AND edc_no = #{edcNo}
+	</select>
+
+	
+	<!-- EMP_EDC 테이블에 데이터 추가 -->
+	<insert id="insertEmpEdc" parameterType="kr.or.ddit.education.vo.EmpEdcVO">
+	    INSERT INTO EMP_EDC (
+	        EE_NUMBER,
+	        EDC_NO,
+	        EMPL_NO,
+	        EE_STATUS,
+	        EE_BACKDATE,
+	        EE_CDATE,
+	        EE_PROGRESS
+	    ) VALUES (
+	        EMP_EDC_SEQ.NEXTVAL, 
+	        #{edcNo}, 
+	        #{emplNo}, 
+	        #{eeStatus}, 
+	        NULL, 
+	        SYSDATE, 
+	        #{eeProgress}
+	    )
+	</insert>
+		
+	
+	
+	
 	<update id="deactivateEducation" parameterType="kr.or.ddit.education.vo.EducationVO">
 	    UPDATE education
 	    SET edc_active = 'N'
 	    WHERE edc_no = #{edcNo}
 	</update>
+
+	<select id="selectCurNo" resultType="int">
+		select CUR_SEQ.nextval
+		FROM dual
+	</select>
+
+	<!-- 커리큘럼 생성하기 -->
+	<insert id="insertCurriculum" parameterType="kr.or.ddit.education.vo.CurriculumVO">
+	    INSERT INTO CURRICULUM (
+	        CUR_NO,
+	        CUR_TITLE,
+	        CUR_NAME,
+	        CUR_URL,
+	        CUR_EXPLAIN,
+	        CUR_ORDER
+	    ) VALUES (
+	        #{curNo},
+	        #{curTitle},
+	        #{curName},
+	        #{curUrl},
+	        #{curExplain},
+	        (
+				SELECT NVL(MAX(CUR_ORDER), 0) + 1 
+				FROM CURRICULUM 
+				WHERE CUR_NO = #{curNo}
+			)
+	    )
+	</insert>
+	
+	 <!-- 관리자 - 교육상세정보 수정  -->
+	<update id="updateEducation" parameterType="kr.or.ddit.education.vo.EducationVO">
+        UPDATE EDUCATION
+        SET EDC_TITLE = #{edcTitle},
+            EDC_SORT = #{edcSort},
+            EDC_WAY = #{edcWay},
+            EDUCATOR = #{educator}
+        WHERE EDC_NO = #{edcNo}
+    </update>
+
+	<!-- 관리자 - 교육 내용 수정  -->
+	<update id="updateContent" parameterType="kr.or.ddit.education.vo.EducationVO">
+        UPDATE EDUCATION
+        SET EDC_CONTENT = #{edcContent}
+        WHERE EDC_NO = #{edcNo}
+    </update>
+    
+    <!-- 관리자 - 교육 책 수정  -->
+    <update id="updateBook" parameterType="kr.or.ddit.education.vo.EducationVO">
+        UPDATE EDUCATION
+        SET BOOK_NO = #{bookNo}
+        WHERE EDC_NO = #{edcNo}
+    </update>
+    
+     <!-- 관리자 - 교육 커리큘럼 수정  -->
+	<update id="updateCurriculum" parameterType="kr.or.ddit.education.vo.CurriculumVO">
+	    UPDATE CURRICULUM
+	    SET 
+	        CUR_TITLE = #{curTitle},
+	        CUR_NAME = #{curName},
+	        CUR_URL = #{curUrl},
+	        CUR_EXPLAIN = #{curExplain}
+	    WHERE CUR_NO = #{curNo} AND CUR_ORDER = #{curOrder}
+	</update>
+	    
+	<!-- 유저 - 교육진행도 업데이트 -->
+    <update id="updateEducationProgress">
+        UPDATE emp_edc
+        SET EE_PROGRESS = #{progress}
+        WHERE EDC_NO = #{edcNo} AND EMPL_NO = #{emplNo}
+    </update>
+
+    <!-- 유저 - 교육진행도 업데이트 -->
+    <select id="getEducationProgress" resultType="int">
+        SELECT COALESCE(EE_PROGRESS, 0)
+        FROM emp_edc
+        WHERE EDC_NO = #{edcNo} AND EMPL_NO = #{emplNo}
+    </select>
+
+    <!-- 유저 - 교육진행도 업데이트 -->
+    <select id="getTotalCurriculumCount" resultType="int">
+    	SELECT COUNT(*) 
+	    FROM curriculum c
+	    JOIN education e ON c.cur_no = e.cur_no 
+	    WHERE e.edc_no = #{edcNo}
+	</select>
+    
+
+	<!-- /* 관리자 : 해당 교육 수강자 조회 */ -->
+	<select id="selectEducationListenerCount" resultType="int" parameterType="kr.or.ddit.education.vo.EducationVO">
+		SELECT COUNT(edc_no)
+		FROM education
+		WHERE edc_no = #{edcNo}
+	</select>
+	
+	<!-- /* 관리자 : 해당 교육 수강자 조회 */ -->
+	<select id="selectEducationListenerList" parameterType="map" resultType="kr.or.ddit.education.vo.EducationVO">
+	    SELECT *
+	    FROM (
+	        SELECT 
+	            ed.empl_no,
+	            em.empl_nm,
+	            ed.ee_status,
+	            ed.ee_progress,
+	            e.edc_no,
+	            ROW_NUMBER() OVER (ORDER BY e.edc_no DESC) AS rnum
+	        FROM education e
+	        JOIN emp_edc ed ON e.edc_no = ed.edc_no
+	        JOIN employee em ON em.empl_no = ed.empl_no
+	        WHERE e.edc_no = #{edcNo}
+	    ) a
+	    <![CDATA[
+	    WHERE a.rnum >= #{page.startRow} AND a.rnum <= #{page.endRow}
+	    ]]>
+	</select>
 
 	
 </mapper>

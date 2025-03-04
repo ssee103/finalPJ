@@ -40,6 +40,8 @@ public class SecurityConfig {
 				authorize.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ASYNC).permitAll() // forward, async 로 오는 요청은 인증이 필요하지않기때문에 모두에게하용
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적리소스 접근허용
 					.requestMatchers("/assets/**").permitAll() // static/assets 이 경로의 하위에있는 애들을 모두 접근허용
+					.requestMatchers("/hrms/cmm/err404").permitAll()
+					.requestMatchers("/hrms/cmm/err500").permitAll()
 					.requestMatchers("/hrms/react/**").permitAll() // 자사홈페이지 요청경로는 로그인 안해도됨
 					//.anyRequest().permitAll() // 이건 모든페이지 접근허용
 					.anyRequest().authenticated() // 로그인완성하면 이거 주석해제하고 모든페이지 접근허용하는 코드제거

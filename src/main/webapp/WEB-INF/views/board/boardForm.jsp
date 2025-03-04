@@ -38,18 +38,9 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
-
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<!-- Page Wrapper -->
 		<div class="page-wrapper cardhead">
@@ -67,6 +58,12 @@
 
 				<div class="row">
 					<div class="col-lg-12">
+							<a href="/hrms/board/boardList" class="back-icon d-flex align-items-center fs-15 fw-medium mb-3 d-inline-flex">
+								<span class=" d-flex justify-content-center align-items-center rounded-circle me-2">
+									<i class="ti ti-arrow-left"></i>
+								</span>
+								목록으로 돌아가기
+							</a>
 						<div class="card">
 							<div class="card-header">
 								<h5 class="card-title">건의사항${name}</h5>
@@ -108,11 +105,11 @@
 											<div class="mb-3">
 												<div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-sm-3 row-cols-1 justify-content-center">
 													<c:if test="${status eq 'u'}">
-														<div class="card access-wrap border-0 flex-fill">
+														<div class="access-wrap border-0 flex-fill">
 															<div class="row justify-content-start">
 																<c:forEach items="${fileList}" var="file">
 																	<div class="col-12">
-																	   <div class="card p-2 border-0 shadow-sm">
+																	   <div class="p-2 border-0">
 																	      <div class="d-flex align-items-center">
 																	      	<c:set var="fileName" value="${file.fileName}"/>
 																			<c:set var="words" value="${fn:split(fileName,'.')}"/>
@@ -154,10 +151,10 @@
 										<div class="text-end">
 											<input type="button" value="${name}" id="addBtn" class="btn btn-primary"/>
 											<c:if test="${status eq 'u'}">
-												<input type="button" id="cancelBtn" value="취소" class="btn btn-dark">
+												<input type="button" id="cancelBtn" value="취소" class="btn btn-secondary">
 											</c:if>
 											<c:if test="${status ne 'u'}">
-												<input type="button" id="listBtn" value="목록" class="btn btn-dark">
+												<input type="button" id="listBtn" value="취소" class="btn btn-secondary">
 											</c:if>
 										</div>
 									</div>
@@ -167,10 +164,9 @@
 					</div>
 				</div>
 
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /page wrapper -->
 	</div>
@@ -191,10 +187,6 @@
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<%-- <!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
- --%>
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -202,10 +194,6 @@
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -239,11 +227,11 @@ $(function(){
 		$("#boardAnonHidden").val(boardAnon ? "Y" : "N");
 		
 		if(boardTitle == null || boardTitle == ""){
-			alert("제목을 입력해주세요!");
+			showToastMessage("제목을 입력해주세요!", "warning");
 			return false;
 		} 
 		if(boardContent == null || boardContent == ""){
-			alert("내용을 입력해주세요!");
+			showToastMessage("내용을 입력해주세요!", "warning");
 			return false;
 		}
 		if($(this).val() == "수정"){

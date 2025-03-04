@@ -12,7 +12,7 @@
 	<meta name="keywords" content="admin, estimates, bootstrap, business, html5, responsive, Projects">
 	<meta name="author" content="Dreams technologies - Bootstrap Admin Template">
 	<meta name="robots" content="noindex, nofollow">
-	<title>전체교육목록관리</title>
+	<title>전체교육 목록관리</title>
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 				<!-- Breadcrumb -->
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
-						<h2 class="mb-1">전체교육목록관리</h2>
+						<h2 class="mb-1">전체교육 목록관리</h2>
 					</div>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 						<div class="me-2 mb-2">
@@ -52,12 +52,10 @@
 							<a href="#" data-bs-toggle="modal" data-bs-target="#add_book" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>교재 등록하기</a>
 						</div>&nbsp;
 						<div class="mb-2">
+							<a href="#" data-bs-toggle="modal" data-bs-target="#add_curriculum" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>커리큘럼 등록하기</a>
+						</div>&nbsp;
+						<div class="mb-2">
 							<a href="#" data-bs-toggle="modal" data-bs-target="#add_project" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>강의 등록하기</a>
-						</div>
-						<div class="ms-2 head-icons">
-							<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-								<i class="ti ti-chevrons-up"></i>
-							</a>
 						</div>
 					</div>
 				</div>
@@ -66,26 +64,21 @@
 				<!-- Leads List -->
 				<div class="card">
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-						<h5>전체교육목록관리</h5>
+						<h5>전체교육 목록조회</h5>
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육명" style="width: 100px;" id="edcTitle">
+									<input type="text" class="form-control" placeholder="강의제목" style="width: 100px;" id="edcTitle">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="강사" style="width: 100px;" id="educator">
+									<input type="text" class="form-control" placeholder="교육담당" style="width: 100px;" id="educator">
 								</div>
 							</div>
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육분류" style="width: 100px;" id="edcSort">
-								</div>
-							</div>
-							<div class="me-3">
-								<div class="input-icon-end position-relative">
-									<input type="text" class="form-control" placeholder="교육대상" style="width: 100px;" id="edcTarget">
+									<input type="text" class="form-control" placeholder="교육대상부서" style="width: 160px;" id="edcTarget">
 								</div>
 							</div>
 							<input type="button" class="btn btn-primary d-flex align-items-center" value="검색" id="searchBtn">
@@ -96,14 +89,14 @@
 							<table class="table datatable">
 								<thead class="thead-light">
 									<tr>
-										<th>강의제목</th>
-										<th>교육담당</th>
-										<th>수강정원</th>
-										<th>수강기간</th>
-										<th>교육대상</th>
-										<th>모집기간</th>
-										<th>교육해당부서</th>
-										<th></th>
+										<th style="text-align: center;">강의제목 (자세히보기)</th>
+										<th style="text-align: center;">교육유형</th>
+										<th style="text-align: center;">교육담당</th>
+										<th style="text-align: center;">교육대상부서</th>
+										<th style="text-align: center;">수강정원</th>
+										<th style="text-align: center;">모집기간</th>
+										<th style="text-align: center;">수강기간</th>
+										<th style="text-align: center;">수정/비활성화</th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -185,19 +178,19 @@
 								            	            </a>
 								            	        </p>
 								            	    </td>
-						                            <td>\${edu.educator}</td>
-						                            <td>\${edu.edcPsncpa}</td>
-						                            <td>
-						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
-						                            </td>
-						                            <td>\${edu.edcTarget}</td>
-						                            <td>
+								            	    <td style="text-align: center;">\${edu.edcSort}</td>
+						                            <td style="text-align: center;">\${edu.educator}</td>
+						                            <td style="text-align: center;">\${edu.edcTarget}</td>
+						                            <td style="text-align: center;">\${edu.edcPsncpa}</td>
+						                            <td style="text-align: center;">
 						                                <span class="text-nowrap">\${edu.recruitSdateFormatted} ~ \${edu.recruitEdateFormatted}</span>
 						                            </td>
-						                            <td>\${edu.edcSort}</td>
-						                            <td>
+						                            <td style="text-align: center;">
+						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
+						                            </td>
+						                            <td style="text-align: center;">
 						                                <div class="action-icon d-inline-flex">
-						                                    <a href="#" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_activity"><i class="ti ti-edit"></i></a>
+						                                	<a href="/hrms/education/admin/adminTrainingDetail/\${edu.edcNo}"><i class="ti ti-edit"></i></a>
 						                                    <a href="javascript:void(0);" class="deleteLecture-btn" data-edc-no="\${edu.edcNo}">
 							                                    <i class="ti ti-trash"></i>
 							                                </a>
@@ -296,7 +289,7 @@
 										<div class="col-md-6">
 										    <div class="mb-3">
 										        <label class="form-label">교육교재</label>
-										        <select class="select" id="edcBookNo">
+										        <select class="select" id="bookNo">
 										            <option>선택</option>
 										        </select>
 										    </div>
@@ -309,10 +302,11 @@
 										            type: "GET",
 										            dataType: "json",
 										            success: function(books) {
-										                let edcBookNo = $("#edcBookNo");
+										                let bookNo = $("#bookNo");
+										                console.log(bookNo,"책넘버--------------------------------------------------------");
 										                books.forEach(function(book) {
-										                    let option = `<option value=\${book.bookNo}>\${book.bookName}</option>`;
-										                    edcBookNo.append(option);
+										                    let option = `<option value="\${book.bookNo}">\${book.bookName}</option>`;
+										                    bookNo.append(option);
 										                });
 										            },
 										            error: function(xhr, status, error) {
@@ -321,20 +315,19 @@
 										        });
 										    });
 										</script>
-
-										<!-- 
-										<div class="col-md-12">
-										    <div class="mb-3">
-										        <label class="form-label">교육 커리큘럼</label>
-										        <div id="curriculumContainer">
-										        </div>
-										        <button type="button" class="btn btn-secondary mt-2" id="addCurriculum">+ 커리큘럼 추가</button>
-										    </div>
+										<div class="col-md-6">
+											<div class="mb-3">
+												<label class="form-label">교육분류</label>
+												<select class="select" id="edcSort2">
+													<option>경영</option>
+													<option>기술</option>
+													<option>마케팅</option>
+													<option>어학</option>
+													<option>기타</option>
+												</select>
+											</div>
 										</div>
-										-->
-
-										
-										<div class="col-md-4">
+										<!-- <div class="col-md-6">
 											<div class="mb-3">
 												<label class="form-label">교육분류</label>
 												<select class="select"  id="edcSort2">
@@ -360,9 +353,21 @@
 										            }
 										        });
 										    });
-										</script>
-										
+										</script> -->
 										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="form-label">교육대상부서</label>
+												<select class="select" id="edcTarget2">
+													<option>전체</option>
+													<option>01_경영인사</option>
+													<option>02_마케팅</option>
+													<option>03_연구개발</option>
+													<option>04_운영</option>
+													<option>05_재무회계</option>
+												</select>
+											</div>
+										</div>
+										<!-- <div class="col-md-4">
 											<div class="mb-3">
 												<label class="form-label">교육대상부서</label>
 												<select class="select" id="edcTarget2">
@@ -388,9 +393,24 @@
 										            }
 										        });
 										    });
-										</script>
+										</script> -->
 										
 										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="form-label">교육대상직급</label>
+												<select class="select" id="edcGrade2">
+													<option>전체</option>
+													<option>사원</option>
+													<option>대리</option>
+													<option>과장</option>
+													<option>차장</option>
+													<option>부장</option>
+												</select>
+											</div>
+										</div>
+										
+										
+										<!-- <div class="col-md-4">
 											<div class="mb-3">
 												<label class="form-label">교육대상직급</label>
 												<select class="select" id="edcGrade2">
@@ -417,8 +437,35 @@
 										            }
 										        });
 										    });
-										</script>
+										</script> -->
+										<div class="col-md-4">
+											<div class="mb-3">
+										        <label class="form-label">교육커리큘럼</label>
+										        <select class="select" id="curNo">
+										            <option>선택</option>
+										        </select>
+										    </div>
+										</div>
 										
+										<script>
+										    $(document).ready(function() {
+										        $.ajax({
+										            url: "/hrms/education/admin/rest/getCurList",
+										            type: "GET",
+										            dataType: "json",
+										            success: function(curs) {
+										                let curNo = $("#curNo");
+										                curs.forEach(function(cur) {
+										                    let option = `<option value=\${cur.curNo}>\${cur.curTitle}</option>`;
+										                    curNo.append(option);
+										                });
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("커리큘럼 데이터를 불러오는 중 오류 발생:", error);
+										            }
+										        });
+										    });
+										</script>
 										<div class="col-md-12">
 											<div class="row">
 												<div class="col-md-3">
@@ -588,6 +635,115 @@
 		</div>
 		<!-- /Add Book -->
 		
+		<!-- Add Curriculum -->
+		<div class="modal fade" id="add_curriculum" role="dialog">
+		    <div class="modal-dialog modal-dialog-centered modal-lg">
+		        <div class="modal-content">
+		            <div class="modal-header header-border align-items-center justify-content-between">
+		                <div class="d-flex align-items-center">
+		                    <h5 class="modal-title me-2">강의 커리큘럼</h5>
+		                </div>
+		                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
+		                    <i class="ti ti-x"></i>
+		                </button>
+		            </div>
+		            <div class="add-info-fieldset ">
+		                <div class="contact-grids-tab p-3 pb-0">
+		                    <ul class="nav nav-underline" id="myTab1" role="tablist">
+		                        <li class="nav-item" role="presentation">
+		                            <button class="nav-link active" id="basic-tab1" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">Basic Information</button>
+		                        </li>
+		                    </ul>
+		                </div>
+		                <div class="tab-content" id="myTabContent">
+		                    <div class="tab-pane fade show active" id="basic-info1" role="tabpanel" aria-labelledby="basic-tab" tabindex="0">
+		                        <form id="curForm">
+		                            <div class="modal-body">
+		                                <div class="row">
+		                                    <div class="col-md-12">
+											    <div class="mb-3">
+											        <label class="form-label">커리큘럼 주제</label>
+											        <input type="text" id="curTitle" class="form-control" >
+											    </div>
+											</div>
+											<div id="curriculumContainer"></div>
+											<button type="button" class="btn btn-secondary mt-2" id="addCurriculum">+ 추가</button>
+		                                </div>
+		                            </div>
+		                            <div class="modal-footer">
+		                                <div class="d-flex align-items-center justify-content-end">
+		                                    <button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">닫기</button>
+		                                    <button type="button" onclick="saveCurriculumBtn()" class="btn btn-primary">저장</button>
+		                                </div>
+		                            </div>
+		                        </form>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- /Add Curriculum -->
+		<script>
+		$(document).ready(function () {
+		    $("#addCurriculum").click(function () {
+		        let curriculumHtml = `
+		            <div class="input-group mb-2 curriculum-item">
+		                <input type="text" class="form-control" placeholder="커리큘럼 내용" name="curName">
+		                <input type="text" class="form-control" placeholder="커리큘럼 URL" name="curUrl">
+		                <input type="text" class="form-control" placeholder="커리큘럼 설명" name="curExplain">
+		                <button type="button" class="btn btn-danger removeCurriculum">X</button>
+		            </div>
+		        `;
+		        $("#curriculumContainer").append(curriculumHtml);
+		    });
+
+		    // 삭제 버튼 클릭 시 해당 입력 필드 제거
+		    $("#curriculumContainer").on("click", ".removeCurriculum", function () {
+		        $(this).closest(".curriculum-item").remove();
+		    });
+		});
+
+		</script>
+		<script>
+		function saveCurriculumBtn() {
+		    let curTitle = $("#curTitle").val();
+		    let curriculumList = [];
+
+		    $(".curriculum-item").each(function () {
+		        let curName = $(this).find("input[name='curName']").val();
+		        let curUrl = $(this).find("input[name='curUrl']").val();
+		        let curExplain = $(this).find("input[name='curExplain']").val();
+
+		        if (curName && curUrl && curExplain && curTitle) {
+		            curriculumList.push({
+		                curTitle: curTitle, // 주제 추가
+		                curName: curName,
+		                curUrl: curUrl,
+		                curExplain: curExplain
+		            });
+		        }
+		    });
+
+		    console.log("보낼 데이터:", curriculumList);
+
+		    $.ajax({
+		        url: "/hrms/education/admin/rest/insertCurriculum",
+		        method: "POST",
+		        contentType: "application/json",
+		        data: JSON.stringify(curriculumList),
+		        success: function (response) {
+		            alert("커리큘럼 저장 완료!");
+		            location.reload();
+		        },
+		        error: function (xhr, status, error) {
+		            console.error("커리큘럼 저장 실패:", error);
+		        }
+		    });
+		}
+
+		
+		</script>
 		<script>
 		function formatDateTime(dateString) {
 		    if (!dateString) return "";
@@ -666,23 +822,6 @@
 	            }
 	        });
 		}
-		
-		$(document).ready(function () {
-		    $("#addCurriculum").click(function () {
-		        let curriculumHtml = `
-		            <div class="input-group mb-2 curriculum-item">
-		                <input type="text" class="form-control" placeholder="커리큘럼명 입력">
-		                <input type="text" class="form-control" placeholder="커리큘럼URL 입력">
-		                <button type="button" class="btn btn-danger removeCurriculum">X</button>
-		            </div>
-		        `;
-		        $("#curriculumContainer").append(curriculumHtml);
-		    });
-
-		    $("#curriculumContainer").on("click", ".removeCurriculum", function () {
-		        $(this).closest(".curriculum-item").remove();
-		    });
-		});
 
 	</script>
 		<script>
@@ -710,7 +849,8 @@
 		        edcSdate: $("#edcSdate").val(),
 		        edcEdate: $("#edcEdate").val(),
 		        edcActive: "Y",
-		        edcBookNo: $("#bookNo").val()
+		        bookNo: $("#bookNo").val(),
+		        curNo: $("#curNo").val()
 		    };
 
 		    console.log("보낼 데이터:", educationData);

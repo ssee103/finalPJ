@@ -18,45 +18,45 @@ import kr.or.ddit.education.vo.EducationVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@Controller     
 @RequestMapping("/hrms/education/admin")
 public class AdminEducationController {
 
 	@Autowired
 	private IEducationService eduService;
 	
-	// 페이지 이동
+	/* 관리자 : 전체 교육 목록보기 페이지 */
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
 	@GetMapping("/adminAllTrainingListSearch")
 	public String adminAllTrainingListSearch() {
 		return "education/adminAllTrainingListSearch";
 	}
 	
+	/* 관리자 : 전체 교육신청자 목록보기 페이지 */
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@PostMapping("/adminNewTrainingRegistration")
 	public String adminNewTrainingRegistration() {
 		return "education/adminNewTrainingRegistration";
 	}
 	
+	/* 관리자 : 전체 교육신청자 목록보기 페이지 */
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@GetMapping("/adminAllTrainingApplication")
 	public String adminAllTrainingApplication() {
 		return "education/adminAllTrainingApplication";
 	}
 	
+	/* 관리자 : 전체 교육 상세보기 페이지 */
 	@PreAuthorize("hasAnyAuthority('ROLE_GENERAL', 'ROLE_ADMIN', 'ROLE_MANAGER')")
 	@GetMapping("/adminTrainingDetail/{edcNo}")
 	public String adminTrainingDetail(@PathVariable("edcNo") int edcNo, Model model) {
-		log.info("교육 상세 페이지 요청 - 교육번호: {}", edcNo);
-
 	    // 교육 상세 정보 가져오기
 	    EducationVO education = eduService.getEducationAdminDetail(edcNo);
 	    // 교육 관련 커리큘럼 리스트 가져오기
 	    List<CurriculumVO> curriculumList = eduService.getCurriculumAdminByEdcNo(edcNo);
 	    // 교육 관련 도서 리스트 가져오기
 	    List<BookVO> bookList = eduService.getBooksAdminByEdcNo(edcNo);
-
-	    // JSP로 데이터 전달
+	    
 	    model.addAttribute("education", education);
 	    model.addAttribute("curriculumList", curriculumList);
 	    model.addAttribute("bookList", bookList);
