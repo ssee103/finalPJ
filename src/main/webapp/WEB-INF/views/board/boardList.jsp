@@ -72,7 +72,7 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>번호</th>
@@ -176,6 +176,7 @@ $(function(){
 		searchForm.submit();
 	
 	});
+	
 });
 
 </script>

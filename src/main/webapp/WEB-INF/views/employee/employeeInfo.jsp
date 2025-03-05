@@ -73,7 +73,7 @@
 															<label class="form-label mb-md-0">서명</label>
 														</div>
 														<div class="col-md-8">
-															<p id="emplSignature" ></p>
+															<p id="emplSignature" style="background-color: white;"></p>
 														</div>
 													</div>
 												</div>                                   
@@ -347,7 +347,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="changePwdModalLabel">비밀번호 변경</h5>
-	        <button type="button" class="btn-close" data-dismiss="modal" aria-label="닫기"></button>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
 	      </div>
 	      <div class="modal-body">
 	        <!-- 모달 내용 입력 -->
@@ -357,7 +357,7 @@
 	        <input type="password" id="changePwd2" class="form-control"/>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary me-2" data-dismiss="modal" id="cancelFinalBtn">취소</button>
+	        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" id="cancelFinalBtn">취소</button>
 	        <button type="button" class="btn btn-primary" id="changeFinalBtn">저장</button>
 	      </div>
 	    </div>
@@ -619,6 +619,23 @@ $(function(){
 		}
 		
 	});
+	
+	let savedMessage = sessionStorage.getItem("toastMessage");
+	let savedType = sessionStorage.getItem("toastType");
+
+	if (savedMessage) {
+		let toast = $("#toastMessage");
+		toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+		toast.addClass(`bg-\${savedType}`);
+		$("#toastBody").text(savedMessage);
+		
+		let toastInstance = new bootstrap.Toast(toast[0]);
+		toastInstance.show();
+		
+		// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+		sessionStorage.removeItem("toastMessage");
+		sessionStorage.removeItem("toastType");
+	}
 	
 }); // ready function 종료 영역
 

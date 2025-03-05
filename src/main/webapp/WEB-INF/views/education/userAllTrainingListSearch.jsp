@@ -223,9 +223,13 @@
 	            let edcNo = $(this).data("edcNo");
 
 	            let today = new Date();
-	            let erDate = today.getFullYear() + "-" +
-	                         String(today.getMonth() + 1).padStart(2, "0") + "-" + 
-	                         String(today.getDate()).padStart(2, "0");
+	            let year = today.getFullYear();
+	            let month = String(today.getMonth() + 1).padStart(2, "0");
+	            let day = String(today.getDate()).padStart(2, "0");
+	            let hours = String(today.getHours()).padStart(2, "0");
+	            let minutes = String(today.getMinutes()).padStart(2, "0");
+
+	            let erDate = `\${year}-\${month}-\${day} \${hours}:\${minutes}`;  // 수정된 형식 적용
 
 	            if (!edcAplc) {
 	                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");

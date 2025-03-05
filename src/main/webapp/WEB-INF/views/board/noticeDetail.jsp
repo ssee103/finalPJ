@@ -208,6 +208,23 @@ $(function(){
 			}
 		});
 	});
+	
+	let savedMessage = sessionStorage.getItem("toastMessage");
+	let savedType = sessionStorage.getItem("toastType");
+
+	if (savedMessage) {
+		let toast = $("#toastMessage");
+		toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+		toast.addClass(`bg-\${savedType}`);
+		$("#toastBody").text(savedMessage);
+		
+		let toastInstance = new bootstrap.Toast(toast[0]);
+		toastInstance.show();
+		
+		// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+		sessionStorage.removeItem("toastMessage");
+		sessionStorage.removeItem("toastType");
+	}
 });
 
 </script>

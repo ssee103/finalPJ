@@ -232,6 +232,11 @@ $(function(){
 		if($(this).val() == "수정"){
 			noticeForm.attr("action", "/hrms/notice/noticeUpdate");
 		}
+		showSessionToastMessage("게시글이 성공적으로 등록되었습니다.", "success");
+		
+		if(!$("#inputFile")[0].files.length){
+			$("#inputFile")[0].disabled = true;
+		}
 		
 		noticeForm.submit();
 		  

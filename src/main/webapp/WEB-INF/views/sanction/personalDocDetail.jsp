@@ -54,6 +54,7 @@
 
 .sort {
  font-weight: bold;
+ background-color: rgb(232, 232, 232) !important;
 }
 
 #aprDiv{
@@ -82,17 +83,9 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<div class="page-wrapper cardhead">
 			<div class="content ">
@@ -111,48 +104,55 @@
 
 					<!-- 문서 자체 정보 -->
 					<div class="col-md-12">
+					
+						<a href="/hrms/sanction/personalDocuments" class="back-icon d-flex align-items-center fs-15 fw-medium mb-3 d-inline-flex">
+							<span class=" d-flex justify-content-center align-items-center rounded-circle me-2">
+								<i class="ti ti-arrow-left"></i>
+							</span>
+							목록으로 돌아가기
+						</a>
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title">기안 문서 상세 페이지 입니다.</h5> <br/>
+								<h5 class="card-title">기안 문서</h5> <br/>
 								
-								<table class="table datatable">
+								<table class="table datatable text-center">
 									<tr>
 										<td class="sort">문서 번호</td>
-										<td id="docNo"></td>
+										<td id="docNo" class="text-start"></td>
 										<td class="sort">기안자</td>
-										<td id="writer"></td>
+										<td id="writer" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">문서 제목</td>
-										<td id="docTitle"></td>
+										<td id="docTitle" class="text-start"></td>
 										<td class="sort">문서 상태</td>
-										<td id="docStatus"></td>
+										<td id="docStatus" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">기안 일시</td>
-										<td id="submitDate"></td>
+										<td id="submitDate" class="text-start"></td>
 										<td class="sort">보존 기한</td>
-										<td id="expiredDate"></td>
+										<td id="expiredDate" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">문서 전결 허용 여부</td>
-										<td id="allowAt"></td>
+										<td id="allowAt" class="text-start"></td>
 										<td class="sort">전결권 보유 여부(본인)</td>
-										<td id="myAllow"></td>
+										<td id="myAllow" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">결재 선(내림차순)</td>
-										<td id="sanctionLine"></td>
+										<td id="sanctionLine" class="text-start"></td>
 										<td class="sort">결재 확정 일시</td>
-										<td id="finalDate"></td>
+										<td id="finalDate" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">참조자</td>
-										<td id="refLine" colspan="3"></td>
+										<td id="refLine" colspan="3" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">첨부 파일</td>
-										<td id="docFileView" colspan="3">aa</td>
+										<td id="docFileView" colspan="3" class="text-start"></td>
 									</tr>
 								</table>
 							</div>
@@ -209,10 +209,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<!-- Datatable JS -->
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -220,10 +216,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -269,7 +261,7 @@ function getUserPosition(userId, callback) {
             if (callback) callback(res.emplPosition);
         },
         error: function() {
-            alert("사용자 직위 정보를 가져오는 중 오류가 발생했습니다.");
+        	showToastMessage("사용자 직위 정보를 가져오는 중 오류가 발생했습니다.", "danger");
         }
     });
 }
@@ -287,7 +279,7 @@ function getDocumentDetail(docNo, myEmplPosition) {
             renderReference(docNo);
         },
         error: function() {
-            alert("문서 상세정보 호출에 오류가 발생했습니다.");
+        	showToastMessage("문서 상세정보 호출에 오류가 발생했습니다.", "danger");
         }
     });
 }

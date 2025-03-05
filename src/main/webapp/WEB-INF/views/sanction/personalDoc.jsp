@@ -33,6 +33,10 @@
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
 
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
+
 		<!-- Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="content">
@@ -54,6 +58,17 @@
 				<div class="card">
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
 						<h5>기안 문서 목록</h5>
+						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+							<div class="card-tools">
+								<form class="input-group input-group-sm" method="post" id="searchForm" style="width: 250px;">
+									<input type="hidden" name="page" id="page"/>
+									<input type="text" name="searchWord" class="form-control me-3" value="" placeholder="검색" style="height: 38px;">
+									<div class="input-group-append">
+										<button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="height: 38px; min-width: 80px; text-align: center;">검색</button>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
@@ -77,11 +92,11 @@
 							</table>
 						</div>
 					</div>
+					<div style="display: flex; justify-content: center; align-items: center; padding:15px;" id="pagingArea"></div>
 				</div>
 				<!-- /Leads List -->
-
 			</div>
-
+			
 			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
 				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
 				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
@@ -124,12 +139,16 @@
 </body>
 <script type="text/javascript">
 
-$(function(){
-	
-	const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
-	console.log("userId: ", userId);
-	
-	let data = {userId : userId};
+let currentPage = 1;
+const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
+console.log("userId: ", userId);
+
+let data = {
+		userId : userId,
+		currentPage : currentPage
+		};
+		
+function preLoad(data){
 	
 	$.ajax({
 		url: "/sanction/getDocumentsInfo",
@@ -139,7 +158,9 @@ $(function(){
 		success: function(res){
 			console.log(res);
 			
-			$.each(res, function(i, doc){
+			$("tbody").empty();
+			
+			$.each(res.documentList, function(i, doc){
 				
 				let apvText = "";
 				let files = "";
@@ -179,12 +200,54 @@ $(function(){
 				
 			});
 			
+			$("#pagingArea").html(res.pagingInfo.pagingHTML);
 			
 		},
 		error: function(error){
-			alert("개인문서 호출에 실패했습니다.");
+			showToastMessage("개인문서 호출에 실패했습니다.", "danger");
 		}
 	});	// 페이지 로드 시 ajax
+}
+
+$(function(){
+	
+	// 문서 초기 로드
+	preLoad(data);
+	
+	// 페이지 선택할 때
+	$("#pagingArea").on("click", "a", function(event){
+		event.preventDefault();
+		let pageNo = $(this).data("page");
+		console.log("pageNo: ", pageNo);
+		
+		currentPage = pageNo;
+		
+		let pageMoving = {
+				userId : userId,
+				currentPage : currentPage 
+		};
+		
+		// 이동한 페이지로 로드 재호출
+		preLoad(pageMoving);
+	
+	});
+	
+	let savedMessage = sessionStorage.getItem("toastMessage");
+	let savedType = sessionStorage.getItem("toastType");
+
+	if (savedMessage) {
+		let toast = $("#toastMessage");
+		toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+		toast.addClass(`bg-\${savedType}`);
+		$("#toastBody").text(savedMessage);
+		
+		let toastInstance = new bootstrap.Toast(toast[0]);
+		toastInstance.show();
+		
+		// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+		sessionStorage.removeItem("toastMessage");
+		sessionStorage.removeItem("toastType");
+	}
 	
 });	// ready function 종료 영역
 

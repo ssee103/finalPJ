@@ -39,16 +39,6 @@ public class JobController {
         }
         return ResponseEntity.ok(job);
     }
-
-    // 해당직무의 질문지
-    //@GetMapping("/jobs/{id}/sort")
-    //public ResponseEntity<RecSortVO> getResumeQuestion(@PathVariable("id") String recNo) {
-    //	RecSortVO question = service.getResumeQuestion(recNo);
-    //   if (question == null) {
-    //      return ResponseEntity.notFound().build();
-    // }
-    //   return ResponseEntity.ok(question);
-    // }
     
     // 해당 직무의 질문지 여러개 가져오기
     @GetMapping("/jobs/{id}/sort")

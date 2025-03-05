@@ -580,44 +580,17 @@
 		                                        <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
 		                                            <div class="profile-upload">
 		                                                <div class="mb-2">
-		                                                    <h6 class="mb-1">도서 검색하기 (ENTER 키를 눌러주세요!)</h6>
+		                                                    <h6 class="mb-1"> 공공 도서관 검색 </h6>
 		                                                    <div class="search-container">
 		                                                        <input type="text" id="searchInput" placeholder="책 제목을 입력하세요">
 		                                                        <button type="button" onclick="searchBooks()">Search</button>
 		                                                    </div>
 		                                                    <div id="searchResults" style="display: none;"></div>
-		                                                    <p class="fs-12">Image should be below 4 mb</p>
 		                                                </div>
 		                                            </div>
 		                                        </div>
 		                                    </div>
-		                                    <div class="col-md-12 text-center">
-		                                        <img id="bookThumbnail" src="" alt="Book Thumbnail" style="max-width: 150px; display: none;">
-		                                    </div>
-		                                    <div class="col-md-12">
-		                                        <div class="mb-3">
-		                                            <label class="form-label">Title</label>
-		                                            <input type="text" id="bookTitle" class="form-control" readonly>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-md-12">
-		                                        <div class="mb-3">
-		                                            <label class="form-label">Sale Price</label>
-		                                            <input type="text" id="bookPrice" class="form-control" readonly>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-md-12">
-		                                        <div class="mb-3">
-		                                            <label class="form-label">Publisher</label>
-		                                            <input type="text" id="bookPublisher" class="form-control" readonly>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-md-12">
-		                                        <div class="mb-3">
-		                                            <label class="form-label">ISBN</label>
-		                                            <input type="text" id="bookIsbn" class="form-control" readonly>
-		                                        </div>
-		                                    </div>
+		                                    
 		                                </div>
 		                            </div>
 		                            <div class="modal-footer">

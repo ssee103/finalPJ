@@ -48,7 +48,7 @@
 							<div class="card-header bg-dark">
 								<div class="d-flex align-items-center">
 									<span class="avatar avatar-lg avatar-rounded border border-white border-2 flex-shrink-0 me-2">
-										<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;">
+										<img alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" id="profileImg">
 									</span>
 									<div>
 										<h5 class="text-white mb-1">${emp.emplNm} (${emp.emplNo })</h5>
@@ -158,13 +158,13 @@
 								<!-- 게시판 내부 -->
 								<div class="card-body d-flex justify-content-center align-items-center" style="padding: 0;">
 								    <div class="w-100 h-100">
-								        <table class="table mb-0" style="width: 100%; height: 100%; border-collapse: collapse;">
+								        <table class="table mb-0 text-center" style="width: 100%; height: 100%; border-collapse: collapse;">
 								            <thead>
 								                <tr>
-								                    <th style="text-align: center;">제목</th>
-								                    <th style="text-align: center;">작성자</th>
-								                    <th style="text-align: center;">조회수</th>
-								                    <th style="text-align: center;">작성날짜</th>
+								                    <th>제목</th>
+								                    <th>작성자</th>
+								                    <th>조회수</th>
+								                    <th>작성날짜</th>
 								                </tr>
 								            </thead>
 								            <tbody id="boardTable">
@@ -235,6 +235,7 @@ let emplPosition = $("#emplPosition");
 let deptCode = $("#deptCode");
 let teamCode = $("#teamCode");
 let hireDate = $("#hireDate")
+let profileImg = $("#profileImg");
 
 let punchOutBtn = $("#punchOutBtn");		// 출퇴근 버튼
 let todayDclzStime = $("#todayDclzStime");	// 오늘 나의 출근시간을 표시하는 곳
@@ -267,7 +268,7 @@ $(function(){
 				data : JSON.stringify({emplNo : userId}),
 				contentType: "application/json;charset=utf-8",
 				success : function(res){
-					showToastMessage("✅출근성공", "success");
+					showToastMessage("출근성공", "success");
 					printList();
 					getTodayPunchOut();
 					todayDclzEtime.text("");
@@ -283,12 +284,12 @@ $(function(){
 				data : JSON.stringify({emplNo : userId}),
 				contentType: "application/json;charset=utf-8",
 				success : function(res){
-					showToastMessage("✅퇴근성공", "success");
+					showToastMessage("퇴근성공", "success");
 					printList();
 					getTodayPunchOut();
 				},
 				error : function(error){
-					showToastMessage("❌ 퇴근등록중 오류발생.", "danger");
+					showToastMessage("퇴근등록중 오류발생.", "danger");
 				}				
 			});
 		}
@@ -481,6 +482,7 @@ function getMyInfo(){
 			deptCode.text(res.deptCode);
 			teamCode.text(res.teamCode);
 			hireDate.text(res.hireDate.substr(0,11));
+			profileImg.attr("src", `/profile_images/\${res.profileImgpath }`);
 		},
 		error : function(error){},
 	});

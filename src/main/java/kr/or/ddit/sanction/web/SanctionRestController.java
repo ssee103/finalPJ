@@ -1,5 +1,6 @@
 package kr.or.ddit.sanction.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.cmm.service.IFileService;
 import kr.or.ddit.cmm.vo.DocFileVO;
+import kr.or.ddit.cmm.vo.PaginationInfoVO;
 import kr.or.ddit.employee.vo.EmployeeVO;
 import kr.or.ddit.sanction.service.ISanctionService;
 import kr.or.ddit.sanction.vo.DocSortVO;
@@ -76,21 +78,51 @@ public class SanctionRestController {
 		return cnt;
 	}
 	
+	// 기안 문서 목록 호출(페이징 작업중)
 	@GetMapping("/getDocumentsInfo")
-	public List<DocumentVO> getDocumentsInfo(String userId) {
+	public Map<String, Object> getDocumentsInfo(String userId, int currentPage) {
 		log.info("개인 문서 호출 컨트롤러 실행");
+		log.info("개인 문서 호출 컨트롤러 currentPage: " + currentPage);
 		
-		List<DocumentVO> dvo = service.getDocumentsInfo(userId);
+		PaginationInfoVO<DocumentVO> pagingVO = new PaginationInfoVO<>(10, 5);
+		pagingVO.setCurrentPage(currentPage);
 		
-		return dvo;
+		int totalCount = service.getDocumentsCount(userId);
+		pagingVO.setTotalRecord(totalCount);
+		
+		int startRow = pagingVO.getStartRow();
+		int endRow = pagingVO.getEndRow();
+		
+		List<DocumentVO> dvo = service.getDocumentsInfo(userId, startRow, endRow);
+		
+		Map<String, Object> result = new HashMap<>();
+	    result.put("pagingInfo", pagingVO);
+	    result.put("documentList", dvo);
+		
+		return result;
 	}
 	
 	@GetMapping("/getApvDocInfo")
-	public List<DocumentVO> getApvDocInfo(String userId) {
+	public Map<String, Object> getApvDocInfo(String userId, int currentPage) {
+		log.info("결재 문서 호출 컨트롤러 실행");
+		log.info("결재 문서 호출 컨트롤러 currentPage: " + currentPage);
 		
-		List<DocumentVO> dvo = service.getApvDocInfo(userId);
+		PaginationInfoVO<DocumentVO> pagingVO = new PaginationInfoVO<>(10, 5);
+		pagingVO.setCurrentPage(currentPage);
 		
-		return dvo;
+		int totalCount = service.getDocumentsCount(userId);
+		pagingVO.setTotalRecord(totalCount);
+		
+		int startRow = pagingVO.getStartRow();
+		int endRow = pagingVO.getEndRow();
+		
+		List<DocumentVO> dvo = service.getApvDocInfo(userId, startRow, endRow);
+		
+		Map<String, Object> result = new HashMap<>();
+	    result.put("pagingInfo", pagingVO);
+	    result.put("documentList", dvo);
+		
+		return result;
 	}
 	
 	@GetMapping("/getApvDocDetail")

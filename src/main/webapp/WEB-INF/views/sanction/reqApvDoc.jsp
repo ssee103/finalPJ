@@ -53,6 +53,17 @@
 				<div class="card">
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
 						<h5>결재 문서 목록</h5>
+						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+							<div class="card-tools">
+								<form class="input-group input-group-sm" method="post" id="searchForm" style="width: 250px;">
+									<input type="hidden" name="page" id="page"/>
+									<input type="text" name="searchWord" class="form-control me-3" value="" placeholder="검색" style="height: 38px;">
+									<div class="input-group-append">
+										<button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="height: 38px; min-width: 80px; text-align: center;">검색</button>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
@@ -75,16 +86,14 @@
 							</table>
 						</div>
 					</div>
+					<div style="display: flex; justify-content: center; align-items: center; padding:15px;" id="pagingArea"></div>
 				</div>
 				<!-- /Leads List -->
 
 			</div>
-
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
-			</div>
-
+			<!-- Footer -->
+			<%@ include file="/WEB-INF/views/theme/footer.jsp" %>
+			<!-- /Footer -->
 		</div>
 		<!-- /Page Wrapper -->
 
@@ -122,12 +131,16 @@
 </body>
 <script type="text/javascript">
 
-$(function(){
-	
-	const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
-	console.log("userId: ", userId);
-	
-	let data = {userId : userId};
+let currentPage = 1;
+const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기
+console.log("userId: ", userId);
+
+let data = {
+		userId : userId,
+		currentPage : currentPage
+		};
+
+function preLoad(data) {
 	
 	// 문서 정보 호출
 	$.ajax({
@@ -138,7 +151,9 @@ $(function(){
 		success: function(res){
 			console.log("res: ", res);
 			
-			$.each(res, function(i, doc){
+			$("tbody").empty();
+			
+			$.each(res.documentList, function(i, doc){
 				
 				let apvText = "";
 				let file = "";
@@ -208,51 +223,7 @@ $(function(){
 		            .addClass("badge-info-transparent");
 				}
 				
-				
-			});
-			
-			// 문서 제목 클릭 이벤트
-			$("tbody").on("click",".documentTitle", function(e){
-				e.preventDefault(); // 기본 링크 동작 차단
-				
-				let ele = $(this)[0];
-				let selectEle = $(ele);
-				
-				var clickedDocNo = selectEle.data("no");
-				var targetUrl = selectEle.attr("href"); // 링크에 지정된 URL 가져오기
-				
-				let updateData = {
-						userId: userId,
-						docNo: clickedDocNo
-				};
-				
-				var sanctnStatus = selectEle.data("sanctnstatus");
-				
-				if(sanctnStatus == '01') {
-					
-					// 결재 상태, 결재 일자 업데이트
-					$.ajax({
-						url: "/sanction/apvStatusUpdate",
-						method: "post",
-						data: updateData,
-						dataType: 'json',
-						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-						success: function(res){
-							
-							if(res == 1) {
-								console.log("결재 상태가 업데이트 되었습니다.");
-								window.location.href = targetUrl;
-							} else {
-								alert("결재 상태 업데이트 중 오류가 발생했습니다.");
-							}
-							
-						}
-						
-					});
-					
-				} else {
-					window.location.href = targetUrl;
-				}
+				$("#pagingArea").html(res.pagingInfo.pagingHTML);
 				
 			});
 			
@@ -262,9 +233,77 @@ $(function(){
 		}
 	});	// 페이지 로드 시 ajax
 	
+}
+
+$(function(){
 	
+	// 문서 초기 로드
+	preLoad(data);
+	
+	// 페이지 선택할 때
+	$("#pagingArea").on("click", "a", function(event){
+		event.preventDefault();
+		let pageNo = $(this).data("page");
+		console.log("pageNo: ", pageNo);
+		
+		currentPage = pageNo;
+		
+		let pageMoving = {
+				userId : userId,
+				currentPage : currentPage 
+		};
+		
+		// 이동한 페이지로 로드 재호출
+		preLoad(pageMoving);
+	
+	});
 	
 });	// ready function 종료 영역
+
+//문서 제목 클릭 이벤트
+$("tbody").on("click",".documentTitle", function(e){
+	e.preventDefault(); // 기본 링크 동작 차단
+	
+	let ele = $(this)[0];
+	let selectEle = $(ele);
+	
+	var clickedDocNo = selectEle.data("no");
+	var targetUrl = selectEle.attr("href"); // 링크에 지정된 URL 가져오기
+	
+	let updateData = {
+			userId: userId,
+			docNo: clickedDocNo
+	};
+	
+	var sanctnStatus = selectEle.data("sanctnstatus");
+	
+	if(sanctnStatus == '01') {
+		
+		// 결재 상태, 결재 일자 업데이트
+		$.ajax({
+			url: "/sanction/apvStatusUpdate",
+			method: "post",
+			data: updateData,
+			dataType: 'json',
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			success: function(res){
+				
+				if(res == 1) {
+					console.log("결재 상태가 업데이트 되었습니다.");
+					window.location.href = targetUrl;
+				} else {
+					alert("결재 상태 업데이트 중 오류가 발생했습니다.");
+				}
+				
+			}
+			
+		});
+		
+	} else {
+		window.location.href = targetUrl;
+	}
+	
+});
 
 </script>
 </html>

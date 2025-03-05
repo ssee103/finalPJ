@@ -1,6 +1,7 @@
 package kr.or.ddit.sanction.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -29,10 +30,11 @@ public interface ISanctionMapper {
 	public void createSanctner(SanctionerVO svo);
 
 	public void createReference(ReferenceVO rvo);
+	
+	// 기안문서 호출 페이징
+	public List<DocumentVO> getDocumentsInfo(Map<String, Object> params);
 
-	public List<DocumentVO> getDocumentsInfo(String userId);
-
-	public List<DocumentVO> getApvDocInfo(String userId);
+	public List<DocumentVO> getApvDocInfo(Map<String, Object> params);
 
 	public DocumentVO getApvDocDetail(String docNo);
 
@@ -91,5 +93,7 @@ public interface ISanctionMapper {
 	public int deleteCustomAprDetail(int msNo);
 
 	public int updateOpinion(String userId, String docNo, String sanctnOpinion);
+
+	public int getDocumentsCount(String userId);
 	
 }

@@ -1,6 +1,8 @@
 package kr.or.ddit.sanction.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,17 +119,27 @@ public class SanctionServiceImpl implements ISanctionService {
 	}
 
 	@Override
-	public List<DocumentVO> getDocumentsInfo(String userId) {
+	public List<DocumentVO> getDocumentsInfo(String userId, int startRow, int endRow) {
 		
-		List<DocumentVO> dvo = mapper.getDocumentsInfo(userId);
+		Map<String, Object> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("startRow", startRow);
+		params.put("endRow", endRow);
+		
+		List<DocumentVO> dvo = mapper.getDocumentsInfo(params);
 		
 		return dvo;
 	}
 
 	@Override
-	public List<DocumentVO> getApvDocInfo(String userId) {
+	public List<DocumentVO> getApvDocInfo(String userId, int startRow, int endRow) {
 		
-		List<DocumentVO> dvo = mapper.getApvDocInfo(userId);
+		Map<String, Object> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("startRow", startRow);
+		params.put("endRow", endRow);
+		
+		List<DocumentVO> dvo = mapper.getApvDocInfo(params);
 		
 		return dvo;
 	}
@@ -360,6 +372,14 @@ public class SanctionServiceImpl implements ISanctionService {
 	public int updateOpinion(String userId, String docNo, String sanctnOpinion) {
 		
 		int cnt = mapper.updateOpinion(userId, docNo, sanctnOpinion);
+		
+		return cnt;
+	}
+
+	@Override
+	public int getDocumentsCount(String userId) {
+		
+		int cnt = mapper.getDocumentsCount(userId);
 		
 		return cnt;
 	}

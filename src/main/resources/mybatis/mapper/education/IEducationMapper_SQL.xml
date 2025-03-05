@@ -468,11 +468,19 @@
 	
 	<insert id="insertEdcReqeust" parameterType="kr.or.ddit.education.vo.EdcRequestVO">
 		INSERT INTO EDC_REQUEST (
-        	EDC_APLC, EDC_NO, ER_DATE, ER_STATUS
+        	EDC_APLC
+        	, EDC_NO
+        	, ER_DATE
+        	, ER_STATUS
     	) VALUES (
-        	#{edcAplc}, #{edcNo}, #{erDate}, #{erStatus}
+        	#{edcAplc}
+        	, #{edcNo}
+        	, TO_DATE(#{erDate}, 'YYYY-MM-DD HH24:MI')
+        	, #{erStatus}
     	)
 	</insert>
+
+	
 	
 	<update id="updateEdcRequestStatus" parameterType="kr.or.ddit.education.vo.EdcRequestVO">
 	    UPDATE edc_request  

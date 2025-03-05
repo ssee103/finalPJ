@@ -15,41 +15,6 @@
 	<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
 
-	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
-	<!-- Apple Touch Icon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
-
-	<!-- Theme Script js -->
-	<script src="assets/js/theme-script.js"></script>
-
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
-	<!-- Color Picker Css -->
-	<link rel="stylesheet" href="assets/plugins/flatpickr/flatpickr.min.css">
-	<link rel="stylesheet" href="assets/plugins/@simonwep/pickr/themes/nano.min.css">
-
-	<!-- Summernote CSS -->
-	<link rel="stylesheet" href="assets/plugins/summernote/summernote-lite.min.css">
-
-	<!-- <!-- Datatable CSS -->
-	<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css"> -->
-
-	<!-- Tabler Icon CSS -->
-	<link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.css">
-
-	<!-- Daterangepikcer CSS -->
-	<link rel="stylesheet" href="assets/plugins/daterangepicker/daterangepicker.css">
-
-	<!-- Fontawesome CSS -->
-	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-
-	<!-- Main CSS -->
-	<link rel="stylesheet" href="assets/css/style.css">
-	
 	<!-- CKEditor -->
 	<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 
@@ -137,18 +102,10 @@ h1{
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<div class="page-wrapper cardhead">
 			<div class="content ">
@@ -169,10 +126,10 @@ h1{
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title">전자 결재 페이지 입니다.</h5> <br/>
-								<select id="docSortSelect">
+								<h5 class="card-title">기안문서 작성</h5> <br/>
+								<select id="docSortSelect" class="form-control w-auto">
 									<option class="option" value="default">양식을 선택하세요.</option>
-								</select> <br/><br/>
+								</select> <br/>
 								<button class="btn btn-primary" id="defineLineBtn" data-bs-toggle="modal" 
 									data-bs-target="#defineLineModal">결재 라인 지정</button>&nbsp;	
 <!-- 								<button class="btn btn-secondary" id="defineRefBtn" data-bs-toggle="modal"  -->
@@ -216,7 +173,7 @@ h1{
 											<input type="text" id="docTitle" class="form-control"/>
 										</div>
 										<div class="card-header" style="display: flex;">
-											<input type="file" id="docFile" multiple="multiple"/>
+											<input type="file" id="docFile" multiple="multiple" class="form-control"/>
 										</div>	
 										<div class="card-header" style="display: flex;">
 											<h5 class="card-title">전결 허용 여부:&nbsp;</h5>
@@ -497,8 +454,8 @@ $(function(){
 						$("#passiveChk").attr("checked", "checked");
 					}
 					
-					$("#docDiv").append(`기간 :&nbsp; <input type="date" id="sDate"/>
-							-&nbsp;<input type="date" id="eDate"/> <br/><br/>`);
+					$("#docDiv").append(`기간 :&nbsp; <input type="date" id="sDate" class="form-control w-auto d-inline-block"/>
+							-&nbsp;<input type="date" id="eDate" class="form-control w-auto d-inline-block"/> <br/><br/>`);
 					
 					CKEDITOR.instances.ckEditor.setData(res[0].dsForm);
 					
@@ -510,10 +467,10 @@ $(function(){
 						$("#passiveChk").attr("checked", "checked");
 					}
 					
-					$("#docDiv").append(`일자 :&nbsp; <input type="date" id="sDate"/>
-					-&nbsp;<input type="date" id="eDate"/> <br/><br/>`);
-					$("#docDiv").append(`시간 :&nbsp; <input type="time" id="sTime"/>
-					-&nbsp;<input type="time" id="eTime"/> <br/><br/>`);
+					$("#docDiv").append(`일자 :&nbsp; <input type="date" id="sDate" class="form-control w-auto d-inline-block"/>
+					-&nbsp;<input type="date" id="eDate" class="form-control w-auto d-inline-block"/> <br/><br/>`);
+					$("#docDiv").append(`시간 :&nbsp; <input type="time" id="sTime" class="form-control w-auto d-inline-block"/>
+					-&nbsp;<input type="time" id="eTime" class="form-control w-auto d-inline-block"/> <br/><br/>`);
 					
 					CKEDITOR.instances.ckEditor.setData(res[2].dsForm);
 					
@@ -769,12 +726,12 @@ $(function(){
 								processData: false,
 								success: function(res){
 									if(res == 1) {
-										alert("결재 요청이 완료되었습니다.");
+										showSessionToastMessage("결재 요청이 완료되었습니다.", "success");
 										location.href = "/hrms/sanction/personalDocuments";
 									}
 								},
 								error: function(error){
-									alert("결재 요청 중 오류가 발생하였습니다.");
+									showToastMessage("결재 요청 중 오류가 발생하였습니다.", "danger");
 								}
 								
 							});
@@ -835,9 +792,9 @@ $(function(){
 				     	// 자기 자신은 선택 불가
 				        if (foundNode.data === userId) {
 				            if (!$("#refChk").is(":checked")) {
-				                alert("자기 자신은 결재자로 선택할 수 없습니다.");
+				                showToastMessage("자기 자신은 결재자로 선택할 수 없습니다.", "warning");
 				            } else {
-				                alert("자기 자신은 참조자로 선택할 수 없습니다.");
+				                showToastMessage("자기 자신은 참조자로 선택할 수 없습니다.", "warning");
 				            }
 				            return;
 				        }
@@ -849,7 +806,7 @@ $(function(){
 				        if ($("#refChk").is(":checked")) {
 				        	// 먼저 반대쪽(결재자 목록)에 같은 사원이 있는지 체크
 				            if ($("#sanctionerLineDiv").find(`[data-emplNo="\${foundNode.data}"]`).length > 0) {
-				                alert("결재자와 참조자는 같을 수 없습니다.");
+				                showToastMessage("결재자와 참조자는 같을 수 없습니다.", "warning");
 				                return;
 				            }
 				        	
@@ -861,12 +818,12 @@ $(function(){
 				                    </div>`);
 				            } else {
 				                console.log("참조자가 중복되었습니다.");
-				                alert("참조자가 중복되었습니다.");
+				                showToastMessage("참조자가 중복되었습니다.", "warning");
 				            }
 				        } else {
 				        	// 결재자 지정인 경우: 반대쪽(참조자 목록)에 같은 사원이 있는지 체크
 				            if ($("#referenceDiv").find(`[data-emplNo="\${foundNode.data}"]`).length > 0) {
-				                alert("결재자와 참조자는 같을 수 없습니다.");
+				                showToastMessage("결재자와 참조자는 같을 수 없습니다.", "warning");
 				                return;
 				            }
 				        	
@@ -881,7 +838,7 @@ $(function(){
 				                    `);
 				            } else {
 				                console.log("결재자가 중복되었습니다.");
-				                alert("결재자가 중복되었습니다.");
+				                showToastMessage("결재자가 중복되었습니다.", "warning");
 				            }
 				        }
 				    } else {
@@ -977,10 +934,10 @@ $(function(){
 			success: function(res) {
 				console.log("커스텀 결재자 저장 res: ", res);
 				if(res == 1) {
-					alert("커스텀 결재선 저장이 완료되었습니다.");
+					showToastMessage("커스텀 결재선 저장이 완료되었습니다.", "success");
 					$("#customModal").modal("hide");
 				} else {
-					alert("커스텀 결재선 저장 중 오류가 발생했습니다.");
+					showToastMessage("커스텀 결재선 저장 중 오류가 발생했습니다.", "danger");
 					$("#customModal").modal("hide");
 				}
 			}
@@ -1104,10 +1061,10 @@ $(document).on("click", ".delCustomBtn", function() {
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		success: function(res) {
 			if(res == 1) {
-				alert("커스텀 결재자의 삭제가 완료되었습니다.");
+				showToastMessage("커스텀 결재자의 삭제가 완료되었습니다.", "success");
 				getCustomAprLine();
 			} else {
-				alert("커스텀 결재자 삭제 중 오류가 발생했습니다.");
+				showToastMessage("커스텀 결재자 삭제 중 오류가 발생했습니다.", "danger");
 			}
 		}
 	});

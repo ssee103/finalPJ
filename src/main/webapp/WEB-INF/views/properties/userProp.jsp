@@ -112,8 +112,8 @@
 									<th class="text-center">물품분류코드</th>
 									<th class="text-center">물품명</th>
 									<th class="text-center">대여가능수량</th>
-									<th class="text-center"></th>
-									<th class="text-center"></th>
+									<th class="text-center">물품상세설명</th>
+									<th class="text-center">물품대여신청</th>
 								</tr>
 							</thead>
 							<tbody id="dataTable-tbody">
@@ -184,11 +184,11 @@
 					                            <td class="text-center">\${prop.psCode}</td>
 					                            <td class="text-center">\${prop.propName}</td>
 					                            <td class="text-center">\${prop.propQty}</td>
-					                            <td><div class="dropdown">
+					                            <td class="text-center"><div class="dropdown">
 					                                <button class="toggle-detail btn btn-primary" data-index="\${index}">더보기</button>
 					                                </div>
 					                            </td>
-					                            <td>\${rentalButton}</td> <!-- 조건부 버튼 삽입 -->
+					                            <td class="text-center">\${rentalButton}</td> <!-- 조건부 버튼 삽입 -->
 					                        </tr>
 					                        <tr class="detail-row" data-index="\${index}" style="display: none;">
 					                            <td colspan="5">

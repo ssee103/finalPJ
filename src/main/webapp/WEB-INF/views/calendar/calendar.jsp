@@ -91,9 +91,9 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h4 class="modal-title">일정 추가</h4>
-						<!-- <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
 							<i class="ti ti-x"></i>
-						</button> -->
+						</button>
 					</div>
 					<form action="calendar.html">
 						<div class="modal-body">
@@ -134,7 +134,7 @@
 								</div>
 								<div class="col-12">
 									<div class="mb-3">
-										<label class="form-label">색</label>
+										<label class="form-label">배경색</label>
 										<input type="color" id="eventColor"/>
 									</div>
 									<div class="mb-0">
@@ -150,39 +150,16 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">취소</button>
-							<button type="button" class="btn btn-primary" onclick="saveEvent()">저장</button>
+							<button type="button" class="btn btn-light me-2" data-bs-dismiss="modal" id="cancelBtn">취소</button>
+							<button type="button" class="btn btn-primary" onclick="saveEvent()" id="saveBtn">저장</button>
+							<button type="button" class="btn btn-warning me-2" id="updateButton" onclick="updateEvent()" style="display:none;">수정</button>
+   							<button type="button" class="btn btn-danger me-2" id="deleteButton" onclick="deleteEvent()" style="display:none;">삭제</button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 		<!-- /Add New Event -->
-
-		<!-- 취소버튼 클릭시 모달창 닫기 -->
-	<!-- 	<div class="modal fade" id="event_modal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					취소버튼 클릭시 모달창 닫기
-					<div class="modal-header bg-dark modal-bg">
-						<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-							<i class="ti ti-x"></i>
-						</button>
-					</div>
-					/취소버튼 클릭시 모달창 닫기
-					이거 뭔지 모르겟음 
-						<div class="modal-body">
-						<p class="d-flex align-items-center fw-medium text-black mb-3"><i class="ti ti-calendar-check text-default me-2"></i>26 Jul,2024 to 31 Jul,2024</p>
-						<p class="d-flex align-items-center fw-medium text-black mb-3"><i class="ti ti-calendar-check text-default me-2"></i>11:00 AM to 12:15 PM</p>
-						<p class="d-flex align-items-center fw-medium text-black mb-3"><i class="ti ti-map-pin-bolt text-default me-2"></i>Las Vegas, US</p>
-						<p class="d-flex align-items-center fw-medium text-black mb-0"><i class="ti ti-calendar-check text-default me-2"></i>A recurring or repeating event is simply any event that you will occur more than once on your calendar.</p>
-					</div>
-				</div>
-			</div>
-		</div> -->
-		<!-- /Event -->
-						
-
 	</div>
 	<!-- /Main Wrapper -->
 
@@ -216,7 +193,7 @@
 
 </body>
 <script type="text/javascript">
-let calendar, currentEventId, selectedDate = null
+let calendar, schNo, selectedDate = null
 const userId = sessionStorage.getItem("userId"); //아이디 세션 가져오기
 let userDeptCode = "${emp.deptCode}"; //로그인한 사람의 부서코드 가져오기
 
@@ -226,7 +203,9 @@ $(document).ready(function() {
 	
 	// 캘린더 생성
 	calendar = new FullCalendar.Calendar(calendarEl, {
-	
+
+		
+		
 	// 캘린더 기본설정
 	headerToolbar: {
 		left: 'prev,next today',
@@ -258,12 +237,8 @@ $(document).ready(function() {
 				success: function (events) {
 					const convertedEvents = events.map(event => {
 						const DateTime = luxon.DateTime;
-						/* let start = DateTime.fromISO(event.start).setZone("local").toISO();
-						let end = event.end ? DateTime.fromISO(event.end).setZone("local").toISO() : start; */
-						
 						let start = DateTime.fromFormat(event.start, "yyyy-MM-dd HH:mm:ss", { zone: "Asia/Seoul" }).toISO();
-			                let end = event.end ? DateTime.fromFormat(event.end, "yyyy-MM-dd HH:mm:ss", { zone: "Asia/Seoul" }).toISO() : start;
-					
+			            let end = event.end ? DateTime.fromFormat(event.end, "yyyy-MM-dd HH:mm:ss", { zone: "Asia/Seoul" }).toISO() : start;
 						return { ...event, start, end, extendedProps: { type: event.type } }; //타입추가
 					});
 					successCallback(convertedEvents);
@@ -308,41 +283,44 @@ $(document).ready(function() {
                     console.error("Error updating event:", error);
                 }
 			})
-		}
-		/* ,
+		},
 		
-		//기존 이벤트 클릭 시 수정/삭제 긴으
+		//기존 이벤트 클릭 시 수정/삭제 모달창
 		eventClick: function (info){
-			currentEventId = info.event.id;
-			 $('#deleteButton').show();
-             $('#eventTitle').val(info.event.title);
-             $('#eventAllDay').prop('checked', info.event.allDay);
+			schNo = info.event.id;
 			
-             const DateTime = luxon.DateTime;
-             let isAllDay = info.event.allDay;
-             let start = info.event.start ? DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'HH:mm") : "";
-             let end = info.event.end ? DateTime.fromJSDate(info.event.end).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'HH:mm") : start;
+			$('#eventTitle').val(info.event.title);
+	        $('#eventAllDay').prop('checked', info.event.allDay);
 
-             // ✅ allDay 일정일 경우 `startDate`는 `T00:00`, `endDate`는 `T23:59`로 변환하여 날짜가 사라지는 문제 방지
-             if (isAllDay) {
-                 start = DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'00:00'");
-                 end = DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'23:59'");
-             }
+	        const DateTime = luxon.DateTime;
+	        let start = info.event.start ? DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'HH:mm") : "";
+	        let end = info.event.end ? DateTime.fromJSDate(info.event.end).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'HH:mm") : start;
 
-             $('#eventStart').val(start);
-             $('#eventEnd').val(end);
-             $('#eventColor').val(info.event.backgroundColor || '#3788d8');
-             $('#eventTextColor').val(info.event.textColor || '#ffffff');	
-             $('#eventForm').show();
-		} */
+	        if (info.event.allDay) {
+	            start = DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'00:00'");
+	            end = DateTime.fromJSDate(info.event.start).setZone("Asia/Seoul").toFormat("yyyy-MM-dd'T'23:59'");
+	        }
+
+	        $('#eventStart').val(start);
+	        $('#eventEnd').val(end);
+	        $('#eventColor').val(info.event.backgroundColor || '#3788d8');
+	        $('#eventTextColor').val(info.event.textColor || '#ffffff');
+			
+	        $('#saveBtn').hide();
+	        $('#updateButton').show();
+	        $('#deleteButton').show();
+	        
+			$("#eventForm").modal("show");
+		} 
 		
 	});
 		calendar.render();
 });
 
-//일정구분 
+//일정구분(개인,부서) 
 $(function(){
 	$("#showPersonal").on("click", function(){
+		
 		fillterEvents("personal");
 	});
 	
@@ -354,6 +332,16 @@ $(function(){
 		fillterEvents("all");
 	});
 	
+	//취소버튼
+	$("#cancelBtn").on("click", function(){
+		schNo = null;
+		$("#eventTitle").val();
+		$("#eventStart").val();
+		$("#eventEnd").val();
+		$("#eventColor").val();
+		$("#eventTextColor").val();
+		$("#eventAllDay").prop("checked", false);
+	});
 });
 
 function fillterEvents(filterType){
@@ -377,7 +365,7 @@ function closeForm() {
 	$('#eventForm').hide();
 }
 
-// ✅ 이벤트 저장 기능 (새 일정 추가)
+// 이벤트 저장 기능 (새 일정 추가)
 function saveEvent() {
 	let isGroup = $("#group").prop("checked"); // 체크 상태 확인
 	let start = $('#eventStart').val();
@@ -388,13 +376,15 @@ function saveEvent() {
 	let startDateTime = DateTime.fromISO(start, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss"); 
 	let endDateTime = end? DateTime.fromISO(end, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss") : startDateTime;
 		
+	let bgColor = $('#eventColor').val() || '#3788d8'; // 기본 배경색 (파란색)
+    let textColor = $('#eventTextColor').val() || '#ffffff'; // 기본 글자색 (흰색)
 	
 	let eventData = {
 		schTitle: $('#eventTitle').val(),
 		schSDate: startDateTime,
 		schEDate: endDateTime,
-		schColor: $('#eventColor').val(),
-		schTextColor: $('#eventTextColor').val() || '#ffffff',
+		schColor: bgColor,
+		schTextColor: textColor,
 		schAllDay: $('#eventAllDay').prop('checked'),
 		emplNo : userId
 	};
@@ -402,7 +392,7 @@ function saveEvent() {
 		eventData.groupId = userDeptCode;
 	}
 
-	// ✅ `allDay` 일정 변환
+	//allDay 일정 변환
 	
 	if(eventData.schAllDay){
 		eventData.schSDate = DateTime.fromISO(start, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd 00:00:00");
@@ -411,38 +401,17 @@ function saveEvent() {
 	
 	console.log("데이터확인:", eventData);
 	
-	
-	
-	/* if (eventData.schAllDay) {
-		console.log("하루종일임?");
-		console.log(eventData.schSDate + "T00:00:00");
-		eventData.schSDate = eventData.schSDate + "T00:00:00";
-		eventData.schEDate = start + "T23:59:59"; 
-	} */
-	
-	/*  else{
-		console.log("하루종일 아님?");
-		//일반일정일 경우 endDate가 없으면 startDate와 동일하게 설정
-		if (!eventData.schEDate || eventData.schEDate.trim() === "") {
-			eventData.schEDate = eventData.schSDate;
-		}
-         
-		eventData.schSDate = eventData.schSDate.indexOf(" ") > 0 ? eventData.schSDate.split(" ")[0] + "T" + eventData.schSDate.split(" ")[1] :  eventData.schSDate;
-		eventData.schEDate = eventData.schEDate.indexOf(" ") > 0 ? eventData.schEDate.split(" ")[0] + "T" + eventData.schEDate.split(" ")[1] :  eventData.schEDate;
-		
-		console.log(eventData.schSDate);
-		console.log(eventData.schEDate);
-		// ✅ 일반 일정의 경우 UTC로 변환
-		// eventData.schSDate = DateTime.fromISO(eventData.schSDate, { zone: "Asia/Seoul" }).toUTC().toISO();
-		// eventData.schEDate = DateTime.fromISO(eventData.schEDate, { zone: "Asia/Seoul" }).toUTC().toISO();
-	} */  
-	
 	$.ajax({
 		url: '/api/events',
 		type: 'POST',
 		contentType: 'application/json;charset=utf-8',
 		data: JSON.stringify(eventData),
 		success: function (result) {
+			
+			
+			
+			
+			
 			console.log("성공?:",result);
 			 $('.modal-backdrop').remove();
 			 $('body').removeClass('modal-open');
@@ -456,24 +425,68 @@ function saveEvent() {
 	});
 }
 
+//일정 수정 
+function updateEvent(){
+	let start = $("#eventStart").val();
+	let end = $("#eventEnd").val();
+	
+	
+	const DateTime = luxon.DateTime;
+	
+	let startDateTime = DateTime.fromISO(start, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss"); 
+	let endDateTime = end? DateTime.fromISO(end, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss") : startDateTime;
+	
+	let eventData = {
+	        schNo: schNo, // 기존 일정 ID
+	        schTitle: $('#eventTitle').val(),
+	        schSDate: startDateTime,
+	        schEDate: endDateTime,
+	        schColor: $('#eventColor').val(),
+	        schTextColor: $('#eventTextColor').val() || '#ffffff',
+	        schAllDay: $('#eventAllDay').prop('checked')
+	    };
 
-/* //일정 삭제
+		console.log("uuuuuuuuuuuuu", schNo);
+	    console.log("DEBUG - 수정 요청 데이터:", eventData);
+
+	    $.ajax({
+	        url: `/api/events/\${schNo}`,
+	        type: 'PUT',
+	        contentType: 'application/json;charset=utf-8',
+	        data: JSON.stringify(eventData),
+	        success: function() {
+	            alert("일정이 수정되었습니다!");
+	            $('.modal-backdrop').remove();
+				$('body').removeClass('modal-open');
+	            calendar.refetchEvents();
+	            closeForm();
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("Error updating event:", error);
+	        }
+	    });
+}
+
+ //일정 삭제
 function deleteEvent(){
 	if(!confirm("정말 삭제하시겠습니까?")) return;
 	
+	console.log("xxxxxxxxxxxxxxxxxxxxx", schNo);
 	$.ajax({
 		url : `/api/events/\${schNo}`,
 		type : "post",
 		success : function(){
+			 $('.modal-backdrop').remove();
+			 $('body').removeClass('modal-open');
 			calendar.refetchEvents();
 			closeForm();
-			alert('새 일정이 추가되었습니다!');
+			alert('일정이 삭제되었습니다!');
 		},
 		error: function (xhr, status, error) {
 			console.error("Error adding event:", error);
 		}
 	})
-} */
+}
 
 //하루종일 체크하면 시간x 아니면 시간까지 표시
 function toggleTimeFields() {
@@ -486,6 +499,7 @@ $(document).ready(function () {
     $('.modal-backdrop').remove();  // ✅ 남아 있는 배경 제거
     $('body').removeClass('modal-open'); // ✅ body 클래스 초기화
 });
+
 
 
 

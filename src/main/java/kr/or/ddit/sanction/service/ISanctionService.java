@@ -21,10 +21,11 @@ public interface ISanctionService {
 	public EmployeeVO getEmplRealInfo(EmployeeVO employeeVO);
 
 	public int createNewDoc(DocumentVO dvo);
+	
+	// 기안 문서 목록 호출
+	public List<DocumentVO> getDocumentsInfo(String userId, int startRow, int endRow);
 
-	public List<DocumentVO> getDocumentsInfo(String userId);
-
-	public List<DocumentVO> getApvDocInfo(String userId);
+	public List<DocumentVO> getApvDocInfo(String userId, int startRow, int endRow);
 
 	public DocumentVO getApvDocDetail(String docNo);
 
@@ -77,5 +78,7 @@ public interface ISanctionService {
 	public int deleteCustomApr(int msNo);
 
 	public int updateOpinion(String userId, String docNo, String sanctnOpinion);
+
+	public int getDocumentsCount(String userId);
 
 }

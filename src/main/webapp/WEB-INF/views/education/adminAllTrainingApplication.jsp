@@ -88,7 +88,7 @@
 										<th style="text-align: center;">교육담당</th>
 										<th style="text-align: center;">교육해당부서</th>
 										<th style="text-align: center;">교육대상직급</th>
-										<th style="text-align: center;">수강신청일</th>
+										<th style="text-align: center;">수강신청일자</th>
 										<th style="text-align: center;">수강기간</th>
 										<th style="text-align: center;">승인/반려</th>
 									</tr>
@@ -176,7 +176,7 @@
 								            	    </td>
 								            	    <td style="text-align: center;">\${edu.edcTarget}</td>
 								            	    <td style="text-align: center;">\${edu.edcGrade}</td>
-								            	    <td style="text-align: center;">\${edu.erDate}</td>
+								            	    <td style="text-align: center;">\${formatPreviousDateTime(edu.erDate)}</td>
 						                            <td style="text-align: center;">
 						                                <span class="text-nowrap">\${edu.edcSdateFormatted} ~ \${edu.edcEdateFormatted}</span>
 						                            </td>
@@ -210,7 +210,20 @@
 			</div>
 		</div>
 		<!-- /Page Wrapper -->
-		
+		<script>
+		function formatPreviousDateTime(dateString) {
+		    if (!dateString) return "";
+
+		    let date = new Date(dateString);
+		    let year = date.getFullYear();
+		    let month = String(date.getMonth() + 1).padStart(2, "0");
+		    let day = String(date.getDate()).padStart(2, "0");
+		    let hours = String(date.getHours()).padStart(2, "0");
+		    let minutes = String(date.getMinutes()).padStart(2, "0");
+
+		    return `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
+		}
+		</script>
 		<script>
 		function formatDateTime(dateString) {
 		    if (!dateString) return "";
@@ -219,7 +232,7 @@
 		    let year = date.getFullYear();
 		    let month = String(date.getMonth() + 1).padStart(2, "0");
 		    let day = String(date.getDate()).padStart(2, "0");
-		    return `\${year}/\${month}/\${day}`;
+		    return `\${year}-\${month}-\${day}`;
 		}
 		</script>
 		<script>

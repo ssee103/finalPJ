@@ -10,6 +10,11 @@
 	<meta name="author" content="Dreams technologies - Bootstrap Admin Template">
 	<meta name="robots" content="noindex, nofollow">
 	<title>채용</title>
+	<style>
+		.modal .modal-footer .btn {
+			margin: 5px !important;
+	}
+	</style>
 </head>
 <body>
 	<div id="global-loader" style="display: none;">
@@ -202,7 +207,7 @@
 							</div>
 							<div class="mb-3">
 								<label for="recTreatment" class="form-label">우대사항</label>
-								<input type="text" class="form-control" id="recTreatment" name="recTreatment" placeholder="예: 정보처리기사 자격증 보유">
+								<textarea class="form-control" id="recTreatment" name="recTreatment" placeholder="예: 정보처리기사 자격증 보유"></textarea>
 							</div>
 							<div class="mb-3">
 								<label for="recTarget" class="form-label">모집인원</label>
@@ -217,6 +222,7 @@
 						</div>
 						<!-- /modal-body -->
 						<div class="modal-footer">
+							<button type="button" id="exampleBtn" class="btn btn-success">예시</button>
 							<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
 							<button type="submit" class="btn btn-primary">등록</button>
 						</div>
@@ -256,5 +262,23 @@
 	<script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/script.js"></script>
 	<script type="module" src="${pageContext.request.contextPath }/assets/js/jobPost.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#exampleBtn").click(function () {
+					$("#recTitle").val("2025년도 하반기 HRMES 연구 및 개발 부서 기획 및 정책연구를 위한 데이터 분석가 채용 공고");
+					$("#deptCode").val("03"); // 연구 및 개발
+					$("#recPosition").val("02"); // 대리
+					$("#recSdate").val("2025-06-01");
+					$("#recEdate").val("2025-06-30");
+					$("#recContent").val("데이터 분석 및 정책 연구, AI 기반 모델 개발, 연구 결과 보고서 작성");
+					$("#recReq").val("Python, R, SQL, 데이터 시각화, 통계 분석");
+					$("#recIdeal").val("논리적 사고가 뛰어나고 협업 능력이 우수한 인재");
+					$("#recExp").val("빅데이터 처리 및 머신러닝 모델 구축 경험");
+					$("#recEssential").val("석사 이상 학위 또는 데이터 분석 관련 실무 경험 2년 이상");
+					$("#recTreatment").val("TensorFlow 또는 PyTorch 활용 가능자 우대");
+					$("#recTarget").val("1명");
+			});
+	});	
+	</script>
 </body>
 </html>

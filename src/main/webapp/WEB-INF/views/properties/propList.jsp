@@ -124,21 +124,21 @@
 		    <table class="table table-bordered">
 		        <thead class="table-light">
 		            <tr>
-		                <th>분류 코드</th>
-		                <th>물품명</th>
-		                <th>수량</th>
-		                <th>파일 코드</th>
-		                <th>내용</th>
-		                <th>관리</th>
+		                <th class="text-center">분류코드</th>
+		                <th class="text-center">물품명</th>
+		                <th class="text-center">수량</th>
+		                <th class="text-center">파일 코드</th>
+		                <th class="text-center">내용</th>
+		                <th class="text-center">관리</th>
 		            </tr>
 		        </thead>
 		       	<tbody id="propertyTableBody">
 				    <c:forEach var="prop" items="${propList}">
 				        <tr>
-				            <td>${prop.psCode}</td>
-				            <td>${prop.propName}</td>
-				            <td>${prop.propQty}</td>
-				            <td>${prop.fileIdentify}</td>
+				            <td class="text-center">${prop.psCode}</td>
+				            <td class="text-center">${prop.propName}</td>
+				            <td class="text-center">${prop.propQty}</td>
+				            <td class="text-center">${prop.fileIdentify}</td>
 				            <td>
 				                <c:choose>
 				                    <c:when test="${fn:length(prop.propContent) <= 40}">
@@ -157,7 +157,7 @@
 				                    </c:otherwise>
 				                </c:choose>
 				            </td>
-				            <td>
+				            <td class="text-center">
 							    <div class="btn-group">
 							        <button class="btn btn-sm edit-btn" data-id="${prop.propNo}">수정</button>
 							        <button class="btn btn-sm delete-btn" data-id="${prop.propNo}">삭제</button>

@@ -23,11 +23,47 @@ function showToastMessage(message, type = "primary") {
 	let toastInstance = new bootstrap.Toast(toast[0]);
 	toastInstance.show();
 }
+//호출 방법
+//showToastMessage("✅ 쪽지가 전송되었습니다.", "success");
+//showToastMessage("⚠️ 추가할 사원을 선택하세요.", "warning");
+//showToastMessage("❌ 쪽지 전송에 실패했습니다.", "danger");
 
-// 호출 방법
-// showToastMessage("✅ 쪽지가 전송되었습니다.", "success");
-// showToastMessage("⚠️ 추가할 사원을 선택하세요.", "warning");
-// showToastMessage("❌ 쪽지 전송에 실패했습니다.", "danger");
+
+// 페이지넘어가면 메시지가 안나옴. 그러니까 세션에 저장해서 메시지 띄우기 
+function showSessionToastMessage(message, type = "primary") {
+    let toast = $("#toastMessage");
+    toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+    toast.addClass(`bg-\${type}`);
+    $("#toastBody").text(message);
+    
+    // 메시지를 세션 스토리지에 저장
+    sessionStorage.setItem("toastMessage", message);
+    sessionStorage.setItem("toastType", type);
+
+    let toastInstance = new bootstrap.Toast(toast[0]);
+    toastInstance.show();
+}
+
+// 호출방법 메시지를 호출할 곳에 이거 추가
+/*
+let savedMessage = sessionStorage.getItem("toastMessage");
+let savedType = sessionStorage.getItem("toastType");
+
+if (savedMessage) {
+	let toast = $("#toastMessage");
+	toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+	toast.addClass(`bg-\${savedType}`);
+	$("#toastBody").text(savedMessage);
+	
+	let toastInstance = new bootstrap.Toast(toast[0]);
+	toastInstance.show();
+	
+	// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+	sessionStorage.removeItem("toastMessage");
+	sessionStorage.removeItem("toastType");
+}
+*/
+
 </script>
 <!-- /Toast 알림 메시지 -->
 

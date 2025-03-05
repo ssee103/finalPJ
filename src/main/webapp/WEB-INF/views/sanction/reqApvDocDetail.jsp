@@ -54,6 +54,7 @@
 
 .sort {
  font-weight: bold;
+ background-color: rgb(232, 232, 232) !important;
 }
 
 #aprDiv{
@@ -81,18 +82,10 @@
 		<!-- Sidebar -->
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
 		<!-- /Sidebar -->
-
-		<!-- Horizontal Menu -->
-		<%@ include file="/WEB-INF/views/theme/horizontalMenu.jsp" %>
-		<!-- /Horizontal Menu -->
-
-		<!-- Two Col Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/twoColSidebar.jsp" %>
-		<!-- /Two Col Sidebar -->
-
-		<!-- Stacked Sidebar -->
-		<%@ include file="/WEB-INF/views/theme/stackedSidebar.jsp" %>
-		<!-- /Stacked Sidebar -->
+		
+		<!-- 모달창들 -->
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+		<!-- /모달창들 -->
 
 		<div class="page-wrapper cardhead">
 			<div class="content ">
@@ -111,48 +104,54 @@
 
 					<!-- 문서 자체 정보 -->
 					<div class="col-md-12">
+						<a href="/hrms/sanction/requestedApvDocuments" class="back-icon d-flex align-items-center fs-15 fw-medium mb-3 d-inline-flex">
+							<span class=" d-flex justify-content-center align-items-center rounded-circle me-2">
+								<i class="ti ti-arrow-left"></i>
+							</span>
+							목록으로 돌아가기
+						</a>
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title">결재 문서 상세 페이지 입니다.</h5> <br/>
+								<h5 class="card-title">결재 문서</h5> <br/>
 								
-								<table class="table datatable">
+								<table class="table datatable text-center">
 									<tr>
 										<td class="sort">문서 번호</td>
-										<td id="docNo"></td>
+										<td id="docNo" class="text-start"></td>
 										<td class="sort">기안자</td>
-										<td id="writer"></td>
+										<td id="writer" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">문서 제목</td>
-										<td id="docTitle"></td>
+										<td id="docTitle" class="text-start"></td>
 										<td class="sort">문서 상태</td>
-										<td id="docStatus"></td>
+										<td id="docStatus" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">기안 일시</td>
-										<td id="submitDate"></td>
+										<td id="submitDate" class="text-start"></td>
 										<td class="sort">보존 기한</td>
-										<td id="expiredDate"></td>
+										<td id="expiredDate" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">문서 전결 허용 여부</td>
-										<td id="allowAt"></td>
+										<td id="allowAt" class="text-start"></td>
 										<td class="sort">전결권 보유 여부(본인)</td>
-										<td id="myAllow"></td>
+										<td id="myAllow" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">결재 선</td>
-										<td id="sanctionLine"></td>
+										<td id="sanctionLine" class="text-start"></td>
 										<td class="sort">결재 일시(본인)</td>
-										<td id="sanctnDate"></td>
+										<td id="sanctnDate" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">참조자</td>
-										<td id="refLine" colspan="3"></td>
+										<td id="refLine" colspan="3" class="text-start"></td>
 									</tr>
 									<tr>
 										<td class="sort">첨부 파일</td>
-										<td id="docFileView" colspan="3"></td>
+										<td id="docFileView" colspan="3" class="text-start"></td>
 									</tr>
 								</table>
 							</div>
@@ -234,10 +233,6 @@
 	<!-- Color Picker JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 	
-	<!-- Datatable JS -->
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-	<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
-	
 	<!-- Daterangepikcer JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -245,10 +240,6 @@
 	
 	<!-- Select2 JS -->
 	<script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-	
-	<!-- Chart JS -->
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-	<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 	
 	<!-- Custom JS -->
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
@@ -392,11 +383,11 @@ $(function(){
                                                         	}
                                                             
                                                         } else {
-                                                            alert("최종 승인 처리 중 오류가 발생했습니다.");
+                                                            showToastMessage("최종 승인 처리 중 오류가 발생했습니다.", "danger");
                                                         }
                                                     },
                                                     error: function(){
-                                                        alert("최종 승인 과정 중 ajax 오류입니다.");
+                                                        showToastMessage("최종 승인 과정 중 오류가 발생했습니다.", "danger");
                                                     }
                                                 });
                                             }
@@ -422,12 +413,12 @@ $(function(){
                                                         // 전체 페이지 새로고침 대신 loadDocDetail() 호출
                                                         loadDocDetail();
                                                     } else {
-                                                        alert("문서 업데이트에 실패했습니다.");
+                                                        showToastMessage("문서 업데이트에 실패했습니다.", "danger");
                                                     }
                                                 }
                                             });
                                         } else {
-                                            alert("승인 처리 중 오류가 발생했습니다.");
+                                            showToastMessage("승인 처리 중 오류가 발생했습니다.", "danger");
                                         }
                                     }
                                 });
@@ -513,17 +504,17 @@ $(function(){
                                                             loadDocDetail();
                                                         },
                                                         error: function(error){
-                                                            alert("전결 후 문서 교체에 실패했습니다.");
+                                                            showToastMessage("전결 후 문서 교체에 실패했습니다.", "danger");
                                                         }
                                                     });
                                                 } else {
-                                                    alert("문서 상태 최종업데이트 중 문제가 발생했습니다.");
+                                                    showToastMessage("문서 상태 최종업데이트 중 문제가 발생했습니다.", "danger");
                                                 }
                                             }
                                         });
                                     },
                                     error: function(error){
-                                        alert("전결 처리 중 오류가 발생했습니다.");
+                                        showToastMessage("전결 처리 중 오류가 발생했습니다.", "danger");
                                     }
                                 });
                             }); // 전결 버튼 클릭 이벤트 종료
@@ -557,7 +548,7 @@ $(function(){
                             
                         },
                         error: function(error){
-                            alert("결제자 서명 조회에 오류가 발생했습니다.");
+                            showToastMessage("결제자 서명 조회에 오류가 발생했습니다.", "danger");
                         }
                     });
                 }
@@ -611,7 +602,7 @@ function insertHistory(docNoData) {
                     },
                     error: function(error) {
                         console.error("히스토리 테이블 인서트 실패:", error);
-                        alert("히스토리 테이블 인서트 중 오류 발생");
+                        showToastMessage("히스토리 테이블 인서트 중 오류 발생", "danger");
                     }
                 });
             }
@@ -633,7 +624,7 @@ function insertEvaluation(evalData) {
         	if(evalRes == 1) {
         		console.log("사원 평가 데이터 삽입 성공");
         	} else {
-        		alert("사원 평가 데이터 삽입 실패");
+        		showToastMessage("사원 평가 데이터 삽입 실패", "danger");
         	}
         }
 	});
@@ -670,7 +661,7 @@ function insertVacation() {
 				// 일 수 가감 메소드 실행
 				minusVacation(startDate, endDate);
 			} else {
-				alert("휴가 신청 히스토리 인서트 에러");
+				showToastMessage("휴가 신청 히스토리 인서트 에러", "danger");
 			}
 		}
 	});
@@ -746,7 +737,7 @@ function minusVacation(startDate, endDate) {
 			if(countRes == 1) {
 				console.log("연차 수 차감이 반영되었습니다.");
 			} else {
-				alert("연차 수 차감에 오류가 발생했습니다.");
+				showToastMessage("연차 수 차감에 오류가 발생했습니다.", "danger");
 			}
 		}
 	});
@@ -799,7 +790,7 @@ function updtDocStatus(data) {
             	replaceDocHtml(docContentData);
             	
             } else {
-                alert("문서 상태(반려) 최종업데이트 중 문제가 발생했습니다.");
+                showToastMessage("문서 상태(반려) 최종업데이트 중 문제가 발생했습니다.", "danger");
             }
         }
     });
@@ -823,11 +814,11 @@ function replaceDocHtml(data) {
                 askForOpinion();
             	
             } else {
-            	alert("문서 교체에 실패했습니다.");
+            	showToastMessage("문서 교체에 실패했습니다.", "danger");
             }
         },
         error: function(error){
-            alert("문서 교체에 실패했습니다.");
+            showToastMessage("문서 교체에 실패했습니다.", "danger");
         }
     });
 }
@@ -1009,7 +1000,7 @@ function loadDocDetail() {
             
         },
         error: function(error){
-            alert("문서 상세정보 호출에 오류가 발생했습니다.");
+            showToastMessage("문서 상세정보 호출에 오류가 발생했습니다.", "danger");
         }
     });
 }
@@ -1046,10 +1037,10 @@ $("#saveOpinion").on("click", function(){
 		success: function(res) {
 			console.log("의견 작성 res: ", res);
 			if(res > 0) {
-				alert("의견 작성이 완료되었습니다.");
+				showToastMessage("의견 작성이 완료되었습니다.", "success");
 				$("#opinionModal").modal("hide");
 			} else {
-				alert("의견 작성 중 오류가 발생했습니다.");
+				showToastMessage("의견 작성 중 오류가 발생했습니다.", "danger");
 			}
 		}
 	});

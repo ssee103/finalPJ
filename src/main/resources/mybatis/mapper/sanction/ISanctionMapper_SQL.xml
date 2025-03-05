@@ -69,46 +69,75 @@
 		values(#{docNo}, #{refNo})
 </insert>
 
-<select id="getDocumentsInfo" parameterType="string" resultType="kr.or.ddit.sanction.vo.DocumentVO">
-	SELECT 
-		doc_no
-		, ds.ds_type as ds_code
-		, writer_no
-		, doc_title
-		, TO_CHAR(doc_date, 'YYYY-MM-DD') as doc_date
-		, doc_content
-		, doc_remark
-		, doc_period
-		, doc_temp
-		, TO_CHAR(sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt
-		, dcrb_allow
-		, doc_apv
-		, final_date
-		, file_identify
-	FROM document d
-	LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
-	WHERE writer_no = #{userId}
-	ORDER BY TO_NUMBER(doc_no) DESC
+<!-- 기안 문서 목록 호출 + 페이징 -->
+<select id="getDocumentsInfo" parameterType="map" resultType="kr.or.ddit.sanction.vo.DocumentVO">
+
+	SELECT * FROM (
+        SELECT a.*, ROWNUM rn FROM (
+			SELECT 
+				doc_no
+				, ds.ds_type as ds_code
+				, writer_no
+				, doc_title
+				, TO_CHAR(doc_date, 'YYYY-MM-DD') as doc_date
+				, doc_content
+				, doc_remark
+				, doc_period
+				, doc_temp
+				, TO_CHAR(sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt
+				, dcrb_allow
+				, doc_apv
+				, final_date
+				, file_identify
+			FROM document d
+			LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
+			WHERE writer_no = #{userId}
+			ORDER BY TO_NUMBER(doc_no) DESC
+		) a
+	<![CDATA[
+	    WHERE ROWNUM <= #{endRow}
+	]]>
+	)
+<![CDATA[
+	 WHERE rn >= #{startRow}
+]]>	
 </select>
 
-<select id="getApvDocInfo" parameterType="string" resultType="kr.or.ddit.sanction.vo.DocumentVO">
-	select 
-	    d.doc_no,
-	    ds.ds_type as ds_code,
-	    (select empl_nm from employee where empl_no = d.writer_no) as writer_no,
-	    d.doc_title,
-	    d.doc_content,
-	    d.doc_period,
-	    d.file_identify,
-	    TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt,
-	    a.sanctner_no,
-	    a.sanctn_status,
-	    a.sanctn_date
-	from document d
-	LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
-	join sanctioner a on d.doc_no = a.doc_no
-	where a.sanctner_no = #{userId}
-	order by TO_NUMBER(doc_no) desc
+<!-- 문서 개수 카운트 -->
+<select id="getDocumentsCount" parameterType="string" resultType="int">
+	select COUNT(doc_no)
+	from document
+	where writer_no = #{userId}
+</select>
+
+<select id="getApvDocInfo" parameterType="map" resultType="kr.or.ddit.sanction.vo.DocumentVO">
+	SELECT * FROM (
+        SELECT a.*, ROWNUM rn FROM (
+			select 
+			    d.doc_no,
+			    ds.ds_type as ds_code,
+			    (select empl_nm from employee where empl_no = d.writer_no) as writer_no,
+			    d.doc_title,
+			    d.doc_content,
+			    d.doc_period,
+			    d.file_identify,
+			    TO_CHAR(d.sanctn_rqstdt, 'YYYY-MM-DD') as sanctn_rqstdt,
+			    a.sanctner_no,
+			    a.sanctn_status,
+			    a.sanctn_date
+			from document d
+			LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
+			join sanctioner a on d.doc_no = a.doc_no
+			where a.sanctner_no = #{userId}
+			order by TO_NUMBER(doc_no) desc
+		) a
+	<![CDATA[
+	    WHERE ROWNUM <= #{endRow}
+	]]>
+	)
+<![CDATA[
+	 WHERE rn >= #{startRow}
+]]>			
 </select>
 
 <resultMap id="documentResultMap" type="kr.or.ddit.sanction.vo.DocumentVO">

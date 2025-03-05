@@ -89,6 +89,7 @@ public class CalendarRestController {
 	}
 	
 	//삭제
+	@PostMapping("/{schNo}")
 	public ResponseEntity<?> deleteCalendar(@PathVariable int schNo){
 		CalendarVO cal = service.selectSchNo(schNo);
 		

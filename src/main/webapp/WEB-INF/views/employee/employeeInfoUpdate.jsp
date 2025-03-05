@@ -688,7 +688,7 @@ $(function(){
 					console.log("업데이트 응답: ", res);
 					
 					if(res == 1) {
-						showToastMessage("수정이 완료되었습니다.", "success");
+						showSessionToastMessage("수정이 완료되었습니다.", "success");
 						 location.href = "/hrms/employee/employeeInfo";
 					} else {
 						showToastMessage("수정에 실패했습니다.", "danger");
