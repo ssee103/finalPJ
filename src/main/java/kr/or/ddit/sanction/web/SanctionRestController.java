@@ -110,7 +110,7 @@ public class SanctionRestController {
 		PaginationInfoVO<DocumentVO> pagingVO = new PaginationInfoVO<>(10, 5);
 		pagingVO.setCurrentPage(currentPage);
 		
-		int totalCount = service.getDocumentsCount(userId);
+		int totalCount = service.getSanctionCount(userId);
 		pagingVO.setTotalRecord(totalCount);
 		
 		int startRow = pagingVO.getStartRow();

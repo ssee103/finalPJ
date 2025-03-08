@@ -22,6 +22,7 @@
     <div class="main-wrapper">
         <%@ include file="/WEB-INF/views/theme/header.jsp" %>
         <%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
+        <%@ include file="/WEB-INF/views/theme/modal.jsp" %>
         
         <div class="page-wrapper">
             <div class="content">
@@ -30,7 +31,7 @@
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
                             <a href="/hrms/education/admin/adminAllTrainingListSearch">
-                                <i class="ti ti-arrow-left me-2"></i>Back to List
+                                <i class="ti ti-arrow-left me-2"></i>목록으로 가기
                             </a>
                         </h6>
                     </div>
@@ -216,19 +217,12 @@
     						    });
                         	}
                         </script>
-                        
-                        
                         <div class="custom-accordion-items">
 						    <div class="accordion accordions-items-seperate" id="accordionExample">
 						        <div class="accordion-item">
 						            <div class="accordion-header" id="headingTwo">
 						                <div class="accordion-button">
-						                    <h5 class="mb-3 d-flex justify-content-between align-items-center">
-											    커리큘럼
-											    <a href="#" data-bs-toggle="modal" data-bs-target="#editCurriculumModal">
-											        <div class="action-icon d-inline-flex"><i class="ti ti-edit fs-3"></i></div>
-											    </a>
-											</h5>
+						                    <h5>커리큘럼 미리보기</h5>
 						                    <div class="ms-auto">
 						                        <a href="#" class="d-flex align-items-center collapsed collapse-arrow"
 						                            data-bs-toggle="collapse" data-bs-target="#primaryBorderTwo"
@@ -246,8 +240,8 @@
 						                            <c:when test="${not empty curriculumList}">
 						                                <c:forEach var="cur" items="${curriculumList}">
 						                                    <div class="list-group-item border rounded mb-2 p-2">
-						                                        <h4 class="fs-14">${cur.curName}</h4>
-						                                        <textarea class="form-control curUrl" placeholder="커리큘럼 URL" disabled="disabled">${cur.curUrl}</textarea>
+						                                        <h4 class="fs-17">${cur.curName}</h4><br/>
+						                                        <p> : ${cur.curExplain}</p>
 						                                    </div>
 						                                </c:forEach>
 						                            </c:when>
@@ -446,7 +440,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify(curriculumList),
             success: function(response) {
-                alert("커리큘럼 수정 완료!");
+                showSessionToastMessage("커리큘럼 수정 완료!", "success");
                 location.reload();
             }
         });
@@ -456,6 +450,25 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function() {
+	
+	let savedMessage = sessionStorage.getItem("toastMessage");
+	let savedType = sessionStorage.getItem("toastType");
+
+	if (savedMessage) {
+		let toast = $("#toastMessage");
+		toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+		toast.addClass(`bg-\${savedType}`);
+		$("#toastBody").text(savedMessage);
+		
+		let toastInstance = new bootstrap.Toast(toast[0]);
+		toastInstance.show();
+		
+		// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+		sessionStorage.removeItem("toastMessage");
+		sessionStorage.removeItem("toastType");
+	}
+	
+	
     $.ajax({
         url: "/hrms/education/admin/rest/getBookList",
         type: "GET",
@@ -493,7 +506,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify(educationData),
             success: function(response) {
-                alert("교육 정보 수정 완료!");
+                showSessionToastMessage("교육 정보 수정 완료!", "success");
                 location.reload();
             }
         });
@@ -510,7 +523,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify(contentData),
             success: function(response) {
-                alert("교육 내용 수정 완료!");
+                showSessionToastMessage("교육 내용 수정 완료!", "success");
                 location.reload();
             }
         });
@@ -531,7 +544,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify(bookData),
             success: function(response) {
-                alert("교재 수정 완료!");
+                showSessionToastMessage("교재 수정 완료!", "success");
                 location.reload();
             },
             error: function(xhr, status, error) {
@@ -557,10 +570,6 @@ $(document).ready(function() {
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
-
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -568,10 +577,6 @@ $(document).ready(function() {
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

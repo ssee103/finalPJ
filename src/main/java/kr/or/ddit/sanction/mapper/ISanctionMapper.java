@@ -95,5 +95,7 @@ public interface ISanctionMapper {
 	public int updateOpinion(String userId, String docNo, String sanctnOpinion);
 
 	public int getDocumentsCount(String userId);
+
+	public int getSanctionCount(String userId);
 	
 }

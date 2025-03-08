@@ -890,7 +890,7 @@
       formData.append("file", file);
       formData.append("crNo", currentCrNo);
       formData.append("emplNo", userId);
-      formData.append("cmContent", "[파일]");
+      formData.append("cmContent", "[파일]");  // 기본 텍스트로 설정
   
       $.ajax({
           url: "/chat/fileMessage",
@@ -901,9 +901,15 @@
           success: function (data) {
               console.log("✅ 파일 업로드 성공:", data);
               let fileMessage = data.message;
-              displayMessage(fileMessage);
   
-              if (!fileMessage.fileUrl) {
+              // ✅ 파일 메시지 처리 (fileUrl이 있으면 즉시 표시, 없으면 서버에서 재요청)
+              if (fileMessage.fileUrl) {
+                  fileMessage.cmContent = `<a href="${fileMessage.fileUrl}" target="_blank">
+                                              <img src="${fileMessage.fileUrl}" alt="첨부 파일" style="max-width: 200px; max-height: 200px;">
+                                           </a>`;
+                  displayMessage(fileMessage);
+              } else {
+                  console.warn("🚨 파일 URL이 없습니다. 서버에서 다시 가져옵니다.");
                   retryFetchFileUrl(fileMessage, 5);
               }
   
@@ -932,6 +938,7 @@
           }
       });
   }
+  
   
 
     function retryFetchFileUrl(fileMessage, attemptsLeft) {

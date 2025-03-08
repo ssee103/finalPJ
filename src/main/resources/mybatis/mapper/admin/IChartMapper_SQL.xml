@@ -118,4 +118,36 @@
 		JOIN employee e ON yv.empl_no = e.empl_no
 		WHERE e.dept_code IN ('01', '02', '03', '04', '05')
 	</select>
+	
+	<select id="getYearsOfService">
+		SELECT 
+		    NVL((SELECT ROUND(AVG(MONTHS_BETWEEN(sysdate, hire_date)/12),2)
+		    FROM employee
+		    WHERE dept_code = '01'),0) AS "01",
+		    
+		    NVL((SELECT ROUND(AVG(MONTHS_BETWEEN(sysdate, hire_date)/12),2)
+		    FROM employee
+		    WHERE dept_code = '02'),0) AS "02",
+		    
+		    NVL((SELECT ROUND(AVG(MONTHS_BETWEEN(sysdate, hire_date)/12),2)
+		    FROM employee
+		    WHERE dept_code = '03'),0) AS "03",
+		    
+		    nvl((SELECT ROUND(AVG(MONTHS_BETWEEN(sysdate, hire_date)/12),2)
+		    FROM employee
+		    WHERE dept_code = '04'),0) AS "04",
+		    
+		    NVL((SELECT ROUND(AVG(MONTHS_BETWEEN(sysdate, hire_date)/12),2)
+		    FROM employee
+		    WHERE dept_code = '05'),0) AS "05"
+		FROM dual
+	</select>
+	
+	<select id="getVaction">
+	SELECT 
+	    (SELECT ROUND(SUM(yryc_total) / SUM(yryc_total) * 100, 2) FROM yearly_vacation) AS total,
+	    (SELECT ROUND(SUM(yryc_usage) / SUM(yryc_total) * 100, 2) FROM yearly_vacation) AS usage,
+	    (SELECT ROUND(SUM(yryc_remndr) / SUM(yryc_total) * 100, 2) FROM yearly_vacation) AS remain
+	FROM dual
+	</select>
 </mapper>

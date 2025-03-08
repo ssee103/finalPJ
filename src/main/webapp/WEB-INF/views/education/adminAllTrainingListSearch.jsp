@@ -14,6 +14,65 @@
 	<meta name="robots" content="noindex, nofollow">
 	<title>전체교육 목록관리</title>
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	
+	<style>
+    .book-item {
+        display: inline-block;
+        position: relative;
+        margin: 10px;
+        text-align: center;
+        cursor: pointer;
+    }
+    .book-item img {
+        width: 120px;
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+    .book-item:hover img {
+        transform: scale(1.1);
+    }
+    .book-item p {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 180px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 12px;
+        z-index: 100;
+    }
+
+    .book-item:hover p {
+        display: none;
+    }
+    .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+	}
+	
+	#searchInput {
+	    width: 300px; /* 너비 조정 */
+	    height: 43px; /* 높이 증가 */
+	    font-size: 16px; /* 글씨 크기 증가 */
+	    padding: 10px;
+	    border: 2px solid #808080; /* 파란색 테두리 */
+	    border-radius: 8px; /* 모서리 둥글게 */
+	    outline: none;
+	    transition: all 0.3s ease;
+	}
+	
+	#searchInput:focus {
+	    border-color: #808080; /* 포커스 시 더 진한 파란색 */
+	    box-shadow: 0 0 8px rgba(0, 91, 187, 0.5);
+	}
+</style>
 </head>
 <body>
 
@@ -49,13 +108,13 @@
 							</div>
 						</div>
 						<div class="mb-2">
-							<a href="#" data-bs-toggle="modal" data-bs-target="#add_book" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>교재 등록하기</a>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#add_book" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>교재등록</a>
 						</div>&nbsp;
 						<div class="mb-2">
-							<a href="#" data-bs-toggle="modal" data-bs-target="#add_curriculum" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>커리큘럼 등록하기</a>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#add_curriculum" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>커리큘럼등록</a>
 						</div>&nbsp;
 						<div class="mb-2">
-							<a href="#" data-bs-toggle="modal" data-bs-target="#add_project" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>강의 등록하기</a>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#add_project" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>강의등록</a>
 						</div>
 					</div>
 				</div>
@@ -265,16 +324,6 @@
 						</button>
 					</div>
 					<div class="add-info-fieldset ">
-						<div class="contact-grids-tab p-3 pb-0">
-							<ul class="nav nav-underline" id="myTab" role="tablist">
-								<li class="nav-item" role="presentation">
-									<button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">강의등록</button>
-								  </li>
-								  <li class="nav-item" role="presentation">
-									<button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab" aria-selected="false">교재등록(구현 미정)</button>
-								  </li>
-							</ul>
-						</div>
 							<div class="tab-content" id="myTabContent">
 								<div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="basic-tab" tabindex="0">
 							<form>
@@ -327,33 +376,7 @@
 												</select>
 											</div>
 										</div>
-										<!-- <div class="col-md-6">
-											<div class="mb-3">
-												<label class="form-label">교육분류</label>
-												<select class="select"  id="edcSort2">
-													<option>선택</option>
-												</select>
-											</div>
-										</div>
-										<script>
-										    $(document).ready(function() {
-										        $.ajax({
-										            url: "/hrms/education/admin/rest/getSortList",
-										            type: "GET",
-										            dataType: "json",
-										            success: function(sorts) {
-										                let edcSort2 = $("#edcSort2");
-										                sorts.forEach(function(sort) {
-										                    let option = `<option value=\${sort.edcSort}>\${sort.edcSort}</option>`;
-										                    edcSort2.append(option);
-										                });
-										            },
-										            error: function(xhr, status, error) {
-										                console.error("분류 데이터를 불러오는 중 오류 발생:", error);
-										            }
-										        });
-										    });
-										</script> -->
+										
 										<div class="col-md-4">
 											<div class="mb-3">
 												<label class="form-label">교육대상부서</label>
@@ -367,33 +390,7 @@
 												</select>
 											</div>
 										</div>
-										<!-- <div class="col-md-4">
-											<div class="mb-3">
-												<label class="form-label">교육대상부서</label>
-												<select class="select" id="edcTarget2">
-													<option>선택</option>
-												</select>
-											</div>
-										</div>
-										<script>
-										    $(document).ready(function() {
-										        $.ajax({
-										            url: "/hrms/education/admin/rest/getTargetList",
-										            type: "GET",
-										            dataType: "json",
-										            success: function(targets) {
-										                let edcTarget2 = $("#edcTarget2");
-										                targets.forEach(function(target) {
-										                    let option = `<option value=\${target.edcTarget}>\${target.edcTarget}</option>`;
-										                    edcTarget2.append(option);
-										                });
-										            },
-										            error: function(xhr, status, error) {
-										                console.error("교육대상부서 데이터를 불러오는 중 오류 발생:", error);
-										            }
-										        });
-										    });
-										</script> -->
+										
 										
 										<div class="col-md-4">
 											<div class="mb-3">
@@ -409,35 +406,6 @@
 											</div>
 										</div>
 										
-										
-										<!-- <div class="col-md-4">
-											<div class="mb-3">
-												<label class="form-label">교육대상직급</label>
-												<select class="select" id="edcGrade2">
-													<option>전체</option>
-												</select>
-											</div>
-										</div>
-										<script>
-										    $(document).ready(function() {
-										        $.ajax({
-										            url: "/hrms/education/admin/rest/getGradeList",
-										            type: "GET",
-										            dataType: "json",
-										            success: function(grades) {
-										            	//console.log(grades);
-										                let edcGrade2 = $("#edcGrade2");
-										                grades.forEach(function(grade) {
-										                    let option = `<option value=\${grade.edcGrade}>\${grade.edcGrade}</option>`;
-										                    edcGrade2.append(option);
-										                });
-										            },
-										            error: function(xhr, status, error) {
-										                console.error("교육대상직급 데이터를 불러오는 중 오류 발생:", error);
-										            }
-										        });
-										    });
-										</script> -->
 										<div class="col-md-4">
 											<div class="mb-3">
 										        <label class="form-label">교육커리큘럼</label>
@@ -538,8 +506,9 @@
 								</div>
 								<div class="modal-footer">
 									<div class="d-flex align-items-center justify-content-end">
-										<button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">Cancel</button>
-										<button class="btn btn-primary" type="button" id="saveProjectBtn">Save</button>
+										<button class="btn btn-success me-2" type="button" id="exampleButton2">예시</button>
+										<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
+										<button class="btn btn-primary" type="button" id="saveProjectBtn">저장</button>
 									</div>
 								</div>
 							</form>
@@ -564,13 +533,6 @@
 		                </button>
 		            </div>
 		            <div class="add-info-fieldset ">
-		                <div class="contact-grids-tab p-3 pb-0">
-		                    <ul class="nav nav-underline" id="myTab" role="tablist">
-		                        <li class="nav-item" role="presentation">
-		                            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">Basic Information</button>
-		                        </li>
-		                    </ul>
-		                </div>
 		                <div class="tab-content" id="myTabContent">
 		                    <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="basic-tab" tabindex="0">
 		                        <form id="bookForm">
@@ -580,22 +542,48 @@
 		                                        <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
 		                                            <div class="profile-upload">
 		                                                <div class="mb-2">
-		                                                    <h6 class="mb-1"> 공공 도서관 검색 </h6>
+		                                                    <h6 class="mb-1">도서 검색</h6>
 		                                                    <div class="search-container">
-		                                                        <input type="text" id="searchInput" placeholder="책 제목을 입력하세요">
-		                                                        <button type="button" onclick="searchBooks()">Search</button>
+		                                                        <input type="text" id="searchInput" placeholder="도서명을 입력하세요">
+		                                                        <button type="button" class="btn btn-primary" onclick="searchBooks()">검색</button>
 		                                                    </div>
 		                                                    <div id="searchResults" style="display: none;"></div>
 		                                                </div>
 		                                            </div>
 		                                        </div>
 		                                    </div>
-		                                    
+		                                    <div class="col-md-12 text-center">
+		                                        <img id="bookThumbnail" src="" alt="Book Thumbnail" style="max-width: 150px; display: none;">
+		                                    </div>
+		                                    <div class="col-md-12">
+		                                        <div class="mb-3">
+		                                            <label class="form-label">도서명</label>
+		                                            <input type="text" id="bookTitle" class="form-control" readonly>
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-md-12">
+		                                        <div class="mb-3">
+		                                            <label class="form-label">도서 가격</label>
+		                                            <input type="text" id="bookPrice" class="form-control" readonly>
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-md-12">
+		                                        <div class="mb-3">
+		                                            <label class="form-label">도서 출판사</label>
+		                                            <input type="text" id="bookPublisher" class="form-control" readonly>
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-md-12">
+		                                        <div class="mb-3">
+		                                            <label class="form-label">도서 고유번호(ISBN)</label>
+		                                            <input type="text" id="bookIsbn" class="form-control" readonly>
+		                                        </div>
+		                                    </div>
 		                                </div>
 		                            </div>
 		                            <div class="modal-footer">
 		                                <div class="d-flex align-items-center justify-content-end">
-		                                    <button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">닫기</button>
+		                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
 		                                    <button type="button" onclick="saveBookBtn()" class="btn btn-primary">저장</button>
 		                                </div>
 		                            </div>
@@ -621,13 +609,6 @@
 		                </button>
 		            </div>
 		            <div class="add-info-fieldset ">
-		                <div class="contact-grids-tab p-3 pb-0">
-		                    <ul class="nav nav-underline" id="myTab1" role="tablist">
-		                        <li class="nav-item" role="presentation">
-		                            <button class="nav-link active" id="basic-tab1" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab" aria-selected="true">Basic Information</button>
-		                        </li>
-		                    </ul>
-		                </div>
 		                <div class="tab-content" id="myTabContent">
 		                    <div class="tab-pane fade show active" id="basic-info1" role="tabpanel" aria-labelledby="basic-tab" tabindex="0">
 		                        <form id="curForm">
@@ -640,12 +621,13 @@
 											    </div>
 											</div>
 											<div id="curriculumContainer"></div>
-											<button type="button" class="btn btn-secondary mt-2" id="addCurriculum">+ 추가</button>
+											<button type="button" class="btn btn-primary mt-2" id="addCurriculum">+ 추가</button>
 		                                </div>
 		                            </div>
 		                            <div class="modal-footer">
 		                                <div class="d-flex align-items-center justify-content-end">
-		                                    <button type="button" class="btn btn-outline-light border me-2" data-bs-dismiss="modal">닫기</button>
+																			<button type="button" id="exampleButton" class="btn btn-success me-2">예시</button>
+		                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
 		                                    <button type="button" onclick="saveCurriculumBtn()" class="btn btn-primary">저장</button>
 		                                </div>
 		                            </div>
@@ -657,6 +639,62 @@
 		    </div>
 		</div>
 		<!-- /Add Curriculum -->
+		 <script>
+		 $(document).ready(function() {
+			    $("#exampleButton").click(function() {
+			        let curriculumContainer = $("#curriculumContainer");
+			        $("#curTitle").val("2025 정보처리기사 필기 과정");
+
+			        // 기존 입력값 초기화
+			        curriculumContainer.empty();
+
+			        let exampleData = [
+								{
+										content: "정보처리기사 1과목",
+										url: `<iframe width="560" height="315" src="https://www.youtube.com/embed/V6xZmoIyTR8?si=9LjBIOvsR66zIrRc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+										description: "정보처리기사 1과목 요약정리"
+								},
+								{
+										content: "정보처리기사 2과목",
+										url: `<iframe width="560" height="315" src="https://www.youtube.com/embed/kHAlXdI3cZ4?si=qY0yYmn4BGaweb0t" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+										description: "정보처리기사 2과목 요약정리"
+								},
+								{
+									content: "정보처리기사 3과목",
+									url: `<iframe width="560" height="315" src="https://www.youtube.com/embed/JxuLMGJONfE?si=aCxdwkDb52gYD5VZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+									description: "정보처리기사 3과목 요약정리"
+								},
+								{
+									content: "정보처리기사 4과목",
+									url: `<iframe width="560" height="315" src="https://www.youtube.com/embed/W5UyQK1UoiE?si=oCDH8WJRkoaJwG2t" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+									description: "정보처리기사 4과목 요약정리"
+								},
+								{
+									content: "정보처리기사 5과목",
+									url: `<iframe width="560" height="315" src="https://www.youtube.com/embed/CZaHIHj1uTs?si=PdcFzIiw5x71PNfL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+									description: "정보처리기사 5과목 요약정리"
+								}
+						];
+
+			        $.each(exampleData, function(index, data) {
+			            let row = `
+			                <div class="curriculum-item input-group mb-2">
+			                    <input type="text" class="form-control curName" value="\${data.content}" readonly>
+			                    <textarea class="form-control curUrl">\${data.url}</textarea>
+			                    <input type="text" class="form-control curExplain" value="\${data.description}" readonly>
+			                    <button type="button" class="btn btn-danger removeCurriculum">삭제</button>
+			                </div>
+			            `;
+			            curriculumContainer.append(row);
+			        });
+			    });
+
+			    $("#curriculumContainer").on("click", ".removeCurriculum", function () {
+			        $(this).closest(".curriculum-item").remove();
+			    });
+			});
+		
+		 </script>
 		<script>
 		$(document).ready(function () {
 		    $("#addCurriculum").click(function () {
@@ -665,7 +703,7 @@
 		                <input type="text" class="form-control" placeholder="커리큘럼 내용" name="curName">
 		                <input type="text" class="form-control" placeholder="커리큘럼 URL" name="curUrl">
 		                <input type="text" class="form-control" placeholder="커리큘럼 설명" name="curExplain">
-		                <button type="button" class="btn btn-danger removeCurriculum">X</button>
+		                <button type="button" class="btn btn-danger removeCurriculum">삭제</button>
 		            </div>
 		        `;
 		        $("#curriculumContainer").append(curriculumHtml);
@@ -684,13 +722,13 @@
 		    let curriculumList = [];
 
 		    $(".curriculum-item").each(function () {
-		        let curName = $(this).find("input[name='curName']").val();
-		        let curUrl = $(this).find("input[name='curUrl']").val();
-		        let curExplain = $(this).find("input[name='curExplain']").val();
+		        let curName = $(this).find(".curName").val();
+		        let curUrl = $(this).find(".curUrl").val();
+		        let curExplain = $(this).find(".curExplain").val();
 
-		        if (curName && curUrl && curExplain && curTitle) {
+		        if (curName && curUrl && curExplain) {
 		            curriculumList.push({
-		                curTitle: curTitle, // 주제 추가
+		                curTitle: curTitle, 
 		                curName: curName,
 		                curUrl: curUrl,
 		                curExplain: curExplain
@@ -715,7 +753,6 @@
 		    });
 		}
 
-		
 		</script>
 		<script>
 		function formatDateTime(dateString) {

@@ -58,11 +58,11 @@
 }
 
 #aprDiv{
- margin-right: 166px !important;
+ margin-right: 288px !important;
 }
 
 #docNoView {
- margin-left: 166px !important;
+ margin-left: 288px !important;
 }
 
 </style>

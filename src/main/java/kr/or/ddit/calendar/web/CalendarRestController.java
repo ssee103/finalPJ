@@ -38,7 +38,7 @@ public class CalendarRestController {
 
 	//일정추가
 	@PostMapping
-	public ResponseEntity<?> insertCalendar(@RequestBody CalendarVO cal){
+	public ResponseEntity<String> insertCalendar(@RequestBody CalendarVO cal){
 //		if(cal.isSchAllDay()) {
 //			cal.setSchSDate(convertToMidnight(cal.getSchSDate()));
 //			cal.setSchEDate(cal.getSchEDate() != null ? convertToEndOfDay(cal.getSchEDate()) : cal.getSchSDate()) ;

@@ -272,8 +272,9 @@
             			</div>
             			
             		</div>
+									<button type="button" id="exampleButton" class="btn btn-success me-2">예시</button>
+			            <button class="btn-close-modal btn btn-secondary me-2 waves-effect">취소</button>
 			            <button type="button" id="saveBtn" class="btn btn-primary me-2 align-items-center">등록</button>
-			            <button class="btn-close-modal btn btn-secondary me-2 waves-effect">닫기</button>
 	            </form>
 	            <br>
 	            <div class="modal-footer">
@@ -321,7 +322,119 @@
 	<script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/script.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/managingEmployee.js"></script>
-
+	<script>
+		$(document).ready(function () {
+			const departmentList = {
+					"01": { name: "경영 인사", teams: { "01001": "경영 인사 1팀", "01002": "경영 인사 2팀" } },
+					"02": { name: "마케팅", teams: { "02001": "마케팅 1팀", "02002": "마케팅 2팀" } },
+					"03": { name: "연구 개발", teams: { "03001": "연구 개발 1팀", "03002": "연구 개발 2팀" } },
+					"04": { name: "운영", teams: { "04001": "운영 1팀", "04002": "운영 2팀" } },
+					"05": { name: "재무 회계", teams: { "05001": "재무 회계 1팀", "05002": "재무 회계 2팀" } }
+			};
+	
+			$("#exampleButton").click(function () {
+					function generateEmployeeId() {
+							return "2025" + Math.floor(10000 + Math.random() * 90000);
+					}
+	
+					const koreanNames = ["김희수", "박선희", "박민수", "최지훈", "정하나", "한예진", "윤서준", "조민석", "강다은", "신동현"];
+					let randomName = koreanNames[Math.floor(Math.random() * koreanNames.length)];
+	
+					const positionList = {
+							"01": "사원",
+							"02": "대리",
+							"03": "과장",
+							"04": "차장",
+							"05": "부장"
+					};
+	
+					let positionKeys = Object.keys(positionList);
+					let randomPositionKey = positionKeys[Math.floor(Math.random() * positionKeys.length)];
+					let randomPosition = positionList[randomPositionKey];
+	
+	
+	
+					let departmentKeys = Object.keys(departmentList);
+					let randomDepartmentKey = departmentKeys[Math.floor(Math.random() * departmentKeys.length)];
+					let randomDepartment = departmentList[randomDepartmentKey];
+	
+					let teamKeys = Object.keys(randomDepartment.teams);
+					let randomTeamKey = teamKeys[Math.floor(Math.random() * teamKeys.length)];
+	
+					function getRandomBirthDate() {
+							let year = Math.floor(Math.random() * (2005 - 1985 + 1)) + 1985;
+							let month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+							let day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+							return `\${year}-\${month}-\${day}`;
+					}
+	
+					function getTodayDate() {
+							let today = new Date();
+							let year = today.getFullYear();
+							let month = String(today.getMonth() + 1).padStart(2, '0');
+							let day = String(today.getDate()).padStart(2, '0');
+							return `\${year}-\${month}-\${day}`;
+					}
+	
+					const bankList = {
+							"001": "한국은행",
+							"002": "산업은행",
+							"003": "기업은행",
+							"004": "국민은행",
+							"005": "외환은행",
+							"011": "농협은행",
+							"020": "우리은행",
+							"045": "새마을금고중앙회",
+							"048": "신협중앙회"
+					};
+	
+					let bankKeys = Object.keys(bankList);
+					let randomBankKey = bankKeys[Math.floor(Math.random() * bankKeys.length)];
+					let randomBranch = `\${bankList[randomBankKey]} \${Math.floor(100 + Math.random() * 900)}지점`;
+	
+					function generateBankAccount() {
+							return Math.floor(100000000000 + Math.random() * 900000000000).toString();
+					}
+	
+					let randomSalary = Math.floor(Math.random() * 13) * 500000 + 2000000;
+	
+					$("#emplNo1").val(generateEmployeeId());
+					$("#emplPwd1").val("1234");
+					$("#emplNm1").val(randomName);
+					$("#positionSelect1").val(randomPositionKey).trigger("change");
+					$("#deptCode1").val(randomDepartmentKey).trigger("change");
+	
+					setTimeout(() => {
+							$("#teamCode1").val(randomTeamKey).trigger("change");
+					}, 300);
+	
+					$("#emplBrthdy1").val(getRandomBirthDate());
+					$("#hireDate1").val(getTodayDate());
+					$("#bankCode1").val(randomBankKey).trigger("change");
+					$("#bankName1").val(randomBranch);
+					$("#account1").val(generateBankAccount());
+					$("#basicSalary1").val(randomSalary);
+	
+			});
+	
+			$("#deptCode1").change(function () {
+					let selectedDept = $(this).val();
+					let teamSelect = $("#teamCode1");
+	
+					teamSelect.empty();
+					teamSelect.append(`<option>팀 선택</option>`);
+	
+					if (departmentList[selectedDept]) {
+							let teams = departmentList[selectedDept].teams;
+							for (let teamCode in teams) {
+									teamSelect.append(`<option value="\${teamCode}">\${teams[teamCode]}</option>`);
+							}
+					}
+			});
+	});
+	
+	
+	</script>
 </body>
 <script>
 let table_tbody = $("#table-tbody");
@@ -385,7 +498,7 @@ function printList(page, emplNo, emplNm, emplPosition, deptCode){
 				tr += `
 					<tr>
 						<td>\${res.emplList[i].emplNo}</td>
-						<td><img src="/assets/img/profile_images/\${img}" class="card-img mb-3" alt="img" style="width:100px; height:100px; object-fit: cover;"></td>
+						<td><img src="/profile_images/\${img}" class="card-img mb-3" alt="img" style="width:100px; height:100px; object-fit: cover;"></td>
 						<td><a href="/hrms/admin/employeeDetail/\${res.emplList[i].emplNo}">\${res.emplList[i].emplNm}</a></td>
 						<td>\${res.emplList[i].emplPosition}</td>
 						<td>\${res.emplList[i].deptCode}</td>

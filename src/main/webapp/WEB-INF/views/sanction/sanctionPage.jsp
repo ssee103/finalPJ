@@ -62,11 +62,18 @@ h1{
 
   /* + 버튼 스타일 재정의 */
   .tui-tree-toggle-btn {
-      display: inline-block; /* 인라인 블록으로 설정 */
-      vertical-align: middle;
-      margin-right: 10px;     /* 버튼과 레이블 사이 간격 */
-      width: 25px;           /* 원하는 너비 */
-      height: 25px;          /* 원하는 높이 */
+      	float: left;
+	    margin: 6px 4px 0 0;
+	    width: 13px;
+	    height: 12px;
+	    font-size: 0;
+	    padding: 0;
+	    color: #000000;
+	    vertical-align: top;
+	    border: 0;
+	    border-radius: 0;
+	    background-color: transparent;
+	    outline: none;
       
   }
 
@@ -814,7 +821,7 @@ $(function(){
 				            if ( $("#referenceDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0 ) {	// 문제 없을 경우
 				                referenceDiv.append(`<div>
 				                        <span class="reference" data-emplNo="\${foundNode.data}">\${clickedText}</span>
-				                        <button class="btn btn-sm btn-outline-danger remove-reference">❌</button>
+				                        <button class="btn btn-sm btn-outline-danger remove-reference">X</button>
 				                    </div>`);
 				            } else {
 				                console.log("참조자가 중복되었습니다.");
@@ -831,9 +838,9 @@ $(function(){
 				            if ($("#sanctionerLineDiv").find(`[data-emplNo="\${foundNode.data}"]`).length === 0) {	// 문제 없을 경우
 				                sanctionerLineDiv.append(`<div>
 				                        <span class="sanctioner" data-emplNo="\${foundNode.data}">\${clickedText}</span>
-				                        <button class="btn btn-sm btn-outline-secondary move-up">⬆</button>
-				                        <button class="btn btn-sm btn-outline-secondary move-down">⬇</button>
-				                        <button class="btn btn-sm btn-outline-danger remove-sanctioner">❌</button>
+				                        <button class="btn btn-sm btn-outline-secondary move-up">▲</button>
+				                        <button class="btn btn-sm btn-outline-secondary move-down">▼</button>
+				                        <button class="btn btn-sm btn-outline-danger remove-sanctioner">X</button>
 				                        </div>
 				                    `);
 				            } else {
@@ -1027,9 +1034,9 @@ $(document).on("click", ".msTitle", function() {	// 문서 전체$(document)에�
         var newHtml = `
             <div>
                 <span class="sanctioner" data-emplno="\${emplNo}">\${approverName}</span>
-                <button class="btn btn-sm btn-outline-secondary move-up">⬆</button>
-                <button class="btn btn-sm btn-outline-secondary move-down">⬇</button>
-                <button class="btn btn-sm btn-outline-danger remove-sanctioner">❌</button>
+                <button class="btn btn-sm btn-outline-secondary move-up">▲</button>
+                <button class="btn btn-sm btn-outline-secondary move-down">▼</button>
+                <button class="btn btn-sm btn-outline-danger remove-sanctioner">X</button>
             </div>
         `;
 

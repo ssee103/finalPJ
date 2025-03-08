@@ -346,6 +346,7 @@
 								</div>
 							</div>
 							<div class="d-flex align-items-center justify-content-end">
+								<button type="button" class="btn btn-success me-2" id="exampleButton">예시</button>
 								<a href="/hrms/employee/employeeInfo"><button type="button" class="btn btn-secondary border me-2" id="cancelBtn">취소</button></a>
 								<button type="button" class="btn btn-primary" id="saveBtn">등록</button>
 							</div>
@@ -426,6 +427,100 @@
 <script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>
 <script src="${pageContext.request.contextPath }/assets/js/script.js"></script>
 
+<script>
+	$(document).ready(function () {
+    $("#exampleButton").click(function () {
+        // 1️⃣ 성별 랜덤 선택
+        let genders = ["M", "F"];
+        let randomGender = genders[Math.floor(Math.random() * genders.length)];
+        if (randomGender === "M") {
+            $("#emplGenderM").prop("checked", true);
+        } else {
+            $("#emplGenderF").prop("checked", true);
+        }
+
+        // 2️⃣ 랜덤 연락처 
+        function generatePhoneNumber() {
+            let firstPart = Math.floor(1000 + Math.random() * 9000);  // 4자리
+            let secondPart = Math.floor(1000 + Math.random() * 9000); // 4자리
+            return `010\${firstPart}\${secondPart}`;
+        }
+        $("#emplTelno").val(generatePhoneNumber());
+
+        // 3️⃣ 랜덤 이메일 생성
+        const emailNames = ["hermes1234", "wonbin5678", "hellowolrd2023", "dev001", "dongjun456", "gwon203", "yerim00"];
+        const emailDomains = ["gmail.com", "naver.com", "daum.net", "kakao.com"];
+        let randomEmail = `\${emailNames[Math.floor(Math.random() * emailNames.length)]}@\${emailDomains[Math.floor(Math.random() * emailDomains.length)]}`;
+        $("#emplEmail").val(randomEmail);
+
+        // 4️⃣ 취미 랜덤 선택
+        const hobbies = ["독서", "등산", "요리", "여행", "게임", "음악 감상", "사진 촬영"];
+        let randomHobby = hobbies[Math.floor(Math.random() * hobbies.length)];
+        $("#emplHobby").val(randomHobby);
+
+        // 5️⃣ 결혼 기념일이 없거나 있을 확률 50%
+        function getRandomMarriageDate() {
+            if (Math.random() < 0.5) return ""; // 50% 확률로 빈 값 반환
+            let year = Math.floor(Math.random() * (2022 - 1980 + 1)) + 1980;
+            let month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            let day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+            return `\${year}-\${month}-\${day}`;
+        }
+        $("#emplMrnry").val(getRandomMarriageDate());
+
+        // 6️⃣ 세대주 여부 랜덤 선택
+        let headOfHousehold = Math.random() < 0.5 ? "Y" : "N";
+        if (headOfHousehold === "Y") {
+            $("#householderAtY").prop("checked", true);
+        } else {
+            $("#householderAtN").prop("checked", true);
+        }
+
+        // 7️⃣ 랜덤 차량번호
+        function generateCarNumber() {
+					const validKoreanChars = ["가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하"];
+					let regionCode = Math.floor(10 + Math.random() * 90); // 10~99 숫자
+					let middleChar = validKoreanChars[Math.floor(Math.random() * validKoreanChars.length)]; // 한글 한 글자
+
+					let isNewType = Math.random() < 0.5; // 50% 확률로 신형/구형 랜덤
+					let lastNumbers = isNewType
+							? Math.floor(1000 + Math.random() * 9000) // 신형(4자리)
+							: Math.floor(100 + Math.random() * 900);  // 구형(3자리)
+
+					return `\${regionCode}\${middleChar} \${lastNumbers}`;
+			}
+
+			$("#vehicleNumber").val(generateCarNumber());
+
+        // 8️⃣ 랜덤 은행 선택 및 지점명, 계좌번호 자동 입력
+        const bankList = {
+            "001": "한국은행",
+            "002": "산업은행",
+            "003": "기업은행",
+            "004": "국민은행",
+            "005": "외환은행",
+            "011": "농협은행",
+            "020": "우리은행",
+            "045": "새마을금고중앙회",
+            "048": "신협중앙회"
+        };
+
+        let bankKeys = Object.keys(bankList);
+        let randomBankKey = bankKeys[Math.floor(Math.random() * bankKeys.length)];
+        let randomBranch = `\${bankList[randomBankKey]} \${Math.floor(100 + Math.random() * 900)}지점`;
+
+        function generateBankAccount() {
+            return Math.floor(100000000000 + Math.random() * 900000000000).toString();
+        }
+
+        $("#bankCode").val(randomBankKey).trigger("change");
+        $("#bankName").val(randomBranch);
+        $("#account").val(generateBankAccount());
+    });
+});
+
+
+</script>
 </body>
 <script>
 const userId = sessionStorage.getItem("userId"); // 세션 아이디 가져오기

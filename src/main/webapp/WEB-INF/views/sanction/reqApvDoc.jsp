@@ -223,9 +223,9 @@ function preLoad(data) {
 		            .addClass("badge-info-transparent");
 				}
 				
-				$("#pagingArea").html(res.pagingInfo.pagingHTML);
-				
 			});
+			
+			$("#pagingArea").html(res.pagingInfo.pagingHTML);
 			
 		},	// success 종료 영역
 		error: function(error){

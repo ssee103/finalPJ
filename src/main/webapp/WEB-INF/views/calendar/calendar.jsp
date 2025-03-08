@@ -49,13 +49,19 @@
 					</div>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 						<div class="mb-2">
-							<a href="#" data-bs-toggle="modal" data-bs-target="#eventForm" class="btn btn-primary d-flex align-items-center"><i class="ti ti-circle-plus me-2"></i>일정추가</a>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#eventForm" class="btn btn-primary d-flex align-items-center" id="btn"><i class="ti ti-circle-plus me-2"></i>일정추가</a>
 						</div>
 					</div>
 				</div>
 
 				<div class="row">
-
+					<div class="col-xxl-9 col-xl-8 theiaStickySidebar">	
+						<div class="card border-0">
+							<div class="card-body">			
+								<div id="calendar"></div>
+							</div>
+						</div>		
+					</div>
 					<!-- Calendar Sidebar -->
 					<div class="col-xxl-3 col-xl-4">
 						<div class="card">
@@ -68,20 +74,11 @@
 
 					</div>
 					<!-- /Calendar Sidebar -->
-
-					<div class="col-xxl-9 col-xl-8 theiaStickySidebar">	
-						<div class="card border-0">
-							<div class="card-body">			
-								<div id="calendar"></div>
-							</div>
-						</div>		
-					</div>
 				</div>
 			</div>
-			<div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-				<p class="mb-0">2014 - 2025 &copy; SmartHR.</p>
-				<p>Designed &amp; Developed By <a href="#" class="text-primary">Dreams</a></p>
-			</div>
+			<!-- 모달창들 -->
+			<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
+			<!-- /모달창들 -->
 		</div>
 		<!-- /Page Wrapper -->
 
@@ -95,7 +92,6 @@
 							<i class="ti ti-x"></i>
 						</button>
 					</div>
-					<form action="calendar.html">
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-12">
@@ -139,7 +135,7 @@
 									</div>
 									<div class="mb-0">
 										<label class="form-label">글자색</label>
-										<input type="color" id="eventTextColor" value="#ffffff"/>
+										<input type="color" id="eventTextColor"/>
 									</div>
 								</div>
 								<div>
@@ -150,12 +146,10 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-light me-2" data-bs-dismiss="modal" id="cancelBtn">취소</button>
-							<button type="button" class="btn btn-primary" onclick="saveEvent()" id="saveBtn">저장</button>
-							<button type="button" class="btn btn-warning me-2" id="updateButton" onclick="updateEvent()" style="display:none;">수정</button>
-   							<button type="button" class="btn btn-danger me-2" id="deleteButton" onclick="deleteEvent()" style="display:none;">삭제</button>
+   							<button type="button" class="btn btn-secondary me-2" id="deleteButton" onclick="deleteEvent()" style="display:none;">삭제</button>
+							<button id="exampleBtn" class="btn btn-success me-2">예시</button>
+							<button id="newBtn" class="btn btn-primary me-2"></button>
 						</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -190,12 +184,112 @@
 	<script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/theme-colorpicker.js"></script>
 	<script src="${pageContext.request.contextPath }/assets/js/script.js"></script>
-
+	<script>
+		$(document).ready(function () {
+			$("#exampleBtn").click(function () {
+					// 📌 1. 기존 입력값 초기화
+					$("#eventTitle").val("");
+					$("#eventStart").val("");
+					$("#eventEnd").val("");
+					$("#eventAllDay").prop("checked", false);
+					$("#eventColor").val("#000000");
+					$("#eventTextColor").val("#ffffff");
+					$("#group").prop("checked", false);
+	
+					// 📌 2. 일정명 랜덤 선택
+					const eventNames = [
+							"전사 회의", "부서 워크샵", "팀 미팅", "신규 프로젝트 Kick-off",
+							"업무 보고", "고객사 미팅", "외부 교육", "내부 교육 세션",
+							"이사회 회의", "회사 창립일 행사", "신입사원 교육", "부서 간담회"
+					];
+					let randomEventName = eventNames[Math.floor(Math.random() * eventNames.length)];
+					
+					// 📌 3. 시작 날짜 & 종료 날짜 (오늘 포함, 2주 내 랜덤)
+					let today = new Date();
+					let startDate = new Date(today);
+					startDate.setDate(today.getDate() - Math.floor(Math.random() * 7)); // 지난 7일 내 랜덤
+	
+					let endDate = new Date(startDate);
+					endDate.setDate(startDate.getDate() + Math.floor(Math.random() * 14)); // 최대 14일 후 종료
+	
+					let formatDateTime = (date, isAllDay) => {
+							let year = date.getFullYear();
+							let month = String(date.getMonth() + 1).padStart(2, '0');
+							let day = String(date.getDate()).padStart(2, '0');
+							
+							if (isAllDay) {
+									return `\${year}-\${month}-\${day}`; // 하루종일이면 시간 제외
+							} else {
+									let hours = String(date.getHours()).padStart(2, '0');
+									let minutes = String(date.getMinutes()).padStart(2, '0');
+									return `\${year}-\${month}-\${day}T\${hours}:\${minutes}`;
+							}
+					};
+	
+					// 📌 4. 하루종일 체크박스 랜덤 선택
+					let isAllDay = Math.random() < 0.5;
+					$("#eventAllDay").prop("checked", isAllDay);
+					toggleTimeFields(isAllDay, startDate, endDate); // 하루 종일이면 시간 필드 숨김
+	
+					// 📌 5. 배경색 & 글자색 랜덤
+					function getRandomColor() {
+							return `#\${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+					}
+					let randomBgColor = getRandomColor();
+					let randomTextColor = getRandomColor();
+	
+					// 📌 6. 부서 일정 랜덤 선택 (체크 or 미체크)
+					let isGroupSchedule = Math.random() < 0.5;
+					$("#group").prop("checked", isGroupSchedule);
+	
+					// 📌 7. 값 입력
+					$("#eventTitle").val(randomEventName);
+					$("#eventColor").val(randomBgColor);
+					$("#eventTextColor").val(randomTextColor);
+			});
+	
+			// 🔹 하루종일 체크 시 날짜만 입력 가능하고 종료 날짜를 시작 날짜와 동일하게 설정
+			$("#eventAllDay").change(function () {
+					let isChecked = $(this).is(":checked");
+					let startDate = new Date($("#eventStart").val());
+	
+					let endDate = isChecked ? new Date(startDate) : new Date(startDate);
+					endDate.setDate(startDate.getDate() + Math.floor(Math.random() * 14)); // 체크 해제 시 종료일 다시 랜덤
+	
+					toggleTimeFields(isChecked, startDate, endDate);
+			});
+	
+			function toggleTimeFields(isAllDay, startDate, endDate) {
+					if (isAllDay) {
+							$("#eventStart").attr("type", "date").val(formatDateTime(startDate, true));
+							$("#eventEnd").attr("type", "date").val(formatDateTime(startDate, true)); // 하루종일이면 같은 날짜로 설정
+					} else {
+							$("#eventStart").attr("type", "datetime-local").val(formatDateTime(startDate, false));
+							$("#eventEnd").attr("type", "datetime-local").val(formatDateTime(endDate, false));
+					}
+			}
+	
+			function formatDateTime(date, isAllDay) {
+					let year = date.getFullYear();
+					let month = String(date.getMonth() + 1).padStart(2, '0');
+					let day = String(date.getDate()).padStart(2, '0');
+	
+					if (isAllDay) {
+							return `\${year}-\${month}-\${day}`;
+					} else {
+							let hours = String(date.getHours()).padStart(2, '0');
+							let minutes = String(date.getMinutes()).padStart(2, '0');
+							return `\${year}-\${month}-\${day}T\${hours}:\${minutes}`;
+					}
+			}
+	});	
+	</script>
 </body>
 <script type="text/javascript">
 let calendar, schNo, selectedDate = null
 const userId = sessionStorage.getItem("userId"); //아이디 세션 가져오기
 let userDeptCode = "${emp.deptCode}"; //로그인한 사람의 부서코드 가져오기
+let newBtn = $("#newBtn"); 
 
 $(document).ready(function() {
 	
@@ -217,7 +311,7 @@ $(document).ready(function() {
 		droppable: true,
 		eventStartEditable: true,
 		eventDurationEditable: true,
-		eventOverlap: true,
+		eventOverlap: false,
 		slotEventOverlap: true,
 		displayEventTime: true,
 		displayEventEnd: true,
@@ -304,14 +398,22 @@ $(document).ready(function() {
 	        $('#eventStart').val(start);
 	        $('#eventEnd').val(end);
 	        $('#eventColor').val(info.event.backgroundColor || '#3788d8');
-	        $('#eventTextColor').val(info.event.textColor || '#ffffff');
+	        $('#eventTextColor').val(info.event.textColor || '#000000');
 			
-	        $('#saveBtn').hide();
-	        $('#updateButton').show();
 	        $('#deleteButton').show();
-	        
+	        newBtn.text("수정");
 			$("#eventForm").modal("show");
-		} 
+		},
+		
+		//부서일정일 경우 title 앞에 핀 아이콘 + 부서일정 문구 표시
+		eventDidMount: function (info) {
+		    if (info.event.extendedProps.type === "department") { 
+		        let titleElement = info.el.querySelector('.fc-event-title'); 
+		        if (titleElement) {
+		            titleElement.innerHTML = `<span style="margin-right:5px;">📌</span><strong>부서 일정</strong> - ` + titleElement.innerHTML;
+		        }
+		    }
+		}
 		
 	});
 		calendar.render();
@@ -319,8 +421,8 @@ $(document).ready(function() {
 
 //일정구분(개인,부서) 
 $(function(){
+	
 	$("#showPersonal").on("click", function(){
-		
 		fillterEvents("personal");
 	});
 	
@@ -332,16 +434,30 @@ $(function(){
 		fillterEvents("all");
 	});
 	
-	//취소버튼
-	$("#cancelBtn").on("click", function(){
+	//일정추가 버튼 클릭 시 초기화
+	$("#btn").on("click", function(){
+		
 		schNo = null;
-		$("#eventTitle").val();
-		$("#eventStart").val();
-		$("#eventEnd").val();
-		$("#eventColor").val();
-		$("#eventTextColor").val();
+		$("#eventTitle").val("");
+		$("#eventStart").val("");
+		$("#eventEnd").val("");
+		$("#eventColor").val("");
+		$("#eventTextColor").val("#ffffff");
 		$("#eventAllDay").prop("checked", false);
+		newBtn.text("저장");
+		$("#deleteButton").hide();
+		
 	});
+	
+	//수정, 저장 버튼 구분
+	$("#newBtn").on("click", function(){
+		if($(this).text() == "수정"){
+			updateEvent();
+		}
+		if($(this).text() == "저장"){
+			saveEvent();
+		}
+	})
 });
 
 function fillterEvents(filterType){
@@ -362,8 +478,9 @@ function fillterEvents(filterType){
 
 // 캘린더 닫기
 function closeForm() {
-	$('#eventForm').hide();
+    $('#eventForm').modal('hide');
 }
+
 
 // 이벤트 저장 기능 (새 일정 추가)
 function saveEvent() {
@@ -377,7 +494,7 @@ function saveEvent() {
 	let endDateTime = end? DateTime.fromISO(end, {zone: "Asia/Seoul"}).toFormat("yyyy-MM-dd HH:mm:ss") : startDateTime;
 		
 	let bgColor = $('#eventColor').val() || '#3788d8'; // 기본 배경색 (파란색)
-    let textColor = $('#eventTextColor').val() || '#ffffff'; // 기본 글자색 (흰색)
+    let textColor = $('#eventTextColor').val() || '#000000'; // 기본 글자색 (검은색)
 	
 	let eventData = {
 		schTitle: $('#eventTitle').val(),
@@ -407,17 +524,12 @@ function saveEvent() {
 		contentType: 'application/json;charset=utf-8',
 		data: JSON.stringify(eventData),
 		success: function (result) {
-			
-			
-			
-			
-			
 			console.log("성공?:",result);
 			 $('.modal-backdrop').remove();
 			 $('body').removeClass('modal-open');
 			calendar.refetchEvents();
 			closeForm();
-			alert('새 일정이 추가되었습니다!');
+			showToastMessage("일정이 성공적으로 등록되었습니다.", "success");
 		},
 		error: function (xhr, status, error) {
 			console.error("Error adding event:", error);
@@ -442,11 +554,10 @@ function updateEvent(){
 	        schSDate: startDateTime,
 	        schEDate: endDateTime,
 	        schColor: $('#eventColor').val(),
-	        schTextColor: $('#eventTextColor').val() || '#ffffff',
+	        schTextColor: $('#eventTextColor').val() || '#000000',
 	        schAllDay: $('#eventAllDay').prop('checked')
 	    };
 
-		console.log("uuuuuuuuuuuuu", schNo);
 	    console.log("DEBUG - 수정 요청 데이터:", eventData);
 
 	    $.ajax({
@@ -455,7 +566,7 @@ function updateEvent(){
 	        contentType: 'application/json;charset=utf-8',
 	        data: JSON.stringify(eventData),
 	        success: function() {
-	            alert("일정이 수정되었습니다!");
+	        	showToastMessage("일정이 수정되었습니다.", "success");
 	            $('.modal-backdrop').remove();
 				$('body').removeClass('modal-open');
 	            calendar.refetchEvents();
@@ -471,7 +582,6 @@ function updateEvent(){
 function deleteEvent(){
 	if(!confirm("정말 삭제하시겠습니까?")) return;
 	
-	console.log("xxxxxxxxxxxxxxxxxxxxx", schNo);
 	$.ajax({
 		url : `/api/events/\${schNo}`,
 		type : "post",
@@ -480,7 +590,7 @@ function deleteEvent(){
 			 $('body').removeClass('modal-open');
 			calendar.refetchEvents();
 			closeForm();
-			alert('일정이 삭제되었습니다!');
+			showToastMessage("일정이 삭제되었습니다.", "success");
 		},
 		error: function (xhr, status, error) {
 			console.error("Error adding event:", error);

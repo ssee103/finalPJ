@@ -21,6 +21,7 @@
     <div class="main-wrapper">
         <%@ include file="/WEB-INF/views/theme/header.jsp" %>
         <%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
+        <%@ include file="/WEB-INF/views/theme/modal.jsp" %>
         
         <div class="page-wrapper">
             <div class="content">
@@ -28,9 +29,12 @@
                 <div class="row align-items-center mb-4">
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
-                            <a href="/hrms/education/user/userAllTrainingListSearch">
-                                <i class="ti ti-arrow-left me-2"></i>Back to List
-                            </a>
+                            <a href="/hrms/education/user/userAllTrainingListSearch" class="back-icon d-flex align-items-center fs-15 fw-medium mb-3 d-inline-flex">
+								<span class=" d-flex justify-content-center align-items-center rounded-circle me-2">
+									<i class="ti ti-arrow-left"></i>
+								</span>
+								목록으로 돌아가기
+                        	</a>
                         </h6>
                     </div>
                 </div>

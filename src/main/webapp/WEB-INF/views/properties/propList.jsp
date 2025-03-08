@@ -48,7 +48,6 @@
     background-color: orange;
     color: white;
     border: none;
-    padding: 10px 20px;
     cursor: pointer;
     margin-top: 10px;
 }
@@ -60,28 +59,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px; /* 버튼 간격 조절 */
-}
-
-.btn-group {
-    display: flex;
-    gap: 8px; /* 버튼 사이 간격 */
-    justify-content: center; /* 가운데 정렬 */
-}
-
-.edit-btn {
-    background-color: #FFC107 !important;
-    color: black !important;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-}
-
-.delete-btn {
-    background-color: #DC3545 !important; 
-    color: white !important;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
 }
 
 .btn-group {
@@ -158,10 +135,8 @@
 				                </c:choose>
 				            </td>
 				            <td class="text-center">
-							    <div class="btn-group">
-							        <button class="btn btn-sm edit-btn" data-id="${prop.propNo}">수정</button>
-							        <button class="btn btn-sm delete-btn" data-id="${prop.propNo}">삭제</button>
-							    </div>
+							        <button class="btn btn-primary delete-btn me-2" data-id="${prop.propNo}">삭제</button>
+							        <button class="btn btn-primary edit-btn" data-id="${prop.propNo}">수정</button>
 							</td>
 				        </tr>
 				    </c:forEach>
@@ -197,7 +172,7 @@
 		                    </div>
 		                </div>
 		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+		                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 		                    <button type="button" id="saveEditProp" class="btn btn-primary">수정</button>
 		                </div>
 		            </form>
@@ -217,7 +192,7 @@
 		                <input type="hidden" id="deletePropNo">
 		            </div>
 		            <div class="modal-footer">
-		                <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 		                <button type="button" id="confirmDeleteProp" class="btn btn-danger">삭제</button>
 		            </div>
 		        </div>
@@ -257,7 +232,8 @@
 		                    </div>
 		                </div>
 		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+												<button type="button" id="exampleButton2" class="btn btn-success me-2">예시</button>
+		                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 		                    <button type="button" id="saveData" class="btn btn-primary">저장</button>
 		                </div>
 		            </form>
@@ -288,7 +264,8 @@
 		                    </div>
 		                </div>
 		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+											<button type="button" id="exampleButton" class="btn btn-success me-2">예시</button>
+		                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 		                    <button type="button" id="savePsData" class="btn btn-primary">저장</button>
 		                </div>
 		            </form>
@@ -318,7 +295,7 @@
 		                </table>
 		            </div>
 		            <div class="modal-footer">
-		                <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 		            </div>
 		        </div>
 		    </div>
@@ -328,6 +305,61 @@
 </body>
 <script>
 $(document).ready(function () {
+	$("#exampleButton").click(function () {
+		// 랜덤한 PSXXXX 형식의 분류 번호 생성
+		function generateRandomPSNumber() {
+				return "PS" + Math.floor(1000 + Math.random() * 9000); // PS1000 ~ PS9999 범위
+		}
+
+		// 대분류 및 소분류 임의 값 리스트
+		const mainCategories = ["전자기기", "사무용품", "연구", "기타"];
+		const subCategories = {
+				"전자기기": ["노트북", "데스크탑", "마우스", "키보드"],
+				"사무용품": ["의자", "책상", "화이트보드", "펜"],
+				"연구": ["실험도구", "현미경", "연구노트", "측정기기"],
+				"기타": ["보관함", "기록지", "기타물품"]
+		};
+
+		// 랜덤한 대분류 선택
+		let randomMainCategory = mainCategories[Math.floor(Math.random() * mainCategories.length)];
+		// 랜덤한 소분류 선택
+		let randomSubCategory = subCategories[randomMainCategory][Math.floor(Math.random() * subCategories[randomMainCategory].length)];
+
+		// 입력 필드에 값 자동 채우기
+		$("#psCodeInput").val(generateRandomPSNumber()); // 물품 분류 번호
+		$("#psLarge").val(randomMainCategory); // 대분류
+		$("#psSmall").val(randomSubCategory); // 소분류
+	});
+
+	$("#exampleButton2").click(function () {
+		// 물품 분류 코드 리스트 (목록처럼 선택되도록)
+		const categoryCodes = ["PS1005", "PS2003", "PS1001", "PS1002", "PS1012", "PS2002", "PS9005", "PS1006", "PS1004"];
+		const itemNames = ["프로젝터", "모니터", "노트북", "데스크탑", "키보드", "의자", "펜", "볼펜", "마우스"];
+		const itemQuantities = [5, 10, 15, 20, 25, 30, 35, 40, 50];
+		const fileCodes = ["file001", "file002", "file003", "file004", "file005", "file006", "file007", "file008", "file009"];
+		const itemDescriptions = [
+				"고해상도 프로젝터",
+				"27인치 모니터",
+				"최신형 노트북",
+				"사무용 데스크탑",
+				"기계식 키보드",
+				"편안한 사무용 의자",
+				"부드러운 필기감의 펜",
+				"고급 볼펜",
+				"무선 마우스"
+		];
+
+		// 랜덤한 값 선택
+		let randomIndex = Math.floor(Math.random() * categoryCodes.length);
+
+		// 값 자동 입력
+		$("#psCodeSelect").val(categoryCodes[randomIndex]); // 물품 분류 코드
+		$("#propName").val(itemNames[randomIndex]); // 물품명
+		$("#propQty").val(itemQuantities[randomIndex]); // 수량
+		$("#fileIdentify").val(fileCodes[randomIndex]); // 파일 코드
+		$("#propContent").val(itemDescriptions[randomIndex]); // 물품 내용
+});
+
     $.ajax({
         url: '/hrms/prop/getPropertyCodes',              
         type: 'GET',

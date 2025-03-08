@@ -110,6 +110,16 @@
 	where writer_no = #{userId}
 </select>
 
+<!-- 결재자 시점 결재 문서 개수 카운트 -->
+<select id="getSanctionCount" parameterType="string" resultType="int">
+	select 
+	    COUNT(d.doc_no)
+	from document d
+	LEFT JOIN doc_sort ds ON d.ds_code = ds.ds_code
+	join sanctioner a on d.doc_no = a.doc_no
+	where a.sanctner_no = #{userId}
+</select>
+
 <select id="getApvDocInfo" parameterType="map" resultType="kr.or.ddit.sanction.vo.DocumentVO">
 	SELECT * FROM (
         SELECT a.*, ROWNUM rn FROM (

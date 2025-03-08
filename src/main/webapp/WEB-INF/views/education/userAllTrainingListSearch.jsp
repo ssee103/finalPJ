@@ -22,6 +22,7 @@
 	<div class="main-wrapper">
 		<%@ include file="/WEB-INF/views/theme/header.jsp" %>
 		<%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
+		<%@ include file="/WEB-INF/views/theme/modal.jsp" %>
 		
 		<div class="page-wrapper">
 			<div class="content">
@@ -67,7 +68,7 @@
 										<th style="text-align: center;">교육대상</th>
 										<th style="text-align: center;">모집기간</th>
 										<th style="text-align: center;">수강기간</th>
-										<th style="text-align: center;">신청버튼</th>
+										<th style="text-align: center;"></th>
 									</tr>
 								</thead>
 								<tbody id="dataTable-tbody">
@@ -232,7 +233,7 @@
 	            let erDate = `\${year}-\${month}-\${day} \${hours}:\${minutes}`;  // 수정된 형식 적용
 
 	            if (!edcAplc) {
-	                alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
+	            	showToastMessage("로그인 정보가 없습니다. 다시 로그인해주세요.", "warning");
 	                return;
 	            }
 
@@ -249,15 +250,33 @@
 	                contentType: "application/json",
 	                data: JSON.stringify(requestData),
 	                success: function (response) {
-	                    alert("수강 신청 완료!");
+	                    showSessionToastMessage("수강 신청 완료!", "success");
 	                    location.reload();
 	                },
 	                error: function (xhr, status, error) {
 	                    console.error("수강 신청 실패:", xhr.responseText);
-	                    alert("이미 수강신청한 과목입니다.");
+	                    showToastMessage("이미 수강신청한 과목입니다.", "warning");
 	                }
 	            });
 	        });
+	    	
+	    	
+		    let savedMessage = sessionStorage.getItem("toastMessage");
+		    let savedType = sessionStorage.getItem("toastType");
+
+		    if (savedMessage) {
+		    	let toast = $("#toastMessage");
+		    	toast.removeClass("bg-primary bg-success bg-danger bg-warning");
+		    	toast.addClass(`bg-\${savedType}`);
+		    	$("#toastBody").text(savedMessage);
+		    	
+		    	let toastInstance = new bootstrap.Toast(toast[0]);
+		    	toastInstance.show();
+		    	
+		    	// 메시지 한 번 표시 후 제거 (새로고침 시 다시 뜨지 않도록)
+		    	sessionStorage.removeItem("toastMessage");
+		    	sessionStorage.removeItem("toastType");
+		    }
 	    });
 	</script>
 	</div>

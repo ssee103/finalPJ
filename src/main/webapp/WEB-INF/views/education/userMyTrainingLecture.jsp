@@ -21,6 +21,7 @@
     <div class="main-wrapper">
         <%@ include file="/WEB-INF/views/theme/header.jsp" %>
         <%@ include file="/WEB-INF/views/theme/sidebar.jsp" %>
+        <%@ include file="/WEB-INF/views/theme/modal.jsp" %>
         
         <div class="page-wrapper">
             <div class="content">
@@ -29,7 +30,7 @@
                     <div class="d-md-flex d-sm-block justify-content-between align-items-center flex-wrap">
                         <h6 class="fw-medium d-inline-flex align-items-center mb-3 mb-sm-0">
                             <a href="/hrms/education/user/userMyTraining">
-                                <i class="ti ti-arrow-left me-2"></i>Back to List
+                                <i class="ti ti-arrow-left me-2"></i>목록으로 가기
                             </a>
                         </h6>
                     </div>
@@ -179,7 +180,7 @@
 	        type: "POST",
 	        data: { edcNo: ${education.edcNo}, curOrder: curOrder },
 	        success: function(response) {
-	            alert("진행률이 업데이트되었습니다!");
+	            showSessionToastMessage("진행률이 업데이트되었습니다!", "success");
 	            
 	            // 새로운 진행률을 받아와서 progress bar에 즉시 반영
 	            $.ajax({
@@ -192,7 +193,7 @@
 	            });
 	        },
 	        error: function(xhr, status, error) {
-	            alert("업데이트 실패: " + error);
+	            showSessionToastMessage("업데이트 실패", "danger");
 	        }
 	    });
 	}
@@ -214,10 +215,6 @@
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<!-- Datatable JS -->
-<script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script>	
-
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -225,10 +222,6 @@
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

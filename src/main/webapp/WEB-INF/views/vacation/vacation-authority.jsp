@@ -78,8 +78,9 @@
 										<th>사원명</th>
 										<th>직급</th>
 										<th>팀</th>
-										<th>사용한휴가</th>
-										<th>남은휴가</th>
+										<th>사용일수</th>
+										<th>남은일수</th>
+										<th>총일수</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -198,6 +199,7 @@ function getList(page, emplNm, emplNo){
 						<td>\${res.emplList[i].teamCode}</td>
 						<td>\${res.emplList[i].yearlyVacationVO.yrycUsage}</td>
 						<td>\${res.emplList[i].yearlyVacationVO.yrycRemndr}</td>
+						<td>\${res.emplList[i].yearlyVacationVO.yrycTotal}</td>
 						<td><button class="btn btn-primary d-flex align-items-center" id="detailButton">자세히보기</button></td>
 					<tr>
 				`;

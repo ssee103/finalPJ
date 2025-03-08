@@ -88,6 +88,11 @@
 										<c:when test="${empty boardList }">
 											<tr>
 												<td>조회하신 게시글이 존재하지 않습니다.</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 											</tr>		
 										</c:when>
 										<c:otherwise>

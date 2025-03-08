@@ -105,14 +105,14 @@
 							</a>
 							<ul>
 								<li>
-									<a href="/hrms/prop/userProp">물품 대여하기</a>
+									<a href="/hrms/prop/userProp">사내 물품대여</a>
 								</li>
 								<li>
-									<a href="/hrms/prop/userRentalAll">대여한 물품보기</a>
+									<a href="/hrms/prop/userRentalAll">나의 대여물품조회</a>
 								</li>
 								<c:if test="${admin eq true }">
 									<li>
-										<a href="/hrms/prop/propList">전체 대여물품 관리</a>
+										<a href="/hrms/prop/propList">전체 물품관리</a>
 									</li>
 								</c:if>
 							</ul>

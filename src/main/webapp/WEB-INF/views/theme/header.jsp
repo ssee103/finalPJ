@@ -97,16 +97,14 @@
 					</div>
 					<div class="dropdown profile-dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-							<span class="avatar avatar-sm online">
-								<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid rounded-circle">
-							</span>
+								${emp.emplNm }(${emp.emplNo })
 						</a>
 						<div class="dropdown-menu shadow-none">
 							<div class="card mb-0">
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<span class="avatar avatar-lg me-2 avatar-rounded">
-											<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid rounded-circle">
+											<img src="/profile_images/${emp.profileImgpath }" alt="이미지" style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid rounded-circle profileImgHeader">
 										</span>
 										<div>
 											<h5 class="mb-0">${emp.emplNm}</h5>
@@ -142,8 +140,10 @@
 const baseUrl = window.location.origin;
 const user = sessionStorage.getItem("userId"); // 현재 로그인한 사용자 ID
 let noti_content = $("#noti-content");
+let profileImgHeader = $(".profileImgHeader");
 
 window.onload = function(){
+	getMyInfo();
 	const socket = new SockJS(`\${baseUrl}/ws/notify`);
 	const stompClient = Stomp.over(socket);
 	
@@ -181,9 +181,15 @@ function notify(message){ // 메시지 태그 만들기
     // div태그에 스타일 설정 (우측 하단 고정)
     notification.css({
 		position: "fixed",
-		bottom: "20px",
+		top: "20px",
 		right: "20px",
-		zIndex: "1000"
+		zIndex: "1000",
+		width: "350px",
+		padding: "15px",
+		fontSize: "20px",
+        borderRadius: "8px", // ✅ 모서리 둥글게
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // ✅ 그림자 추가 (더 돋보이게)
+    	fontWeight: "800"
     });
     // div 태그에 버튼 추가
     notification.append(closeButton);
@@ -235,5 +241,19 @@ function notify(message){ // 메시지 태그 만들기
 		},
 		error : function(error){}
 	});
+}
+ 
+function getMyInfo(){
+	$.ajax({
+		url : "/cmm/getMyInfo",
+		data : JSON.stringify({emplNo:user}),
+		type : "post",
+		contentType : "application/json;charset=utf-8",
+		success : function(res){
+			$(".profileImgHeader").attr("src", `/profile_images/\${res.profileImgpath }`);
+		},
+		error : function(error){},
+	});
+	
 }
 </script>

@@ -384,4 +384,12 @@ public class SanctionServiceImpl implements ISanctionService {
 		return cnt;
 	}
 
+	@Override
+	public int getSanctionCount(String userId) {
+		
+		int cnt = mapper.getSanctionCount(userId);
+		
+		return cnt;
+	}
+
 }

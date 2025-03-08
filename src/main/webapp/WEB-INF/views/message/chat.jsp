@@ -179,22 +179,6 @@
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
 						<h2 class="mb-1">채팅</h2>
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="/cmm/index"><i class="ti ti-smart-home"></i></a>
-								</li>
-								<li class="breadcrumb-item">
-									앱
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">채팅</li>
-							</ol>
-						</nav>
-					</div>
-					<div class="head-icons">
-						<a href="javascript:void(0);" class="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header">
-							<i class="ti ti-chevrons-up"></i>
-						</a>
 					</div>
 				</div>
 				<div class="chat-wrapper">
@@ -214,7 +198,7 @@
 								   <div class="search-wrap">
 									   <form action="/chat">
 										   <div class="input-group">
-											   <input type="text" class="form-control" placeholder="Search For Contacts or Messages">
+											   <input type="text" class="form-control">
 											   <span class="input-group-text"><i class="ti ti-search"></i></span>
 										   </div>
 									   </form>
