@@ -128,7 +128,7 @@ https://www.figma.com/design/aptpPcRIWCamw4bXrgjQMP/Figma-basics?node-id=1669-16
 
 ![image](https://github.com/user-attachments/assets/37fbe27d-707c-4bd8-9f09-43d1adb5b076)
 ![image](https://github.com/user-attachments/assets/7310144a-9014-4767-b376-bbbc3911b7a6)
-![image](https://github.com/user-attachments/assets/b7d96a6e-c77b-477a-b943-dbb03b8ca811)
+![image](https://github.com/user-attachments/assets/b3cd8a58-924b-4f8d-95fe-3bd96bea911a)
 
 ## 결재 문서 페이지 
 - 승인 및 반려 기능
