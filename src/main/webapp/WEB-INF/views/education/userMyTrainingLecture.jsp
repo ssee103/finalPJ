@@ -180,7 +180,7 @@
 	        type: "POST",
 	        data: { edcNo: ${education.edcNo}, curOrder: curOrder },
 	        success: function(response) {
-	            showSessionToastMessage("진행률이 업데이트되었습니다!", "success");
+	            showToastMessage("진행률이 업데이트되었습니다!", "success");
 	            
 	            // 새로운 진행률을 받아와서 progress bar에 즉시 반영
 	            $.ajax({
@@ -193,7 +193,7 @@
 	            });
 	        },
 	        error: function(xhr, status, error) {
-	            showSessionToastMessage("업데이트 실패", "danger");
+	            showToastMessage("업데이트 실패", "danger");
 	        }
 	    });
 	}

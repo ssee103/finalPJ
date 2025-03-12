@@ -916,7 +916,7 @@ function loadDocDetail() {
 	             	} else if(approver.sanctnStatus == '결재 대기') {
 	             		sanctionHtml += "<div>(" + approver.sanctnerPosition + ") " + approver.sanctnerNo + " <span class=' badge badge-dark-transparent'>" + approver.sanctnStatus + "</span></div>";
 	             	} else if(approver.sanctnStatus == '반려') {
-	             		sanctionHtml += "<div>(" + approver.sanctnerPosition + ") " + approver.sanctnerNo + " <span class=' badge badge-purple-transparent'>" + approver.sanctnStatus + "</span></div>";
+	             		sanctionHtml += "<div>(" + approver.sanctnerPosition + ") " + approver.sanctnerNo + " <span class=' badge badge-pink-transparent'>" + approver.sanctnStatus + "</span></div>";
 	             	}
                 	
                 });

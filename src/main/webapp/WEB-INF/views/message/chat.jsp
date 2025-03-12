@@ -11,6 +11,18 @@
 	<meta name="robots" content="noindex, nofollow">
 	<title>채팅</title>
 	<style>
+		#notification-box {
+		    display: none !important; /* 요소를 완전히 숨김 */
+		    visibility: hidden;
+		    opacity: 0;
+		    height: 0;
+		    width: 0;
+		    overflow: hidden;
+		    position: absolute; /* 화면에서 제거 */
+		}
+	
+	
+	
 		.messages {
 			position: relative;    /* 자식 요소의 position() 계산을 위해 설정 */
 		}

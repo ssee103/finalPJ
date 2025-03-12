@@ -28,7 +28,7 @@
 														<option value="">일</option>
 												</select>
 												<button class="btn btn-primary" id="searchBtn">검색</button>
-												<button class="btn btn-secondary" id="resetBtn">초기화</button>
+												<!-- <button class="btn btn-secondary" id="resetBtn">초기화</button> -->
 										</div>
 									</div>								
                     <div class="card-body p-0">
@@ -149,8 +149,8 @@
 						</div>
 
 						<div class="modal-footer">
-							<button id="downloadPdf" class="btn btn-success">다운로드</button>
-							<button type="button" class="btn light-white" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">닫기</button>
+							<button id="downloadPdf" class="btn btn-primary">다운로드</button>
 						</div>
 				</div>
 		</div>

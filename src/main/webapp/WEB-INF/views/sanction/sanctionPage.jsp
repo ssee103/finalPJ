@@ -138,24 +138,23 @@ h1{
 									<option class="option" value="default">양식을 선택하세요.</option>
 								</select> <br/>
 								<button class="btn btn-primary" id="defineLineBtn" data-bs-toggle="modal" 
-									data-bs-target="#defineLineModal">결재 라인 지정</button>&nbsp;	
+									data-bs-target="#defineLineModal">결재 선 지정</button>&nbsp;	
 <!-- 								<button class="btn btn-secondary" id="defineRefBtn" data-bs-toggle="modal"  -->
 <!-- 									data-bs-target="#defineRefModal">참조자 지정</button> &nbsp; -->
 								<button class="btn btn-secondary" id="customSanctnerLine" data-bs-toggle="modal" 
-									data-bs-target="#getCustomModal">결재 라인 템플릿</button> &nbsp;	
-								<button class="btn btn-outline-light border me-3">임시 저장</button>
+									data-bs-target="#getCustomModal">결재 선 템플릿</button> &nbsp;	
 								
 								<!-- 모달 바깥 결재자&참조자 영역 -->	
 								<div id="outModalAprRef" style="display: flex; margin-right: 20px; margin-top: 20px;">
 									<div style="margin-right: 100px;">
-										<h5 class="card-title">결재자 라인 (내림차순)</h5>
+										<h5 class="card-title">결재 선 (하향식)</h5>
 										<span id="aprDefault">지정 된 결재자가 없습니다.</span>
 										<div id="chosenLine">
 											
 										</div>
 									</div>
 									<div style="margin-right: 20px;">
-										<h5 class="card-title">참조자 라인</h5>
+										<h5 class="card-title">참조자 목록</h5>
 										<span id="refDefault">지정 된 참조자가 없습니다.</span>
 										<div id="chosenRef">
 											
@@ -286,7 +285,7 @@ h1{
 	      <!-- 모달 푸터 -->
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" id="showCustomModal" style="margin: 2px;" data-bs-toggle="modal" 
-									data-bs-target="#customModal">커스텀 결재 라인 저장</button>
+									data-bs-target="#customModal">결재 선 템플릿 저장</button>
 	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin: 2px;">닫기</button>
 	        <button type="button" class="btn btn-secondary" id="removeSanctioner" style="margin: 2px;">초기화</button>
 	        <button type="button" class="btn btn-primary" id="saveLine" style="margin: 2px;">저장</button>
@@ -300,13 +299,13 @@ h1{
 	  <div class="modal-dialog modal-sm"> <!-- modal-xl: 큰 모달 -->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="previewModalLabel">커스텀 결재선 저장</h5>
+	        <h5 class="modal-title" id="previewModalLabel">결재 선 템플릿 생성</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
 	      </div>
 	      <div class="modal-body">
-	      	커스텀 결재 선 제목: <input type="text" class="form-control" id="customTitle" placeholder="템플릿 제목을 지정해주세요."/>
+	      	결재 선 템플릿 제목: <input type="text" class="form-control" id="customTitle" placeholder="템플릿 제목을 지정해주세요."/>
 	      </div>
-	      <div class="modal-body" style="border: 1px solid black;">지정 된 결재 선(↓)</div>
+	      <div class="modal-body">지정 결재 선(하향식)</div>
 	      <div class="modal-body" id="customDiv">
 	        <!-- 미리보기 내용을 여기에 삽입 -->
 	        
@@ -324,7 +323,7 @@ h1{
 	  <div class="modal-dialog modal-lg"> <!-- modal-xl: 큰 모달 -->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="previewModalLabel">커스텀 결재선</h5>
+	        <h5 class="modal-title" id="previewModalLabel">결재 선 템플릿</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
 	      </div>
 	      <div class="modal-body" id="getCustomDiv">

@@ -143,7 +143,7 @@ div.table-responsive .table tbody tr:nth-child(even) {
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
                     <th><input type="checkbox" id="emplNoCheckAll"></th>
@@ -274,7 +274,7 @@ div.table-responsive .table tbody tr:nth-child(even) {
 
 						<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-								<button id="confirmPay" class="btn btn-primary">지급 확정</button>
+								<button id="confirmPay" class="btn btn-primary">지급</button>
 						</div>
 				</div>
 		</div>

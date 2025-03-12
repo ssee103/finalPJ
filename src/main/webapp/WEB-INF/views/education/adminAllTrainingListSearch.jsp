@@ -626,7 +626,7 @@
 		                            </div>
 		                            <div class="modal-footer">
 		                                <div class="d-flex align-items-center justify-content-end">
-																			<button type="button" id="exampleButton" class="btn btn-success me-2">예시</button>
+											<button type="button" id="exampleButton" class="btn btn-success me-2">예시</button>
 		                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">취소</button>
 		                                    <button type="button" onclick="saveCurriculumBtn()" class="btn btn-primary">저장</button>
 		                                </div>
@@ -842,9 +842,6 @@
 		        return;  
 		    }
 		    
-		    // console.log("edcGrade2 보낼 데이터:", $("#edcGrade2"));
-		    // console.log("edcGrade2 보낼 데이터:", $("#edcGrade2")[0]);
-		    
 		    let educationData = {
 		        edcSort: $("#edcSort2").val(),
 		        edcWay: $("#edcWay").val(),
@@ -888,6 +885,100 @@
 			let toastInstance = new bootstrap.Toast(toast[0]);
 			toastInstance.show();
 		}
+		</script>
+		<script>
+		$("#exampleButton2").click(function () {
+		    $("#edcTitle2").val("2025년도 1분기 정보처리기사 필기 과정");
+
+		    $("#edcSort2").val("기술").trigger("change");
+		    $("#edcTarget2").val("전체").trigger("change");
+		    $("#edcGrade2").val("전체").trigger("change");
+
+		    $("#recruitSdate").val("2025-03-01");
+		    $("#recruitEdate").val("2025-03-31");
+		    $("#edcSdate").val("2025-03-01");
+		    $("#edcEdate").val("2025-04-30");
+
+		    $("#select2-edcWay-container").val("온라인").trigger("change");
+
+		    $("#educator2").val("양문자");
+		    $("#edcPsncpa").val(100);
+		    $("#edcContent").val("2025년도 정보처리기사 필기 대비");
+
+		    let targetBookNo = "1165217317 9791165217310";
+		    let foundBookNo = $("#bookNo option").filter(function () {
+		        return $(this).val() === targetBookNo;
+		    }).val();
+
+		    if (foundBookNo) {
+		        $("#bookNo").val(foundBookNo).trigger("change");
+		    }
+
+		    let targetCurTitle = "2025 정보처리기사 필기 과정";
+		    let foundCurNo = $("#curNo option").filter(function () {
+		        return $(this).text().includes(targetCurTitle);
+		    }).val();
+
+		    if (foundCurNo) {
+		        $("#curNo").val(foundCurNo).trigger("change");
+		    }
+		});
+
+		$(document).ready(function () {
+		    $.ajax({
+		        url: "/hrms/education/admin/rest/getBookList",
+		        type: "GET",
+		        dataType: "json",
+		        success: function (books) {
+		            let bookNo = $("#bookNo");
+		            bookNo.empty().append('<option value="">선택</option>');
+
+		            books.forEach(function (book) {
+		                let option = `<option value="\${book.bookNo}">\${book.bookName}</option>`;
+		                bookNo.append(option);
+		            });
+
+		            let targetBookNo = "1165217317 9791165217310";
+		            let foundBookNo = $("#bookNo option").filter(function () {
+		                return $(this).val() === targetBookNo;
+		            }).val();
+
+		            if (foundBookNo) {
+		                $("#bookNo").val(foundBookNo).trigger("change");
+		            }
+		        },
+		        error: function (xhr, status, error) {
+		            console.error("책 데이터를 불러오는 중 오류 발생:", error);
+		        }
+		    });
+
+		    $.ajax({
+		        url: "/hrms/education/admin/rest/getCurList",
+		        type: "GET",
+		        dataType: "json",
+		        success: function (curs) {
+		            let curNo = $("#curNo");
+		            curNo.empty().append('<option value="">선택</option>');
+
+		            curs.forEach(function (cur) {
+		                let option = `<option value="\${cur.curNo}">\${cur.curTitle}</option>`;
+		                curNo.append(option);
+		            });
+
+		            let targetCurTitle = "2025 정보처리기사 필기 과정";
+		            let foundCurNo = $("#curNo option").filter(function () {
+		                return $(this).text().includes(targetCurTitle);
+		            }).val();
+
+		            if (foundCurNo) {
+		                $("#curNo").val(foundCurNo).trigger("change");
+		            }
+		        },
+		        error: function (xhr, status, error) {
+		            console.error("커리큘럼 데이터를 불러오는 중 오류 발생:", error);
+		        }
+		    });
+		});
 		</script>
 	</div>
 	<!-- /Main Wrapper -->

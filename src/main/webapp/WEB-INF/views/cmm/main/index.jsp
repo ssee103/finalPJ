@@ -247,7 +247,13 @@ let boardChangeBtn = $("#boardChangeBtn");	// 게시판 전환하는 버튼
 let boardTable = $("#boardTable");			// 게시판 출력하는 곳
 let boardsDetail = $("#boardsDetail");
 
+let calendar = $("#calendar");
 $(function(){
+	
+	calendar.on("click", function(){
+		location.href = "/hrms/cal/viewCalendar";
+	});
+	
 	getBoards();
 	getEmplList();
 	setInterval(getEmplList, 600000);
@@ -482,7 +488,11 @@ function getMyInfo(){
 			deptCode.text(res.deptCode);
 			teamCode.text(res.teamCode);
 			hireDate.text(res.hireDate.substr(0,11));
-			profileImg.attr("src", `/profile_images/\${res.profileImgpath }`);
+			if(res.profileImgpath != null){
+				profileImg.attr("src", `/profile_images/\${res.profileImgpath }`);
+			}else{
+				profileImg.attr("src", `/profile_images/forNull.png`);
+			}
 		},
 		error : function(error){},
 	});

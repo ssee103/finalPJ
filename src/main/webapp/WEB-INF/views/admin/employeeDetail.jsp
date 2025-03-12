@@ -49,8 +49,7 @@
 					<div class="col-xl-4 theiaStickySidebar">
 						<div class="card card-bg-1">
 							<div class="card-body p-0">
-								<span class="avatar avatar-xl avatar-rounded border border-2 border-white m-auto d-flex mb-2">
-									<img src="assets/img/users/user-13.jpg" class="w-auto h-auto" alt="Img">
+								<span class="avatar avatar-xl border-white m-auto d-flex mb-2">
 								</span>
 								<div class="text-center px-3 pb-3 border-bottom">
 									<div class="mb-3">
@@ -222,10 +221,6 @@
 <!-- Color Picker JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/@simonwep/pickr/pickr.es5.min.js"></script>
 
-<!-- Datatable JS -->
-<%-- <script src="${pageContext.request.contextPath }/assets/js/jquery.dataTables.min.js"></script> --%>
-<%-- <script src="${pageContext.request.contextPath }/assets/js/dataTables.bootstrap5.min.js"></script> --%>
-
 <!-- Daterangepikcer JS -->
 <script src="${pageContext.request.contextPath }/assets/js/moment.js"></script>
 <script src="${pageContext.request.contextPath }/assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -233,10 +228,6 @@
 
 <!-- Select2 JS -->
 <script src="${pageContext.request.contextPath }/assets/plugins/select2/js/select2.min.js"></script>
-
-<!-- Chart JS -->
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="${pageContext.request.contextPath }/assets/plugins/apexchart/chart-data.js"></script>
 
 <!-- Custom JS -->
 <script src="${pageContext.request.contextPath }/assets/js/circle-progress.js"></script>

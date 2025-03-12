@@ -44,7 +44,7 @@
 				<!-- Breadcrumb -->
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
-						<h2 class="mb-1">개인 문서함</h2>
+						<h2 class="mb-1">기안 문서함</h2>
 					</div>
 					<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 						<div class="mb-2">
@@ -77,8 +77,8 @@
 									<tr>
 										<th class="text-center">문서 번호</th>
 										<th class="text-center">제목</th>
-										<th class="text-center">결재종류</th>
-										<th class="text-center">결재 상태</th>
+										<th class="text-center">양식</th>
+										<th class="text-center">문서 상태</th>
 										<th>기안 일자</th>
 										<th class="text-center">첨부파일</th>
 										<th class="text-center"></th>

@@ -372,7 +372,7 @@ function renderApprovers(approverList) {
         } else if(approver.sanctnStatus == '위임 전결') {
             return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-secondary-transparent">\${approver.sanctnStatus}</span></div>`;
         } else if(approver.sanctnStatus == '반려') {
-            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-purple-transparent">\${approver.sanctnStatus}</span></div>`;
+            return `<div>(\${approver.sanctnerPosition}) \${approver.sanctnerNo} <span class="badge badge-pink-transparent">\${approver.sanctnStatus}</span></div>`;
         }
     }).join("");
     $("#sanctionLine").html(sanctionHtml);

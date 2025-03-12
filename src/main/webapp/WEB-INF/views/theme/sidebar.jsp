@@ -174,7 +174,7 @@
 								</a>
 								<ul>
 									<li><a href="/hrms/attendance/authorityPage">출퇴근 기록</a></li>
-									<li><a href="/hrms/dclz/overtime/authorityPage">연장근무 기록</a></li>
+									<li><a href="/hrms/dclz/overtime/authorityPage">초과근무 기록</a></li>
 									<li><a href="/hrms/vacation/authorityPage">휴가 기록</a></li>
 								</ul>
 							</li>

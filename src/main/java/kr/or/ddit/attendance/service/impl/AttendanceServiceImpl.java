@@ -57,7 +57,7 @@ public class AttendanceServiceImpl implements IAttendanceService{
 		return mapper.selectLastDal(emplNo);
 	}
 	
-	@Scheduled(cron = "1 43 17 * * *")
+	//@Scheduled(cron = "1 43 17 * * *")
 	public void absent() {
 		String today = LocalDate.now().toString()+1;
 		List<DiligenceAndLazinessVO> dalList = mapper.selectMemberDclz();

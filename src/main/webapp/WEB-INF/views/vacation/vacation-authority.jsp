@@ -38,7 +38,7 @@
 				<!-- Breadcrumb -->
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
-						<h2 class="mb-1">부서원 휴가기록</h2>
+						<h2 class="mb-1">부서원 휴가보유현황</h2>
 					</div>
 				</div>
 				<!-- /Breadcrumb -->
@@ -46,7 +46,7 @@
 				<!-- Leads List -->
 				<div class="card">
 					<div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-						<h5>휴가기록</h5>
+						<h5>휴가보유현황</h5>
 						<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 							<div class="me-3">
 								<div class="input-icon-end position-relative">
@@ -71,7 +71,7 @@
 					</div>
 					<div class="card-body p-0">
 						<div class="custom-datatable-filter table-responsive">
-							<table class="table datatable">
+							<table class="table datatable text-center">
 								<thead class="thead-light">
 									<tr>
 										<th>사번</th>

@@ -72,7 +72,7 @@
 									<tr>
 										<th>문서 번호</th>
 										<th>제목</th>
-										<th>결재 종류</th>
+										<th>양식</th>
 										<th>결재 상태</th>
 										<th>기안 일자</th>
 										<th>기안자</th>
@@ -204,7 +204,7 @@ function preLoad(data) {
 				} else if(apvText == '반려') {
 					$("tbody tr:last-child .badge")
 		            .removeClass("badge-pink-transparent")
-		            .addClass("badge-purple-transparent");
+		            .addClass("badge-pink-transparent");
 				} else if(apvText == '전결') {
 					$("tbody tr:last-child .badge")
 		            .removeClass("badge-pink-transparent")

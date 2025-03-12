@@ -83,12 +83,10 @@
 	<select id="selectEmpl" parameterType="string" resultType="kr.or.ddit.employee.vo.EmployeeVO">
 		SELECT
 			e.empl_no
-			,empl_pwd
 			, empl_nm
 			, c.cc_name as empl_position
 			, d.dept_name as dept_code
 			, t.team_name as team_code
-			, empl_signature
 			, empl_brthdy
 			, hire_date
 			, retire_date
