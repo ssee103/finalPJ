@@ -3,7 +3,7 @@
 작성자 : 403호 1조 TA 백승권
 
 # 프로젝트 소개
-기존의 HRMS 프로그램(인사관리 프로그램)과는 다른 차별성을 두기 위해 인사시스템 + 그룹웨어 기능을 탑재하면 어떨까? 라는 생각으로 HERMES 프로젝트를 진행하게 되었습니다.
+기존의 HRMS 프로그램(인사관리 프로그램)과는 다른 차별성을 두기 위해 인사시스템 + 그룹웨어 기능을 탑재하면 시장에서 경쟁력이 있겠다는 생각으로 HERMES 프로젝트를 진행하게 되었습니다.
 
 # 프로젝트 기간
 2025.01.07 ~ 2025.03.11
@@ -128,7 +128,7 @@ https://www.figma.com/design/aptpPcRIWCamw4bXrgjQMP/Figma-basics?node-id=1669-16
 
 ![image](https://github.com/user-attachments/assets/37fbe27d-707c-4bd8-9f09-43d1adb5b076)
 ![image](https://github.com/user-attachments/assets/7310144a-9014-4767-b376-bbbc3911b7a6)
-![image](https://github.com/user-attachments/assets/b7d96a6e-c77b-477a-b943-dbb03b8ca811)
+![image](https://github.com/user-attachments/assets/b3cd8a58-924b-4f8d-95fe-3bd96bea911a)
 
 ## 결재 문서 페이지 
 - 승인 및 반려 기능
